@@ -8,23 +8,23 @@
 html,body{margin:0;height:100%}
 body{background:var(--bg);font-family:'Londrina Solid',Impact,'Comic Sans MS',sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center}
 [hidden]{display:none!important}
-#g{position:relative;width:min(100%,1000px);aspect-ratio:16/10;border:4px solid var(--ink);border-radius:10px;overflow:hidden;container-type:inline-size;background:#8d827a;user-select:none}
+#g{position:relative;width:min(100vw,160vh);width:min(100vw,160dvh);aspect-ratio:16/10;border:4px solid var(--ink);border-radius:10px;overflow:hidden;container-type:inline-size;background:#8d827a;user-select:none}
 #sc{position:absolute;inset:0;width:100%;height:100%}
-button{font-family:inherit;color:var(--ink);cursor:pointer;background:var(--tan);border:3px solid var(--ink);border-radius:10px;font-size:clamp(11px,2.3cqw,22px);padding:.2em .6em}
+button{font-family:inherit;color:var(--ink);cursor:pointer;background:var(--tan);border:3px solid var(--ink);border-radius:10px;font-size:max(11px,2.3cqw);padding:.2em .6em}
 button:hover{filter:brightness(1.1)}button:disabled{opacity:.4}
 input,select{font:inherit;border:3px solid var(--ink);border-radius:8px;padding:.1em .3em}
 #bb{position:absolute;top:4%;left:36%;width:60%;background:var(--tan);border:4px solid var(--ink);border-radius:22px;padding:2% 3%}
-#who{color:#e8761d;font-size:clamp(14px,4cqw,38px);font-weight:900;line-height:1}
-#tx{font-size:clamp(12px,3.2cqw,30px);line-height:1.1;margin-top:.3em;font-weight:900}
+#who{color:#e8761d;font-size:max(14px,4cqw);font-weight:900;line-height:1}
+#tx{font-size:max(12px,3.2cqw);line-height:1.1;margin-top:.3em;font-weight:900}
 #yn{position:absolute;left:24%;top:36%;display:flex;gap:6px;align-items:center;background:#fff;border:4px solid var(--ink);border-radius:50%/60%;padding:1% 3%}
 #yn button{background:#4c4;font-weight:900;transform:rotate(-6deg)}#yn .n{background:#d33;transform:rotate(6deg)}#yn .x{background:#f4a62a;transform:none}
-#st{position:absolute;left:2%;bottom:3%;background:var(--tan);border:4px solid var(--ink);border-radius:12px;padding:1% 2%;font-size:clamp(14px,4.2cqw,40px);font-weight:900;line-height:1.15}
+#st{position:absolute;left:2%;bottom:3%;background:var(--tan);border:4px solid var(--ink);border-radius:12px;padding:1% 2%;font-size:max(14px,4.2cqw);font-weight:900;line-height:1.15}
 #st div{display:flex;align-items:center;gap:.4em}
 .ic{width:1em;height:1em;border-radius:50%;border:3px solid var(--ink);display:inline-block}
 .b{background:#2f86d6}.gn{background:#5cc45a}.y{background:#f5c22b}
-#si{font-size:clamp(9px,1.8cqw,16px);font-weight:400}
+#si{font-size:max(9px,1.8cqw);font-weight:400}
 #ct{position:absolute;right:2%;bottom:3%;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:55%}
-#ts{position:absolute;right:2%;bottom:14%;max-width:50%;background:#fffd;border:3px solid var(--ink);border-radius:10px;padding:.3em .6em;font-size:clamp(11px,2.4cqw,22px)}
+#ts{position:absolute;right:2%;bottom:14%;max-width:50%;background:#fffd;border:3px solid var(--ink);border-radius:10px;padding:.3em .6em;font-size:max(11px,2.4cqw)}
 #ts:empty{display:none}
 #ck{position:absolute;left:0;top:0;height:1.2%;background:#f5c22b;border-bottom:3px solid var(--ink)}
 #nt{position:absolute;inset:0;background:#0a0a3c;opacity:0;transition:opacity 1s;pointer-events:none}
@@ -33,7 +33,7 @@ input,select{font:inherit;border:3px solid var(--ink);border-radius:8px;padding:
 .tb{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}.tb .on{background:#f5c22b}
 .bd{display:grid;grid-template-columns:1fr 1fr;gap:5px}.bd p{grid-column:1/3;margin:0}
 .rw{display:flex;justify-content:space-between;text-align:left;gap:6px}
-#tg{display:none}#g.tw #tg{display:inline}#g.tw #roomg{display:none}#g.tw #rl,#g.tw #vs{display:none}#tc{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);display:flex;gap:10px}#tc button{font-size:clamp(16px,4cqw,34px);touch-action:none}.q{cursor:pointer}.mk{animation:bob .7s ease-in-out infinite alternate}@keyframes bob{to{transform:translateY(-8px)}}#yn #ig{background:#bbb;transform:none}.cl{animation:drift 60s linear infinite}@keyframes drift{from{transform:translateX(-200px)}to{transform:translateX(1200px)}}
+#tg{display:none}#g.tw #tg{display:inline}#g.tw #roomg{display:none}#g.tw #rl,#g.tw #vs{display:none}#tc{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);display:flex;gap:10px}#tc button{font-size:max(16px,4cqw);touch-action:none}.q{cursor:pointer}.mk{animation:bob .7s ease-in-out infinite alternate}@keyframes bob{to{transform:translateY(-8px)}}#yn #ig{background:#bbb;transform:none}.cl{animation:drift 60s linear infinite}@keyframes drift{from{transform:translateX(-200px)}to{transform:translateX(1200px)}}
 </style></head><body>
 <div id="g">
 <svg id="sc" viewBox="0 0 1000 625" preserveAspectRatio="xMidYMid slice">
@@ -59,7 +59,7 @@ input,select{font:inherit;border:3px solid var(--ink);border-radius:8px;padding:
 <div id="yn" hidden><button onclick="ch('y')">Y</button><b>/</b><button class="n" onclick="ch('n')">N</button><button class="x" id="ex" onclick="ch('x')"></button><button id="ig" onclick="ch('i')">Ignore</button></div>
 <div id="st"><div><i class="ic b"></i><span id="sP"></span></div><div><i class="ic gn"></i><span id="sH"></span></div><div><i class="ic y"></i><span id="sG"></span></div><span id="si"></span></div>
 <div id="ts"></div>
-<div id="ct"><button onclick="B?say('Answer first!'):M()">Menu</button><button id="wk" onclick="walk()">Walk town</button><button id="sb" onclick="sleep()">Sleep</button></div>
+<div id="ct"><button onclick="B?say('Answer first!'):M()">Menu</button><button id="wk" onclick="walk()">Walk town</button><button id="sb" onclick="sleep()">Sleep</button><button onclick="document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()">⛶</button></div>
 <div id="tc" hidden></div><div id="pn" class="pp" hidden></div><div id="md" class="pp" hidden></div><div id="zz" hidden>Zzz...</div>
 </div>
 <script>
