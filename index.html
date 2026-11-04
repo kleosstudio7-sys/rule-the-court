@@ -5,35 +5,35 @@
 :root{--ink:#2b2118;--tan:#d6c4a8;--bg:#e8f7f3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f2321}}
 :root[data-theme="dark"]{--bg:#0f2321}
-html,body{margin:0;height:100%}
+html,body{margin:0;height:100%;overflow:hidden}
 body{background:var(--bg);font-family:'Londrina Solid',Impact,'Comic Sans MS',sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center}
 [hidden]{display:none!important}
-#g{position:relative;width:min(100vw,160vh);width:min(100vw,160dvh);aspect-ratio:16/10;border:4px solid var(--ink);border-radius:10px;overflow:hidden;container-type:inline-size;background:#8d827a;user-select:none}
+#g{position:fixed;inset:0;overflow:hidden;container-type:size;--u:min(1cqw,1.6cqh);background:#8d827a;user-select:none}
 #sc{position:absolute;inset:0;width:100%;height:100%}
-button{font-family:inherit;color:var(--ink);cursor:pointer;background:var(--tan);border:3px solid var(--ink);border-radius:10px;font-size:max(11px,2.3cqw);padding:.2em .6em}
+button{font-family:inherit;color:var(--ink);cursor:pointer;background:var(--tan);border:3px solid var(--ink);border-radius:10px;font-size:max(11px,calc(2.3*var(--u)));padding:.2em .6em}
 button:hover{filter:brightness(1.1)}button:disabled{opacity:.4}
 input,select{font:inherit;border:3px solid var(--ink);border-radius:8px;padding:.1em .3em}
 #bb{position:absolute;top:4%;left:36%;width:60%;background:var(--tan);border:4px solid var(--ink);border-radius:22px;padding:2% 3%}
-#who{color:#e8761d;font-size:max(14px,4cqw);font-weight:900;line-height:1}
-#tx{font-size:max(12px,3.2cqw);line-height:1.1;margin-top:.3em;font-weight:900}
+#who{color:#e8761d;font-size:max(14px,calc(4*var(--u)));font-weight:900;line-height:1}
+#tx{font-size:max(12px,calc(3.2*var(--u)));line-height:1.1;margin-top:.3em;font-weight:900}
 #yn{position:absolute;left:24%;top:36%;display:flex;gap:6px;align-items:center;background:#fff;border:4px solid var(--ink);border-radius:50%/60%;padding:1% 3%}
 #yn button{background:#4c4;font-weight:900;transform:rotate(-6deg)}#yn .n{background:#d33;transform:rotate(6deg)}#yn .x{background:#f4a62a;transform:none}
-#st{position:absolute;left:2%;bottom:3%;background:var(--tan);border:4px solid var(--ink);border-radius:12px;padding:1% 2%;font-size:max(14px,4.2cqw);font-weight:900;line-height:1.15}
+#st{position:absolute;left:2%;bottom:3%;background:var(--tan);border:4px solid var(--ink);border-radius:12px;padding:1% 2%;font-size:max(14px,calc(4.2*var(--u)));font-weight:900;line-height:1.15}
 #st div{display:flex;align-items:center;gap:.4em}
 .ic{width:1em;height:1em;border-radius:50%;border:3px solid var(--ink);display:inline-block}
 .b{background:#2f86d6}.gn{background:#5cc45a}.y{background:#f5c22b}
-#si{font-size:max(9px,1.8cqw);font-weight:400}
+#si{font-size:max(9px,calc(1.8*var(--u)));font-weight:400}
 #ct{position:absolute;right:2%;bottom:3%;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:55%}
-#ts{position:absolute;right:2%;bottom:14%;max-width:50%;background:#fffd;border:3px solid var(--ink);border-radius:10px;padding:.3em .6em;font-size:max(11px,2.4cqw)}
+#ts{position:absolute;right:2%;bottom:14%;max-width:50%;background:#fffd;border:3px solid var(--ink);border-radius:10px;padding:.3em .6em;font-size:max(11px,calc(2.4*var(--u)))}
 #ts:empty{display:none}
 #ck{position:absolute;left:0;top:0;height:1.2%;background:#f5c22b;border-bottom:3px solid var(--ink)}
 #nt{position:absolute;inset:0;background:#0a0a3c;opacity:0;transition:opacity 1s;pointer-events:none}
-#zz{position:absolute;inset:0;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:8cqw}
+#zz{position:absolute;inset:0;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:calc(8*var(--u))}
 .pp{position:absolute;inset:4%;background:var(--tan);border:4px solid var(--ink);border-radius:14px;overflow:auto;padding:2%}
 .tb{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}.tb .on{background:#f5c22b}
 .bd{display:grid;grid-template-columns:1fr 1fr;gap:5px}.bd p{grid-column:1/3;margin:0}
 .rw{display:flex;justify-content:space-between;text-align:left;gap:6px}
-#tg{display:none}#g.tw #tg{display:inline}#g.tw #roomg{display:none}#g.tw #rl,#g.tw #vs{display:none}#tc{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);display:flex;gap:10px}#tc button{font-size:max(16px,4cqw);touch-action:none}.q{cursor:pointer}.mk{animation:bob .7s ease-in-out infinite alternate}@keyframes bob{to{transform:translateY(-8px)}}#yn #ig{background:#bbb;transform:none}.cl{animation:drift 60s linear infinite}@keyframes drift{from{transform:translateX(-200px)}to{transform:translateX(1200px)}}
+#tg{display:none}#g.tw #tg{display:inline}#g.tw #roomg{display:none}#g.tw #rl,#g.tw #vs{display:none}#tc{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);display:flex;gap:10px}#tc button{font-size:max(16px,calc(4*var(--u)));touch-action:none}.q{cursor:pointer}.mk{animation:bob .7s ease-in-out infinite alternate}@keyframes bob{to{transform:translateY(-8px)}}#yn #ig{background:#bbb;transform:none}.cl{animation:drift 60s linear infinite}@keyframes drift{from{transform:translateX(-200px)}to{transform:translateX(1200px)}}
 </style></head><body>
 <div id="g">
 <svg id="sc" viewBox="0 0 1000 625" preserveAspectRatio="xMidYMid slice">
@@ -164,7 +164,7 @@ let bag=[],npcs=[],px=500,dir=0,gt=null,tid;
 const nq=()=>{if(!bag.length)bag=TQ.map((_,i)=>i).sort(()=>R()-.5);return bag.pop()};
 function spawnN(){const L=R()<.5,q=R()<.18,c=['#c84','#58a','#7a4','#a63','#a4a','#488','#b55','#6a8'][F(R()*8)],sk=['#f2d6b8','#e0b48c','#b9805a','#7a4a30'][F(R()*4)],hc=['#2b2118','#6b3f1d','#c9a24b','#8a8a8a'][F(R()*4)],mu=R()<.7?'M-9 16Q0 24 9 16':'M-8 18H8',e=document.createElementNS('http://www.w3.org/2000/svg','g');e.innerHTML=`<g transform="scale(.6)" stroke="#2b2118" stroke-width="5" stroke-linejoin="round"><path d="M-40 90Q-45 20 0 20Q45 20 40 90L55 120L-55 120Z" fill="${c}"/><circle cx="0" cy="0" r="30" fill="${sk}"/><path d="M-30 -8Q0 -40 30 -8Q0 -20 -30 -8Z" fill="${hc}"/><circle cx="-11" cy="4" r="4.5" fill="#2b2118" stroke="none"/><circle cx="11" cy="4" r="4.5" fill="#2b2118" stroke="none"/><path d="${mu}" stroke-width="3.5" fill="none"/></g>${q?'<g class="mk"><circle cx="0" cy="-60" r="16" fill="#f5c22b" stroke="#2b2118" stroke-width="4"/><text x="0" y="-53" font-size="20" font-weight="900" text-anchor="middle" fill="#2b2118" stroke="none">E</text></g>':''}`;const n={e,x:L?-40:1040,v:(L?1:-1)*(.8+R()*1.4),q};if(q){e.setAttribute('class','q');e.onclick=ev=>{ev.stopPropagation();talk(n)}}else{e.setAttribute('class','q');e.onclick=ev=>{ev.stopPropagation();say(CH[F(R()*CH.length)])}}$('np').appendChild(e);npcs.push(n)}
 function talk(n){if(!n.q||B||mo)return;n.q=0;n.e.querySelector('.mk').remove();n.e.removeAttribute('class');TQ[nq()]()}
-function loop(){if(B||mo)return;if(dir)gt=null;if(gt!=null){if(Math.abs(gt-px)<6)gt=null;else px+=Math.sign(gt-px)*5}px=Math.max(40,Math.min(960,px+dir*5));if(npcs.length<6&&R()<.012)spawnN();npcs=npcs.filter(n=>{n.x+=n.v;n.e.setAttribute('transform','translate('+n.x+',488)');if(n.x<-60||n.x>1060){n.e.remove();return 0}return 1});$('pl').setAttribute('transform','translate('+px+',435) scale(.5)')}
+function loop(){if(B||mo)return;if(dir)gt=null;if(gt!=null){if(Math.abs(gt-px)<6)gt=null;else px+=Math.sign(gt-px)*5}px=Math.max(40,Math.min(960,px+dir*5));if(npcs.length<6&&R()<.012)spawnN();npcs=npcs.filter(n=>{n.x+=n.v;n.e.setAttribute('transform','translate('+n.x+',448)');if(n.x<-60||n.x>1060){n.e.remove();return 0}return 1});$('pl').setAttribute('transform','translate('+px+',395) scale(.5)')}
 function leave(){if(B)return say('Answer first!');tn=0;clearInterval(tid);$('g').classList.remove('tw');$('tc').hidden=1;$('wk').textContent='Walk town';dir=0;say('You return to the castle.');pump(5000)}
 function walk(){if(tn)return leave();if(B||mo||slp)return say('Not now.');tn=1;$('g').classList.add('tw');ruler($('pl'),S);px=500;dir=0;npcs=[];$('np').innerHTML='';$('tc').hidden=0;$('wk').textContent='Back to castle';gt=null;say('Walk with A/D or arrow keys, or click where you want to go. Click anyone with an E, or press E near them.');tid=setInterval(loop,40);loop()}
 $('tg').addEventListener('click',e=>{if(!tn||B||mo)return;const r=$('sc').getBoundingClientRect();gt=(e.clientX-r.left)/r.width*1000});
