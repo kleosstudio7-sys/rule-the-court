@@ -1,0 +1,222 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Rule the Court</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@400;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2b2118;--tan:#d6c4a8;--bg:#e8f7f3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f2321}}
+:root[data-theme="dark"]{--bg:#0f2321}
+html,body{margin:0;height:100%}
+body{background:var(--bg);font-family:'Londrina Solid',Impact,'Comic Sans MS',sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center}
+[hidden]{display:none!important}
+#g{position:relative;width:min(100%,1000px);aspect-ratio:16/10;border:4px solid var(--ink);border-radius:10px;overflow:hidden;container-type:inline-size;background:#8d827a;user-select:none}
+#sc{position:absolute;inset:0;width:100%;height:100%}
+button{font-family:inherit;color:var(--ink);cursor:pointer;background:var(--tan);border:3px solid var(--ink);border-radius:10px;font-size:clamp(11px,2.3cqw,22px);padding:.2em .6em}
+button:hover{filter:brightness(1.1)}button:disabled{opacity:.4}
+input,select{font:inherit;border:3px solid var(--ink);border-radius:8px;padding:.1em .3em}
+#bb{position:absolute;top:4%;left:36%;width:60%;background:var(--tan);border:4px solid var(--ink);border-radius:22px;padding:2% 3%}
+#who{color:#e8761d;font-size:clamp(14px,4cqw,38px);font-weight:900;line-height:1}
+#tx{font-size:clamp(12px,3.2cqw,30px);line-height:1.1;margin-top:.3em;font-weight:900}
+#yn{position:absolute;left:24%;top:36%;display:flex;gap:6px;align-items:center;background:#fff;border:4px solid var(--ink);border-radius:50%/60%;padding:1% 3%}
+#yn button{background:#4c4;font-weight:900;transform:rotate(-6deg)}#yn .n{background:#d33;transform:rotate(6deg)}#yn .x{background:#f4a62a;transform:none}
+#st{position:absolute;left:2%;bottom:3%;background:var(--tan);border:4px solid var(--ink);border-radius:12px;padding:1% 2%;font-size:clamp(14px,4.2cqw,40px);font-weight:900;line-height:1.15}
+#st div{display:flex;align-items:center;gap:.4em}
+.ic{width:1em;height:1em;border-radius:50%;border:3px solid var(--ink);display:inline-block}
+.b{background:#2f86d6}.gn{background:#5cc45a}.y{background:#f5c22b}
+#si{font-size:clamp(9px,1.8cqw,16px);font-weight:400}
+#ct{position:absolute;right:2%;bottom:3%;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:55%}
+#ts{position:absolute;right:2%;bottom:14%;max-width:50%;background:#fffd;border:3px solid var(--ink);border-radius:10px;padding:.3em .6em;font-size:clamp(11px,2.4cqw,22px)}
+#ts:empty{display:none}
+#ck{position:absolute;left:0;top:0;height:1.2%;background:#f5c22b;border-bottom:3px solid var(--ink)}
+#nt{position:absolute;inset:0;background:#0a0a3c;opacity:0;transition:opacity 1s;pointer-events:none}
+#zz{position:absolute;inset:0;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:8cqw}
+.pp{position:absolute;inset:4%;background:var(--tan);border:4px solid var(--ink);border-radius:14px;overflow:auto;padding:2%}
+.tb{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}.tb .on{background:#f5c22b}
+.bd{display:grid;grid-template-columns:1fr 1fr;gap:5px}.bd p{grid-column:1/3;margin:0}
+.rw{display:flex;justify-content:space-between;text-align:left;gap:6px}
+#tg{display:none}#g.tw #tg{display:inline}#g.tw #roomg{display:none}#g.tw #rl,#g.tw #vs{display:none}#tc{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);display:flex;gap:10px}#tc button{font-size:clamp(16px,4cqw,34px);touch-action:none}.q{cursor:pointer}.mk{animation:bob .7s ease-in-out infinite alternate}@keyframes bob{to{transform:translateY(-8px)}}#yn #ig{background:#bbb;transform:none}.cl{animation:drift 60s linear infinite}@keyframes drift{from{transform:translateX(-200px)}to{transform:translateX(1200px)}}
+</style></head><body>
+<div id="g">
+<svg id="sc" viewBox="0 0 1000 625" preserveAspectRatio="xMidYMid slice">
+<defs><pattern id="br" width="80" height="40" patternUnits="userSpaceOnUse"><rect width="80" height="40" fill="#9b8f86"/><path d="M0 0H80M0 20H80M0 40H80M40 0V20M0 20V40M80 20V40" stroke="#6b5f58" stroke-width="3" fill="none"/></pattern>
+<linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd8ec"/><stop offset="1" stop-color="#e4f3f0"/></linearGradient></defs>
+<g id="roomg"><rect width="1000" height="625" fill="url(#br)"/>
+<path d="M300 430V200Q300 90 520 90Q740 90 740 200V430Z" fill="url(#sk)"/>
+<g stroke="#2b2118" stroke-width="4" stroke-linejoin="round">
+<rect x="360" y="260" width="60" height="170" fill="#cfc8c0"/><polygon points="350,260 390,180 430,260" fill="#47a86a"/>
+<rect x="470" y="220" width="80" height="210" fill="#d9d2ca"/><polygon points="458,220 510,120 562,220" fill="#3f9a62"/>
+<rect x="610" y="270" width="64" height="160" fill="#cfc8c0"/><polygon points="600,270 642,190 684,270" fill="#47a86a"/>
+<rect x="500" y="290" width="18" height="30" fill="#f5c22b"/><rect x="385" y="320" width="14" height="24" fill="#f5c22b"/><rect x="635" y="330" width="14" height="24" fill="#f5c22b"/></g>
+<g id="hs"></g>
+<path d="M300 430V200Q300 90 520 90Q740 90 740 200V430Z" fill="none" stroke="#2b2118" stroke-width="10"/>
+<rect y="500" width="1000" height="125" fill="#5a3f2e"/><g id="gp"></g></g>
+<g id="tg"><rect width="1000" height="625" fill="url(#sk)"/><g class="cl" fill="#fff" stroke="#2b2118" stroke-width="4"><ellipse cx="0" cy="90" rx="70" ry="26"/><ellipse cx="45" cy="75" rx="45" ry="24"/></g><g class="cl" style="animation-delay:-30s" fill="#fff" stroke="#2b2118" stroke-width="4"><ellipse cx="0" cy="170" rx="60" ry="22"/><ellipse cx="40" cy="156" rx="38" ry="20"/></g><rect y="430" width="1000" height="195" fill="#8a7a5c"/><path d="M0 500H1000" stroke="#2b2118" stroke-width="6"/><g id="th" stroke="#2b2118" stroke-width="5" stroke-linejoin="round"></g><g id="np"></g><g id="pl"></g></g>
+<g id="rl" transform="translate(190,300) scale(1.3)"></g>
+<g id="vs" transform="translate(830,420) scale(1.1)"></g>
+<g id="gh" style="display:none" transform="translate(560,330)"><path d="M-40 60V-10Q-40 -60 0 -60Q40 -60 40 -10V60L25 45L10 60L-5 45L-20 60Z" fill="#fff" fill-opacity=".8" stroke="#2b2118" stroke-width="4"/><circle cx="-14" cy="-20" r="6" fill="#2b2118"/><circle cx="14" cy="-20" r="6" fill="#2b2118"/><ellipse cx="0" cy="5" rx="8" ry="11" fill="#2b2118"/></g>
+</svg>
+<div id="nt"></div><div id="ck"></div>
+<div id="bb" hidden><div id="who"></div><div id="tx"></div></div>
+<div id="yn" hidden><button onclick="ch('y')">Y</button><b>/</b><button class="n" onclick="ch('n')">N</button><button class="x" id="ex" onclick="ch('x')"></button><button id="ig" onclick="ch('i')">Ignore</button></div>
+<div id="st"><div><i class="ic b"></i><span id="sP"></span></div><div><i class="ic gn"></i><span id="sH"></span></div><div><i class="ic y"></i><span id="sG"></span></div><span id="si"></span></div>
+<div id="ts"></div>
+<div id="ct"><button onclick="B?say('Answer first!'):M()">Menu</button><button id="wk" onclick="walk()">Walk town</button><button id="sb" onclick="sleep()">Sleep</button></div>
+<div id="tc" hidden></div><div id="pn" class="pp" hidden></div><div id="md" class="pp" hidden></div><div id="zz" hidden>Zzz...</div>
+</div>
+<script>
+const $=i=>document.getElementById(i),R=Math.random,F=Math.floor,cl=v=>Math.max(0,Math.min(100,Math.round(v)));
+let S,B=null,AF=null,Q=[],slp=0,mo=0,rows=[],tab='Realm',lg=[],lt,hr=60;
+const DEF=()=>({name:'Aria',king:0,skin:'#f2c9a0',hair:'#2a1a3a',robe:'#4a78c8',crown:'#f2c230',gold:400,people:60,happy:70,unrest:10,tax:15,troops:10,tl:0,walls:0,wx:0,guards:0,mach:0,farms:0,mines:0,pick:0,biz:0,land:1,houses:[],inf:0,chef:0,slaves:0,know:0,day:1,t:0,sl:0,loans:[],warn:-1,deaths:0,debtors:0,fear:0,made:0,ks:[{n:'Redmoor',p:40,rel:0},{n:'Goldvale',p:28,rel:10},{n:'Stonehelm',p:75,rel:-5},{n:'Bonereach',p:60,rel:-100,skel:1,enemy:1}]});
+const save=()=>{try{localStorage.setItem('realm1',JSON.stringify(S))}catch(e){}};
+const G=d=>S.gold=Math.max(0,Math.round(S.gold+d)),H=d=>S.happy=cl(S.happy+d),U=d=>S.unrest=cl(S.unrest+d),P=d=>S.people=Math.max(0,Math.round(S.people+d));
+const cap=()=>40+S.land*40+S.houses.length*6,pw=()=>Math.round(S.troops*(1+S.tl*.5)+S.walls*12+S.wx*10+S.guards*1.5+S.mach*22*(1+S.tl*.2));
+let tn=0;const idle=()=>!B&&$('pn').hidden&&!mo&&!slp&&!tn;
+function say(t){lg.push(t);lg=lg.slice(-3);$('ts').innerHTML=lg.join('<br>');clearTimeout(lt);lt=setTimeout(()=>{lg=[];$('ts').innerHTML=''},8000)}
+function upd(){if(S.made&&S.people<=0)return die('Your kingdom emptied out.');$('sP').textContent=S.people;$('sH').textContent=S.happy+'%';$('sG').textContent=S.gold;$('si').textContent='Day '+S.day+' · power '+pw()+' · unrest '+S.unrest+'%';$('ck').style.width=Math.min(100,S.t/10.2)+'%';$('nt').style.opacity=(S.t>=900||slp)?.5:0;$('gh').style.display=S.sl>=2?'':'none';$('sb').disabled=S.t<300;save()}
+function ruler(el,s){el.innerHTML=`<g stroke="#2b2118" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M-62 40Q-80 150 -70 230L70 230Q80 150 62 40Z" fill="${s.hair}"/><path d="M-55 120Q-70 230 -85 250L85 250Q70 230 55 120Q40 80 0 80Q-40 80 -55 120Z" fill="${s.robe}"/><path d="M-20 85L0 160L20 85Z" fill="#f4efe6"/><circle cx="0" cy="40" r="46" fill="${s.skin}"/><path d="M-48 36Q-30 -10 0 0Q30 -10 48 36Q20 14 0 22Q-20 14 -48 36Z" fill="${s.hair}"/>${s.king?'<path d="M-36 58Q0 120 36 58Q0 80 -36 58Z" fill="'+s.hair+'"/>':''}<path d="M-40 -2L-44 -50L-22 -26L0 -62L22 -26L44 -50L40 -2Z" fill="${s.crown}"/></g><circle cx="-16" cy="42" r="5" fill="#2b2118"/><circle cx="16" cy="42" r="5" fill="#2b2118"/><path d="M-9 60Q0 66 9 60" stroke="#2b2118" stroke-width="4" fill="none"/>`}
+function vis(c,h){$('vs').innerHTML=`<g stroke="#2b2118" stroke-width="5" stroke-linejoin="round"><path d="M-50 90Q-60 20 0 20Q60 20 50 90L70 120L-70 120Z" fill="${c}"/><circle cx="0" cy="0" r="34" fill="#efe8f0"/>${h?'<path d="M-36 -8L0 -52L36 -8Z" fill="'+c+'"/>':'<path d="M-34 -10Q0 -40 34 -10Q0 -22 -34 -10Z" fill="#2b2118"/>'}</g><circle cx="-11" cy="2" r="4" fill="#2b2118"/><circle cx="11" cy="2" r="4" fill="#2b2118"/><path d="M-8 16L-4 26L0 16L4 26L8 16" stroke="#2b2118" stroke-width="3" fill="#fff"/>`}
+function drawH(){$('hs').innerHTML=S.houses.slice(-14).map((h,i)=>`<g stroke="#2b2118" stroke-width="3"><rect x="${315+i*29}" y="400" width="24" height="30" fill="${h.c}"/><polygon points="${311+i*29},400 ${327+i*29},382 ${343+i*29},400" fill="#8a3b2a"/></g>`).join('');const base=['#e07a5f','#81b29a','#f2cc8f','#6a8caf','#c08497','#b5a642'],cu=S.houses.slice(-6).map(h=>h.c);$('th').innerHTML=base.map((c,i)=>`<rect x="${30+i*160}" y="300" width="130" height="190" fill="${cu[i]||c}"/><polygon points="${20+i*160},300 ${95+i*160},210 ${170+i*160},300" fill="#8a3b2a"/><rect x="${80+i*160}" y="410" width="30" height="80" fill="#5a3f2e"/>`).join('')}
+(()=>{let a=[];for(let i=0;i<260;i++){const x=R()*1000;a.push([x,625-R()*(120+170*Math.max(0,1-Math.abs(x-230)/330))])}a.sort((p,q)=>p[1]-q[1]);$('gp').innerHTML='<g stroke="#2b2118" stroke-width="3" fill="#f5c22b">'+a.map(p=>`<ellipse cx="${p[0]|0}" cy="${p[1]|0}" rx="30" ry="15"/>`).join('')+'</g>'})();
+
+function ask(w,c,t,y,n,x,xl){B={y,n,x};vis(c,F(R()*2));$('who').textContent=w;$('tx').textContent=t;$('bb').hidden=0;$('yn').hidden=0;$('vs').style.display='';$('ex').hidden=!x;$('ex').textContent=xl||'⚔ Execute';$('pn').hidden=1}
+function pump(d){setTimeout(()=>{if(idle()&&Q.length)Q.shift()()},d)}
+function ch(k){if(!B)return;const f=k=='i'?()=>H(-1):B[k];B=null;$('bb').hidden=1;$('yn').hidden=1;$('vs').style.display='none';f&&f();upd();if(!B){const a=AF;AF=null;if(a)a();if(!B&&Q.length)pump(15000)}}
+function kill(f){H(f?-3:-12);U(f?3:18);P(-1);say(f?'Justice served.':'Killed for no reason... the people whisper.')}
+function die(m){S.deaths++;B=null;Q=[];AF=null;$('bb').hidden=1;$('yn').hidden=1;$('vs').style.display='none';$('g').classList.remove('tw');tn=0;clearInterval(tid);$('tc').hidden=1;$('wk').textContent='Walk town';S.gold=Math.round(S.gold*.4)+100;S.people=Math.max(10,Math.round(S.people*.8));S.troops=Math.round(S.troops*.5);S.guards=Math.round(S.guards*.5);S.t=0;S.sl=0;S.unrest=25;S.warn=-1;slp=0;$('zz').hidden=1;say('💀 '+m+' You respawn at the throne.');upd()}
+
+const EV=[
+()=>ask('Beggar Bo','#6a8','Your Majesty, could you spare 50 gold for bread?',()=>{G(-50);H(6);if(R()<.2){G(-30);say('He told everyone... a crowd came for more!')}},()=>H(-3),()=>kill(0)),
+()=>ask('Merchant Mel','#c84','May I open a new shop in town? You design it!',()=>mkHouse(true),()=>H(-2)),
+()=>ask('Outsider','#58a','We are travelers. May we join your kingdom?',()=>{P(8);if(R()<.25){G(-60);say('Some were thieves!')}else say('8 newcomers settled in.')},()=>say('They left.'),()=>kill(0)),
+()=>ask('Price Guild','#a63','Merchants want to raise prices and pay you 90 gold. Allow?',()=>{G(90);H(-4);if(R()<.2){U(8);say('Riot over prices!')}},()=>H(3)),
+()=>ask('Farmer Finn','#7a4','Will you lend me 100 gold, majesty?',()=>{G(-100);S.loans.push({d:S.day+2,a:140});say('Loan given.')},()=>H(-2)),
+()=>ask('Peasant','#965','Majesty, may I speak freely about your taxes?',()=>{if(R()<.6){H(2);say('He spoke politely.')}else{H(-2);U(2);say('He insulted you in front of everyone!')}},()=>U(3),()=>kill(0)),
+()=>ask('Thief','#555','I stole a loaf of bread. Will you forgive me? (No means public execution)',()=>{H(5);U(-3)},()=>{U(10);H(-4);S.fear=Math.min(.3,S.fear+.05);say('Publicly executed.')}),
+()=>ask('Scholar','#68a','Will you buy a rare book of war for 90 gold?',()=>{G(-90);if(S.know>=4||R()<.3)say('It was a fake!');else{S.know++;say('You learned something new!')}},()=>0),
+()=>ask('Slaver','#833','Will you buy 3 slaves for 80 gold?',()=>{G(-80);S.slaves+=3;U(2)},()=>0),
+()=>ask('Fortune Teller','#a4a','Will you pay 40 gold for me to find treasure for you?',()=>{G(-40);if(R()<.5){G(150);say('Treasure found!')}else say('Nothing but dirt.')},()=>0),
+()=>ask('Smiling Cook','#c33','A drink for the weary ruler?',()=>{if(R()<(S.guards?.08:.25)*(S.chef?.3:1))return die('The drink was poisoned!');H(1);say('Delicious!')},()=>say('You wisely refused.')),
+()=>ask('Debtor','#a85','Will you give me one more week to pay my taxes?',()=>{H(5);G(-20)},()=>{G(20);U(4)},()=>kill(1))];
+const TQ=[
+()=>ask('Baker','#c94','May I raise the price of bread? You will get a cut.',()=>{G(30);H(-3)},()=>H(3)),
+()=>ask('Little Kid','#6ac','Can I pet your horse?',()=>{H(3);if(R()<.15){G(-10);say('The horse kicked a cart!')}},()=>H(-2)),
+()=>ask('Old Woman','#a8a','I have no coin for taxes this month. Will you forgive my tax?',()=>{H(6);G(-15)},()=>{G(15);U(4)}),
+()=>ask('Drunk','#a64','Hic! May I buy you a drink, ruler?',()=>{H(2);if(R()<.3){G(-10);say('He left you with the bill!')}},()=>U(1),()=>kill(0)),
+()=>ask('Guild Man','#488','Will you join the merchant guild for 40 gold?',()=>{G(-40);if(R()<.6){G(110);say('The guild paid off!')}else say('Nothing came of it.')},()=>0),
+()=>ask('Blacksmith','#777','Will you pay 70 gold to fix my broken forge?',()=>{G(-70);H(3);S.troops+=3;say('He forged you 3 swords!')},()=>H(-2)),
+()=>ask('Lost Child','#6ac','Will your guards help me find my cat?',()=>{H(3);G(-5)},()=>H(-1)),
+()=>ask('Priest','#ddd','Will you donate 30 gold to the temple?',()=>{G(-30);H(4)},()=>H(-1)),
+()=>ask('Farmer','#7a4','Will you buy 40 gold of medicine for my sick crops?',()=>{G(-40);if(R()<.7){S.farms++;say('The harvest was saved!')}else say('The medicine did nothing.')},()=>H(-2)),
+()=>ask('Whisperer','#556','I heard rebels plotting. Will you pay 25 gold for their names?',()=>{G(-25);U(-8);say('You arrested the plotters.')},()=>U(3)),
+()=>ask('Minstrel','#a4a','May I sing a song about you in the square?',()=>{if(R()<.2){H(-3);say('It was an insulting song!')}else{H(4);say('The crowd cheers!')}},()=>0),
+()=>ask('Widow','#888','Could you spare some bread for my hungry children?',()=>{G(-20);H(5)},()=>H(-3)),
+()=>ask('Soldier','#486','Will you buy us new boots for 35 gold?',()=>{G(-35);S.troops+=2;U(-2)},()=>U(2)),
+()=>ask('Tavern Owner','#b73','Will you lower my tavern tax this season?',()=>{G(-25);H(4)},()=>U(2)),
+()=>ask('Stranger','#324','Will you buy a treasure map from me for 30 gold?',()=>{G(-30);if(R()<.4){G(120);say('You found buried gold!')}else say('The map was a joke.')},()=>0),
+()=>ask('Defector','#a33','I am a spy from '+S.ks[0].n+'. May I join your troops instead?',()=>{if(R()<.3){G(-50);say('He lied and stole from you!')}else{S.troops+=2;say('He joined your troops.')}},()=>0,()=>kill(1)),
+()=>ask('Mason','#999','May I repair the old bridge for 50 gold?',()=>{G(-50);H(3);P(2)},()=>H(-2)),
+()=>ask('Bride','#e9a','Will you attend our wedding?',()=>{H(5);G(-10)},()=>H(-2)),
+()=>ask('Brawler','#a55','He cheated at cards. Will you punish him?',()=>{U(-2);H(1)},()=>H(-1),()=>kill(1)),
+()=>ask('Fisherman','#58a','May I sell fish at the castle gate? I will share the profit.',()=>{G(25);H(2)},()=>H(-1)),
+()=>ask('Teacher','#a75','Will you pay 45 gold to open a school for the children?',()=>{G(-45);H(5);if(R()<.25&&S.know<4){S.know++;say('The teacher shared new knowledge!')}},()=>H(-2)),
+()=>ask('Gardener','#6a6','May I plant flowers around the castle for 20 gold?',()=>{G(-20);H(3)},()=>0),
+()=>ask('Worried Father','#a96','My son stole an apple. Will you forgive him?',()=>H(4),()=>{U(3);H(-2)}),
+()=>ask('Traveling Merchant','#c75','May I set up a stall in your market for 40 gold a week?',()=>{G(40);if(R()<.15){U(4);say('He was a smuggler!')}},()=>0),
+()=>ask('Palace Guard','#678','We have not been paid in days. May we have a raise of 30 gold?',()=>{G(-30);U(-3)},()=>U(5)),
+()=>ask('Healer','#7ab','Will you pay 50 gold for herbs to keep the town healthy?',()=>{G(-50);H(3);P(3);say('Sick villagers recovered.')},()=>H(-2)),
+()=>ask('Beekeeper','#db4','May I keep bees near the castle? You get free honey.',()=>{G(15);H(2);if(R()<.2){H(-1);say('A guard got stung!')}},()=>0),
+()=>ask('Hungry Traveler','#865','Could you spare 20 gold for a hungry traveler?',()=>{G(-20);H(3)},()=>H(-1)),
+()=>ask('Noble','#a4c','May I build a bigger house in town? I will pay a 60 gold fee.',()=>{G(60);U(3)},()=>U(-1)),
+()=>ask('Hunter','#574','May I hunt in the royal forest? I will bring you meat.',()=>{G(20);H(2)},()=>H(-1)),
+()=>ask('Gossip','#c8a','Do you want to know what people really say about you?',()=>{if(R()<.5){H(-2);say('Mostly complaints about taxes.')}else{H(1);say('They say you are fair!')}},()=>0),
+()=>ask('Young Boy','#7ac','Can I try on your crown?',()=>{H(4);if(R()<.2)say('He dropped it in the mud!')},()=>H(-1)),
+()=>ask('Foreign Trader','#b84','I come from '+S.ks[1].n+'. May I trade in your market?',()=>{G(20);S.ks[1].rel+=3},()=>{S.ks[1].rel-=2}),
+()=>ask('Musician','#a6c','Will you hire me to play at the castle for 30 gold?',()=>{G(-30);H(4)},()=>0)];
+TQ.push(
+()=>ask('Cobbler','#a85','May I measure your feet for royal shoes? It costs 15 gold.',()=>{G(-15);H(2)},()=>0),
+()=>ask('Baker Boy','#dc9','Would you like a free sweet roll?',()=>{H(2);if(R()<.1)say('It was a little stale...')},()=>0),
+()=>ask('Shepherd','#8a7','May my sheep graze on the castle lawn?',()=>{H(2);G(5)},()=>H(-1)),
+()=>ask('Tailor','#c6a','Will you pay 40 gold for a new royal cloak?',()=>{G(-40);H(3);U(-1)},()=>0),
+()=>ask('Poet','#97b','May I read you a poem about the kingdom?',()=>{H(3);say('The crowd clapped along.')},()=>0),
+()=>ask('Carpenter','#a74','Will you pay 45 gold for new market stalls?',()=>{G(-45);H(2);if(R()<.3){S.biz++;say('Busy stalls bring in daily income!')}},()=>H(-1)),
+()=>ask('Village Elder','#bbb','May the elders hold a council meeting in your hall?',()=>{U(-5);H(2)},()=>U(4)),
+()=>ask('Sailor','#47a','May my crew rest in your town tonight? We spend plenty of coin.',()=>{G(35);if(R()<.2){H(-2);say('A brawl broke out at the tavern!')}},()=>0),
+()=>ask('Candle Maker','#eb6','Will you buy candles for the castle halls for 20 gold?',()=>{G(-20);H(1)},()=>0),
+()=>ask('Dog Owner','#9a7','May my dog join the royal guards?',()=>{H(3);say('The dog guards very well!')},()=>H(-1)),
+()=>ask('Orphan Keeper','#a9c','Will you pay 60 gold to build a home for the orphans?',()=>{G(-60);H(6);U(-3)},()=>H(-3)),
+()=>ask('Runner','#5a9','May we hold a footrace in the square? The prize is 25 gold.',()=>{G(-25);H(5)},()=>H(-1)),
+()=>ask('Fortune Teller','#a4a','Do you want to hear your fortune for free?',()=>{if(R()<.6){G(30);say('She says great luck ahead!')}else{H(-2);say('She sees a dark cloud ahead...')}},()=>0),
+()=>ask('Pickpocket','#555','I took some coins. May I give them back and walk free?',()=>{G(30);H(1)},()=>{U(3);say('The guards took him away.')}),
+()=>ask('Stable Boy','#a86','Will you buy a stronger horse for 60 gold?',()=>{G(-60);S.troops+=2;say('Your cavalry grew stronger.')},()=>0),
+()=>ask('Librarian','#79a','Will you buy new books for 50 gold?',()=>{G(-50);if(S.know<4&&R()<.5){S.know++;say('You learned something new!')}},()=>0),
+()=>ask('Cartographer','#ba7','May I draw a map of your kingdom for 30 gold?',()=>{G(-30);H(1);say('A fine map now hangs in your hall.')},()=>0),
+()=>ask('Pilgrim','#ccb','May I pray at your temple for a week?',()=>H(2),()=>0),
+()=>ask('Water Carrier','#6bc','May I dig a new well in the square for 35 gold?',()=>{G(-35);H(4);P(2)},()=>H(-2)),
+()=>ask('Juggler','#e84','May I juggle in the square for the crowd?',()=>{H(3);if(R()<.1)say('He dropped a plate!')},()=>0));
+EV.push(
+()=>ask('Court Jester','#e5a','May I tell a joke about the guards?',()=>{H(2);U(-1);say('Even the guards laughed.')},()=>0),
+()=>ask('Royal Cook','#c63','Will you pay 30 gold for fresh spices for tonights feast?',()=>{G(-30);H(3)},()=>H(-1)),
+()=>ask('Messenger','#68b','May I deliver your letters for 10 gold a day?',()=>{G(-10);H(1)},()=>0),
+()=>ask('Cat Lady','#b9a','May my cats live in your barns? They catch rats.',()=>{H(1);G(5)},()=>0),
+()=>ask('Stable Master','#a75','Will you pay 60 gold to repair the stables?',()=>{G(-60);S.troops+=2},()=>H(-1)),
+()=>ask('Lord Ned','#97a','May I borrow some of your guards for my wedding day?',()=>{H(3);say('The wedding was lovely.')},()=>U(1)));
+const CH=['Villager: "Nice weather for a walk, majesty."','Villager: "Have you tried the bread? It is good today."','Child: "Is the crown heavy?"','Old Man: "I remember when this street was just mud."','Villager: "Long live the ruler!"','Merchant: "Best prices in the kingdom!"','Villager: "Careful, the cobbles are slippery."','Child: "Look, a bird!"','Villager: "I heard a dragon lives in the hills."','Baker: "Fresh bread, still warm!"','Villager: "My cat had kittens last week."','Guard: "All quiet in town, majesty."'];
+let bag=[],npcs=[],px=500,dir=0,gt=null,tid;
+const nq=()=>{if(!bag.length)bag=TQ.map((_,i)=>i).sort(()=>R()-.5);return bag.pop()};
+function spawnN(){const L=R()<.5,q=R()<.18,c=['#c84','#58a','#7a4','#a63','#a4a','#488','#b55','#6a8'][F(R()*8)],sk=['#f2d6b8','#e0b48c','#b9805a','#7a4a30'][F(R()*4)],hc=['#2b2118','#6b3f1d','#c9a24b','#8a8a8a'][F(R()*4)],mu=R()<.7?'M-9 16Q0 24 9 16':'M-8 18H8',e=document.createElementNS('http://www.w3.org/2000/svg','g');e.innerHTML=`<g transform="scale(.6)" stroke="#2b2118" stroke-width="5" stroke-linejoin="round"><path d="M-40 90Q-45 20 0 20Q45 20 40 90L55 120L-55 120Z" fill="${c}"/><circle cx="0" cy="0" r="30" fill="${sk}"/><path d="M-30 -8Q0 -40 30 -8Q0 -20 -30 -8Z" fill="${hc}"/><circle cx="-11" cy="4" r="4.5" fill="#2b2118" stroke="none"/><circle cx="11" cy="4" r="4.5" fill="#2b2118" stroke="none"/><path d="${mu}" stroke-width="3.5" fill="none"/></g>${q?'<g class="mk"><circle cx="0" cy="-60" r="16" fill="#f5c22b" stroke="#2b2118" stroke-width="4"/><text x="0" y="-53" font-size="20" font-weight="900" text-anchor="middle" fill="#2b2118" stroke="none">E</text></g>':''}`;const n={e,x:L?-40:1040,v:(L?1:-1)*(.8+R()*1.4),q};if(q){e.setAttribute('class','q');e.onclick=ev=>{ev.stopPropagation();talk(n)}}else{e.setAttribute('class','q');e.onclick=ev=>{ev.stopPropagation();say(CH[F(R()*CH.length)])}}$('np').appendChild(e);npcs.push(n)}
+function talk(n){if(!n.q||B||mo)return;n.q=0;n.e.querySelector('.mk').remove();n.e.removeAttribute('class');TQ[nq()]()}
+function loop(){if(B||mo)return;if(dir)gt=null;if(gt!=null){if(Math.abs(gt-px)<6)gt=null;else px+=Math.sign(gt-px)*5}px=Math.max(40,Math.min(960,px+dir*5));if(npcs.length<6&&R()<.012)spawnN();npcs=npcs.filter(n=>{n.x+=n.v;n.e.setAttribute('transform','translate('+n.x+',488)');if(n.x<-60||n.x>1060){n.e.remove();return 0}return 1});$('pl').setAttribute('transform','translate('+px+',435) scale(.5)')}
+function leave(){if(B)return say('Answer first!');tn=0;clearInterval(tid);$('g').classList.remove('tw');$('tc').hidden=1;$('wk').textContent='Walk town';dir=0;say('You return to the castle.');pump(5000)}
+function walk(){if(tn)return leave();if(B||mo||slp)return say('Not now.');tn=1;$('g').classList.add('tw');ruler($('pl'),S);px=500;dir=0;npcs=[];$('np').innerHTML='';$('tc').hidden=0;$('wk').textContent='Back to castle';gt=null;say('Walk with A/D or arrow keys, or click where you want to go. Click anyone with an E, or press E near them.');tid=setInterval(loop,40);loop()}
+$('tg').addEventListener('click',e=>{if(!tn||B||mo)return;const r=$('sc').getBoundingClientRect();gt=(e.clientX-r.left)/r.width*1000});
+addEventListener('keydown',e=>{if(!tn||B||mo)return;const k=e.key.toLowerCase();if(k=='arrowleft'||k=='a')dir=-1;else if(k=='arrowright'||k=='d')dir=1;else if(k=='e'){const n=npcs.find(n=>n.q&&Math.abs(n.x-px)<90);n&&talk(n)}});
+addEventListener('keyup',e=>{if(['arrowleft','arrowright','a','d'].includes(e.key.toLowerCase()))dir=0});
+
+function creator(){mo=1;$('pn').hidden=1;const t={...S};$('md').hidden=0;$('md').innerHTML=`<h2 style="margin:0">Create your ruler</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><svg viewBox="-90 -80 180 340" style="width:28%;min-width:120px;background:#9fd8ec;border:3px solid #2b2118;border-radius:10px"><g id="pv"></g></svg><div style="display:grid;gap:6px;align-content:start">Name <input id="cn" value="${t.name}" maxlength="14"><select id="k2"><option value="0">Queen</option><option value="1" ${t.king?'selected':''}>King</option></select>Skin <input type="color" id="c1" value="${t.skin}">Hair <input type="color" id="c2" value="${t.hair}">Robe <input type="color" id="c3" value="${t.robe}">Crown <input type="color" id="c4" value="${t.crown}"><button onclick="go()">Rule!</button></div></div>`;const up=()=>{t.name=$('cn').value||'Ruler';t.king=+$('k2').value;t.skin=$('c1').value;t.hair=$('c2').value;t.robe=$('c3').value;t.crown=$('c4').value;ruler($('pv'),t)};['cn','k2','c1','c2','c3','c4'].forEach(i=>$(i).oninput=up);up();window.go=()=>{up();Object.assign(S,t);S.made=1;mo=0;$('md').hidden=1;ruler($('rl'),S);if(!S.started){S.started=1;say('Welcome, '+(S.king?'King ':'Queen ')+S.name+'!')}upd()}}
+function mkHouse(f){hr=f===true?0:60;mo=1;$('pn').hidden=1;$('md').hidden=0;$('md').innerHTML=`<h2 style="margin:0">Design a building</h2><div style="display:grid;gap:6px;max-width:320px">Name <input id="hn" value="New shop" maxlength="16">Type <select id="hk"><option>shop</option><option>home</option><option>tavern</option><option>smithy</option></select>Color <input type="color" id="hc" value="#d9774a"><button onclick="hb()">Build</button><button onclick="G(hr);hx()">Cancel</button></div>`}
+function hb(){S.houses.push({n:$('hn').value||'House',k:$('hk').value,c:$('hc').value});say('Built '+S.houses[S.houses.length-1].n+'!');drawH();hx()}
+function hx(){mo=0;$('md').hidden=1;upd()}
+
+function M(t){if(t)tab=t;const T={Realm:rR,Army:rA,Staff:rS,Allies:rD,Royal:rY};rows=T[tab]();const p=$('pn');p.hidden=0;p.innerHTML=`<div class="tb">${Object.keys(T).map(k=>`<button class="${k==tab?'on':''}" onclick="M('${k}')">${k}</button>`).join('')}<button onclick="X()">✕ Close</button></div><div class="bd">${tab=='Realm'?`<p>Tax ${S.tax}% <button onclick="tx(-5)">−</button><button onclick="tx(5)">+</button> · land ${S.land} · room for ${cap()} people</p>`:''}${rows.map((r,i)=>`<button class="rw" ${r[3]?'disabled':''} onclick="RW(${i})"><span>${r[0]}</span><span>${r[1]?r[1]+'g':''}</span></button>`).join('')}</div>`}
+const X=()=>{$('pn').hidden=1;pump(800)};
+function tx(d){S.tax=Math.max(0,Math.min(60,S.tax+d));upd();M()}
+function RW(i){const r=rows[i];if(r[1]&&S.gold<r[1])return say('Not enough gold!');G(-(r[1]||0));r[2]();upd();if(!B&&Q.length)pump(1500);if(!B&&!mo&&!$('pn').hidden)M()}
+const rR=()=>[['Custom house / shop',60,mkHouse],['Crop field (sells daily)',80,()=>{S.farms++}],['Hire miner',150,()=>{S.mines++}],['Upgrade pickaxes (lvl '+S.pick+')',200+S.pick*150,()=>{S.pick++}],['Expand kingdom',300,expand],['Invest in a townsperson business',120,invest],['Library: read ('+S.know+'/4)',100+S.know*60,()=>{S.know++;say(['','Weapons unlocked!','Slingshots & machines unlocked!','Catapults unlocked!','Wall fire & spikes unlocked!'][S.know])},S.know>=4]];
+const rA=()=>[['Train 10 troops',60,()=>{S.troops+=10}],['Upgrade troops (lvl '+S.tl+')',200+S.tl*150,()=>{S.tl++}],['Build slingshot/catapult',250,()=>{S.mach++},S.know<2],['Wall (lvl '+S.walls+')',150+S.walls*100,()=>{S.walls++}],['Wall fire & spikes',200,()=>{S.wx++},S.know<4||!S.walls],['Hire 5 guards',100,()=>{S.guards+=5}]];
+const rS=()=>[['Hire informant (news & spy)',80,()=>{S.inf=1},S.inf],['Hire personal chef',40,()=>{S.chef=1},S.chef],['Buy 3 slaves',60,()=>{S.slaves+=3;U(2)}]];
+const rD=()=>S.ks.flatMap(k=>k.dead?[]:[[k.n+(k.ally?' (ally)':'')+': ally',0,()=>ally(k),k.ally||k.skel],[k.n+': trade',0,()=>trade(k),k.enemy],[k.n+': war (power '+k.p+')',0,()=>war(k)],[k.n+': hitman',150,()=>hit(k)]].concat(k.ally?[[k.n+': BETRAY',0,()=>betray(k)]]:[]));
+const rY=()=>[['Customize ruler',0,creator],['Burn a house/business',0,()=>{S.houses.pop();drawH();P(-3);U(8);H(-6);say('You burned it down.')}],['Execute someone (no reason)',0,()=>kill(0)],['Execute ALL slaves',0,()=>{S.slaves=0;U(15);H(-10)}],['Execute EVERYONE',0,()=>{P(-S.people*.3);U(35);H(-25);say('The people are terrified...')}],['Forgive all debts',0,()=>{S.debtors=0;H(8);U(-6)}],['Publicly execute debtors',0,()=>{S.debtors=0;U(10);H(-5);S.fear=Math.min(.3,S.fear+.1);say('Fewer will dare to default.')},!S.debtors]];
+
+function invest(){if(R()<.7){S.biz++;say('They agreed! New daily income.')}else ask('Merchant','#a74','I refuse your coin! Forgive (Y) or kill (N)?',()=>H(2),()=>kill(1))}
+function expand(){S.land++;say('Kingdom expanded.');const a=S.ks.filter(k=>!k.dead);if(S.land>=3&&R()<.5){const k=a[F(R()*a.length)];ask(k.n+' envoy','#58a','Your border touches our land! Negotiate (Y) or fight (N)?',()=>{if(R()<.55+k.rel/200){k.rel+=5;say('Border agreed peacefully.')}else ask(k.n,'#a33','Talks failed. Retreat (Y) or go to war (N)?',()=>{S.land--;say('You retreated, avoiding conflict.')},()=>war(k))},()=>war(k))}}
+function ally(k){if(R()<.55+k.rel/200){k.ally=1;k.rel+=15;say(k.n+' accepts! You grow together.')}else{k.rel-=10;say(k.n+' refuses.')}}
+function trade(k){if(R()<.75){G((S.farms*35+40)*(k.ally?1.5:1));say('Trade succeeded!')}else say(k.n+' refused to trade.')}
+function hit(k){if(R()<.55){k.p=Math.round(k.p*.6);say('The hitman struck! '+k.n+' is shaken.')}else{k.enemy=1;k.rel-=40;say('The hitman failed and talked...')}}
+function betray(k){ask('Betrayal','#222','Conquer '+k.n+' (Y) or secretly steal from them (N)?',()=>{k.ally=0;war(k,1,1)},()=>{if(R()<.35){k.enemy=1;k.ally=0;k.rel=-60;say('Caught stealing! They hate you now.')}else{G(100+k.p);say('Stolen secretly!')}})}
+function war(k,f=1,all){const m=pw()*f,e=k.p*(.8+R()*.5);if(R()<m/(m+e)){const n=Math.round(k.p*.5+5);if(R()<.8){G(k.p*4);say('Victory over '+k.n+'! +'+k.p*4+'g')}else say('Victory, but no loot.');k.p=Math.round(k.p*.5);k.ally=0;k.enemy=1;k.rel=-60;if(all){k.dead=1;say(k.n+' is now part of your kingdom!')}S.troops=Math.round(S.troops*.9);Q.push(()=>ask('Spoils','#a63','Take '+n+' captives as citizens (Y) or slaves (N)?',()=>P(n),()=>{S.slaves+=n;U(3)}))}else{S.troops=Math.round(S.troops*.6);P(-S.people*.1);G(-S.gold*.2);k.enemy=1;k.rel=-60;k.ally=0;say('Defeat vs '+k.n+'! Troops, people & gold lost.')}}
+function battle(k){const m=pw(),e=k.p*(.8+R()*.5);say('⚔ '+k.n+' attacks!');if(R()<m/(m+e)){S.troops=Math.round(S.troops*.88);k.rel-=5;say('You held the line!')}else{S.troops=Math.round(S.troops*.6);P(-S.people*.12);G(-S.gold*.25);U(8);H(-8);say('You lost people and gold.')}}
+function civil(){const r=Math.round(S.people*S.unrest/200)+5,m=S.troops*(1+S.tl*.5)+S.guards*2+S.walls*6;say('⚔ REBELLION! '+r+' rebels rise.');if(R()<m/(m+r)){S.troops=Math.round(S.troops*.85);U(-30);say('You crushed it.')}else{G(-S.gold*.5);P(-S.people*.2);S.troops=Math.round(S.troops*.5);U(-20);say('Rebels won. Your kingdom is weak.')}}
+function disaster(){const t=F(R()*3);if(t==0){const d=Math.round(S.people*.12);P(-d);say('☠ Plague! '+d+' died.')}else if(t==1){G(-90);S.farms=Math.max(0,S.farms-1);say('🌊 Flood! Repairs cost 90g.')}else{S.houses.pop();drawH();G(-100);H(-5);say('🔥 Great fire! Rebuilding cost 100g.')}}
+
+function dawn(){if(S.sl>=3)return die('You never slept and collapsed.');if(tn){tn=0;clearInterval(tid);$('g').classList.remove('tw');$('tc').hidden=1;$('wk').textContent='Walk town'}S.day++;S.t=0;const al=S.ks.filter(k=>!k.dead);
+if(S.warn>=0){const k=S.ks[S.warn];S.warn=-1;if(!k.dead)Q.push(()=>battle(k))}
+const inc=Math.round(S.people*S.tax*.08+S.farms*30+S.mines*(12+S.pick*14)+S.biz*28+S.houses.filter(h=>h.k=='shop').length*18+S.slaves*6),ex=Math.round(S.troops*.6+S.guards*3+S.inf*8+(S.chef&&!S.slaves?5:0)+S.walls*3);G(inc-ex);say('Day '+S.day+': +'+inc+'g income, −'+ex+'g wages');
+H(S.tax>25?-(S.tax-25)/2:(S.tax<10?3:1));U((S.tax>25?(S.tax-25)/2:-3)-S.guards*.3+(S.happy<40?4:-1));
+S.loans=S.loans.filter(l=>{if(l.d>S.day)return 1;if(R()<.65+S.fear){G(l.a);say('A loan was repaid.')}else{S.debtors++;say('A borrower defaulted!')}return 0});
+if(S.happy>40)P(Math.max(0,Math.min(cap()-S.people,Math.ceil(S.people*.04))));
+if(S.unrest>55&&R()<S.unrest/150)civil();if(R()<.07)disaster();
+al.forEach(k=>{k.p=Math.round(k.p+2+R()*3)});
+if(al.length>1&&S.day>1){const pk=()=>al[F(R()*al.length)];
+if(R()<.3){const k=pk();if(!k.skel)Q.push(()=>ask(k.n+' envoy','#58a','Will you send 3 troops to help us in our war?',()=>{S.troops=Math.max(0,S.troops-3);k.rel+=12;say('They are grateful.')},()=>{k.rel-=8;if(k.ally&&R()<.5){k.ally=0;say('Your alliance is shaken!')}}))}
+if(R()<.2){const k=pk();if(!k.ally&&!k.skel&&!k.enemy)Q.push(()=>ask(k.n,'#4a8','Will you ally with us, Your Majesty?',()=>{k.ally=1;k.rel+=20;say('Allied with '+k.n)},()=>{k.rel-=3}))}
+if(R()<.15){const k=pk();if(!k.enemy)Q.push(()=>ask(k.n+' trader','#b83','Trade goods with us?',()=>{if(R()<.8){G(60+S.farms*20);say('Profitable trade!')}else{G(-40);say('They cheated you!')}},()=>0))}
+if(R()<.12){const a=pk(),b=pk();if(a!=b){const w=a.p>=b.p?a:b,l=w==a?b:a;w.p=Math.round(w.p*.75);l.p=Math.round(l.p*.5);if(S.inf)Q.push(()=>ask('Informant','#8a5',w.n+' beat '+l.n+'. Both are weakened. Attack the winner (Y)?',()=>war(w),()=>0,()=>{war(w,.55);war(l,.55)},'Attack both!'))}}}
+al.forEach(k=>{if(S.warn<0&&!k.ally&&R()<(k.skel?.12:k.enemy?.1:k.rel<-20?.05:.01)){S.warn=S.ks.indexOf(k);if(S.inf)say('Informant: '+k.n+' plans to attack tomorrow!')}});
+upd();pump(4000)}
+function sleep(){if(tn)return say('Return to the castle first.');if(S.t<300||B||mo)return say(S.t<300?'You are not tired yet.':'Finish first.');slp=1;$('zz').hidden=0;$('pn').hidden=1;setTimeout(()=>{slp=0;$('zz').hidden=1;if(R()<.06*(1-Math.min(.9,S.guards*.1)))return die('An assassin found you in your sleep!');S.sl=0;dawn();say('☀ You wake up. Checkpoint saved.')},5000)}
+function tick(){if(!S.made||slp||mo)return;S.t++;if(S.t==900)say('🌙 Night falls. Sleep, or stay awake...');if(S.t>=1020){S.sl++;if(S.sl==2)say('👻 You are seeing ghosts...');dawn();return}if(S.t<900&&S.t%60==0&&idle()){if(Q.length)Q.shift()();else{const A=R()<.5?EV:TQ;A[F(R()*A.length)]()}}if(S.sl>=2&&S.t%30==0)say('👻 Boo... go to sleep.');upd()}
+
+try{S=JSON.parse(localStorage.getItem('realm1'))}catch(e){}
+S=Object.assign(DEF(),S||{});
+drawH();ruler($('rl'),S);$('vs').style.display='none';upd();if(!S.made)creator();
+setInterval(tick,1000);addEventListener('beforeunload',save);
+</script></body></html>
