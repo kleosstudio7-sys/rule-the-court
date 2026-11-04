@@ -91,6 +91,7 @@ function shopInc(){if(!S.shop.on)return 0;let t=0;const pr=S.shop.pr/100,d=Math.
 function shopUI(){mo=1;$('pn').hidden=1;$('md').hidden=0;const s=S.shop;$('md').innerHTML='<h2 style="margin:0">Your shop</h2><div style="display:grid;gap:6px;max-width:340px">Price level <input type="range" id="sp" min="50" max="200" step="5" value="'+s.pr+'"><b id="spv">'+s.pr+'%</b>'+Object.keys(SI).map(k=>'<label><input type="checkbox" id="si_'+k+'" '+(s.it[k]?'checked':'')+'> '+k+' (base '+SI[k][0]+'g, cost '+SI[k][1]+'g)</label>').join('')+'<small>High prices sell less and anger people; low prices please them but cut profit.</small><button onclick="shopOk()">Save</button></div>';$('sp').oninput=()=>$('spv').textContent=$('sp').value+'%'}
 function shopOk(){S.shop.pr=+$('sp').value;for(const k in SI)S.shop.it[k]=$('si_'+k).checked?1:0;hx();say('Shop updated.')}
 function sellS(n,k){S.slaves-=n;if(!k){G(n*30);H(-3);U(3);say('Sold '+n+' slaves to townspeople. Some are uneasy.')}else if(R()<.5+k.rel/200){G(n*55);k.rel+=3;H(-1);U(1);say(k.n+' bought '+n+' slaves for '+n*55+'g.')}else{S.slaves+=n;k.rel-=2;say(k.n+' refused to buy slaves.')}}
+function rg(n){let lo,hi;if(n<=20){lo=5;hi=15}else if(n<=40){lo=10;hi=30}else if(n<=60){lo=20;hi=40}else{lo=25;hi=45}let g=lo+F(R()*(hi-lo+1))+Math.floor((S.land-1)+S.people/80+S.houses.length/4);g=Math.min(50,g);if(n>=100&&R()<.05)g=100;return g}
 function sendE(k,t){S.env={k:S.ks.indexOf(k),t,d:S.day+1};say('You send someone to '+k.n+' to strike a deal. He returns tomorrow.')}
 function deal(k,t,p){if(t=='c')S.grain=0;else{if(S.slaves<3)return say('You no longer have 3 slaves.');S.slaves-=3;H(-1);U(1)}G(p);k.rel+=3;say('Deal done with '+k.n+': +'+p+'g.')}
 function envBack(){const e=S.env;S.env=null;const k=S.ks[e.k];if(!k||k.dead||k.enemy||R()>.6+k.rel/200){if(k)k.rel-=2;return say('Your envoy was turned away'+(k?' by '+k.n:'')+'.')}const p=e.t=='c'?Math.round(S.grain*9*(k.ally?1.3:1)):165;Q.push(()=>ask('Envoy','#b83',k.n+' offers '+p+'g for '+(e.t=='c'?S.grain+' crops':'3 slaves')+'. Accept (Y) or haggle (N)?',()=>deal(k,e.t,p),()=>{if(R()<.5)deal(k,e.t,Math.round(p*1.4));else{k.rel-=3;say('The deal collapsed.')}}))}
@@ -112,21 +113,21 @@ const EV=[
 ()=>ask('Beggar Bo','#6a8','Your Majesty, could you spare 50 gold for bread?',()=>{G(-50);H(6);if(R()<.2){G(-30);say('He told everyone... a crowd came for more!')}},()=>H(-3),()=>kill(0)),
 ()=>ask('Merchant Mel','#c84','May I open a new shop in town? You design it!',()=>mkHouse(true),()=>H(-2)),
 ()=>ask('Outsider','#58a','We are travelers. May we join your kingdom?',()=>{P(8);if(R()<.25){G(-60);say('Some were thieves!')}else say('8 newcomers settled in.')},()=>say('They left.'),()=>kill(0)),
-()=>ask('Price Guild','#a63','Merchants want to raise prices and pay you 90 gold. Allow?',()=>{G(90);H(-4);if(R()<.2){U(8);say('Riot over prices!')}},()=>H(3)),
-()=>ask('Farmer Finn','#7a4','Will you lend me 100 gold, majesty?',()=>{G(-100);S.loans.push({d:S.day+2,a:140});say('Loan given.')},()=>H(-2)),
+()=>ask('Price Guild','#a63','Merchants want to raise prices, and you would get a share. Do you let them?',()=>{const g=5+F(R()*11)+Math.floor((S.land-1)+S.people/50+S.houses.length/3);G(g);say('Your share: '+g+' gold.');H(-4);if(R()<.2){U(8);say('Riot over prices!')}},()=>H(3)),
+()=>{const L=Math.min(50,10+F(R()*41)+Math.floor((S.land-1)+S.people/80+S.houses.length/4));ask('Farmer Finn','#7a4','Will you lend me '+L+' gold, majesty? I will pay you back tomorrow.',()=>{if(S.gold<L)return say('You cannot afford that loan.');G(-L);S.loans.push({d:S.day+1,a:Math.round(L*1.2)});say('Loan given. Repayment due tomorrow.')},()=>H(-2))},
 ()=>ask('Peasant','#965','Majesty, may I speak freely about your taxes?',()=>{if(R()<.6){H(2);say('He spoke politely.')}else{H(-2);U(2);say('He insulted you in front of everyone!')}},()=>U(3),()=>kill(0)),
 ()=>ask('Thief','#555','I stole a loaf of bread. Will you forgive me? (No means public execution)',()=>{H(5);U(-3)},()=>{U(10);H(-4);S.fear=Math.min(.3,S.fear+.05);say('Publicly executed.');scn(exSvg(1))}),
 ()=>ask('Scholar','#68a','Will you buy a rare book of war for 90 gold?',()=>{G(-90);if(S.know>=4||R()<.3)say('It was a fake!');else{S.know++;say('You learned something new!')}},()=>0),
 ()=>ask('Slaver','#833','Will you buy 3 slaves for 80 gold?',()=>{G(-80);S.slaves+=3;U(2)},()=>0),
-()=>ask('Fortune Teller','#a4a','Will you pay 40 gold for me to find treasure for you?',()=>{G(-40);if(R()<.5){G(150);say('Treasure found!')}else say('Nothing but dirt.')},()=>0),
+()=>ask('Fortune Teller','#a4a','Will you pay 40 gold for me to find treasure for you?',()=>{G(-40);if(R()<.5){G(rg(150));say('Treasure found!')}else say('Nothing but dirt.')},()=>0),
 ()=>ask('Smiling Cook','#c33','A drink for the weary ruler?',()=>{if(R()<(S.guards?.08:.25)*(S.chef?.3:1))return die('The drink was poisoned!');H(1);say('Delicious!')},()=>say('You wisely refused.')),
-()=>ask('Debtor','#a85','Will you give me one more week to pay my taxes?',()=>{H(5);G(-20)},()=>{G(20);U(4)},()=>kill(1))];
+()=>ask('Debtor','#a85','Will you give me one more week to pay my taxes?',()=>{H(5);G(-20)},()=>{G(rg(20));U(4)},()=>kill(1))];
 const TQ=[
-()=>ask('Baker','#c94','May I raise the price of bread? You will get a cut.',()=>{G(30);H(-3)},()=>H(3)),
+()=>ask('Baker','#c94','May I raise the price of bread? You will get a cut.',()=>{G(rg(30));H(-3)},()=>H(3)),
 ()=>ask('Little Kid','#6ac','Can I pet your horse?',()=>{H(3);if(R()<.15){G(-10);say('The horse kicked a cart!')}},()=>H(-2)),
-()=>ask('Old Woman','#a8a','I have no coin for taxes this month. Will you forgive my tax?',()=>{H(6);G(-15)},()=>{G(15);U(4)}),
+()=>ask('Old Woman','#a8a','I have no coin for taxes this month. Will you forgive my tax?',()=>{H(6);G(-15)},()=>{G(rg(15));U(4)}),
 ()=>ask('Drunk','#a64','Hic! May I buy you a drink, ruler?',()=>{H(2);if(R()<.3){G(-10);say('He left you with the bill!')}},()=>U(1),()=>kill(0)),
-()=>ask('Guild Man','#488','Will you join the merchant guild for 40 gold?',()=>{G(-40);if(R()<.6){G(110);say('The guild paid off!')}else say('Nothing came of it.')},()=>0),
+()=>ask('Guild Man','#488','Will you join the merchant guild for 40 gold?',()=>{G(-40);if(R()<.6){G(rg(110));say('The guild paid off!')}else say('Nothing came of it.')},()=>0),
 ()=>ask('Blacksmith','#777','Will you pay 70 gold to fix my broken forge?',()=>{G(-70);H(3);S.troops+=3;say('He forged you 3 swords!')},()=>H(-2)),
 ()=>ask('Lost Child','#6ac','Will your guards help me find my cat?',()=>{H(3);G(-5)},()=>H(-1)),
 ()=>ask('Priest','#ddd','Will you donate 30 gold to the temple?',()=>{G(-30);H(4)},()=>H(-1)),
@@ -136,41 +137,41 @@ const TQ=[
 ()=>ask('Widow','#888','Could you spare some bread for my hungry children?',()=>{G(-20);H(5)},()=>H(-3)),
 ()=>ask('Soldier','#486','Will you buy us new boots for 35 gold?',()=>{G(-35);S.troops+=2;U(-2)},()=>U(2)),
 ()=>ask('Tavern Owner','#b73','Will you lower my tavern tax this season?',()=>{G(-25);H(4)},()=>U(2)),
-()=>ask('Stranger','#324','Will you buy a treasure map from me for 30 gold?',()=>{G(-30);if(R()<.4){G(120);say('You found buried gold!')}else say('The map was a joke.')},()=>0),
+()=>ask('Stranger','#324','Will you buy a treasure map from me for 30 gold?',()=>{G(-30);if(R()<.4){G(rg(120));say('You found buried gold!')}else say('The map was a joke.')},()=>0),
 ()=>ask('Defector','#a33','I am a spy from '+S.ks[0].n+'. May I join your troops instead?',()=>{if(R()<.3){G(-50);say('He lied and stole from you!')}else{S.troops+=2;say('He joined your troops.')}},()=>0,()=>kill(1)),
 ()=>ask('Mason','#999','May I repair the old bridge for 50 gold?',()=>{G(-50);H(3);P(2)},()=>H(-2)),
 ()=>ask('Bride','#e9a','Will you attend our wedding?',()=>{H(5);G(-10)},()=>H(-2)),
 ()=>ask('Brawler','#a55','He cheated at cards. Will you punish him?',()=>{U(-2);H(1)},()=>H(-1),()=>kill(1)),
-()=>ask('Fisherman','#58a','May I sell fish at the castle gate? I will share the profit.',()=>{G(25);H(2)},()=>H(-1)),
+()=>ask('Fisherman','#58a','May I sell fish at the castle gate? I will share the profit.',()=>{G(rg(25));H(2)},()=>H(-1)),
 ()=>ask('Teacher','#a75','Will you pay 45 gold to open a school for the children?',()=>{G(-45);H(5);if(R()<.25&&S.know<4){S.know++;say('The teacher shared new knowledge!')}},()=>H(-2)),
 ()=>ask('Gardener','#6a6','May I plant flowers around the castle for 20 gold?',()=>{G(-20);H(3)},()=>0),
 ()=>ask('Worried Father','#a96','My son stole an apple. Will you forgive him?',()=>H(4),()=>{U(3);H(-2)}),
-()=>ask('Traveling Merchant','#c75','May I set up a stall in your market for 40 gold a week?',()=>{G(40);if(R()<.15){U(4);say('He was a smuggler!')}},()=>0),
+()=>ask('Traveling Merchant','#c75','May I set up a stall in your market for a weekly fee?',()=>{G(rg(40));if(R()<.15){U(4);say('He was a smuggler!')}},()=>0),
 ()=>ask('Palace Guard','#678','We have not been paid in days. May we have a raise of 30 gold?',()=>{G(-30);U(-3)},()=>U(5)),
 ()=>ask('Healer','#7ab','Will you pay 50 gold for herbs to keep the town healthy?',()=>{G(-50);H(3);P(3);say('Sick villagers recovered.')},()=>H(-2)),
-()=>ask('Beekeeper','#db4','May I keep bees near the castle? You get free honey.',()=>{G(15);H(2);if(R()<.2){H(-1);say('A guard got stung!')}},()=>0),
+()=>ask('Beekeeper','#db4','May I keep bees near the castle? You get free honey.',()=>{G(rg(15));H(2);if(R()<.2){H(-1);say('A guard got stung!')}},()=>0),
 ()=>ask('Hungry Traveler','#865','Could you spare 20 gold for a hungry traveler?',()=>{G(-20);H(3)},()=>H(-1)),
-()=>ask('Noble','#a4c','May I build a bigger house in town? I will pay a 60 gold fee.',()=>{G(60);U(3)},()=>U(-1)),
-()=>ask('Hunter','#574','May I hunt in the royal forest? I will bring you meat.',()=>{G(20);H(2)},()=>H(-1)),
+()=>ask('Noble','#a4c','May I build a bigger house in town? I will pay a fee.',()=>{G(rg(60));U(3)},()=>U(-1)),
+()=>ask('Hunter','#574','May I hunt in the royal forest? I will bring you meat.',()=>{G(rg(20));H(2)},()=>H(-1)),
 ()=>ask('Gossip','#c8a','Do you want to know what people really say about you?',()=>{if(R()<.5){H(-2);say('Mostly complaints about taxes.')}else{H(1);say('They say you are fair!')}},()=>0),
 ()=>ask('Young Boy','#7ac','Can I try on your crown?',()=>{H(4);if(R()<.2)say('He dropped it in the mud!')},()=>H(-1)),
-()=>ask('Foreign Trader','#b84','I come from '+S.ks[1].n+'. May I trade in your market?',()=>{G(20);S.ks[1].rel+=3},()=>{S.ks[1].rel-=2}),
+()=>ask('Foreign Trader','#b84','I come from '+S.ks[1].n+'. May I trade in your market?',()=>{G(rg(20));S.ks[1].rel+=3},()=>{S.ks[1].rel-=2}),
 ()=>ask('Musician','#a6c','Will you hire me to play at the castle for 30 gold?',()=>{G(-30);H(4)},()=>0)];
 TQ.push(
 ()=>ask('Cobbler','#a85','May I measure your feet for royal shoes? It costs 15 gold.',()=>{G(-15);H(2)},()=>0),
 ()=>ask('Baker Boy','#dc9','Would you like a free sweet roll?',()=>{H(2);if(R()<.1)say('It was a little stale...')},()=>0),
-()=>ask('Shepherd','#8a7','May my sheep graze on the castle lawn?',()=>{H(2);G(5)},()=>H(-1)),
+()=>ask('Shepherd','#8a7','May my sheep graze on the castle lawn?',()=>{H(2);G(rg(5))},()=>H(-1)),
 ()=>ask('Tailor','#c6a','Will you pay 40 gold for a new royal cloak?',()=>{G(-40);H(3);U(-1)},()=>0),
 ()=>ask('Poet','#97b','May I read you a poem about the kingdom?',()=>{H(3);say('The crowd clapped along.')},()=>0),
 ()=>ask('Carpenter','#a74','Will you pay 45 gold for new market stalls?',()=>{G(-45);H(2);if(R()<.3){S.biz++;say('Busy stalls bring in daily income!')}},()=>H(-1)),
 ()=>ask('Village Elder','#bbb','May the elders hold a council meeting in your hall?',()=>{U(-5);H(2)},()=>U(4)),
-()=>ask('Sailor','#47a','May my crew rest in your town tonight? We spend plenty of coin.',()=>{G(35);if(R()<.2){H(-2);say('A brawl broke out at the tavern!')}},()=>0),
+()=>ask('Sailor','#47a','May my crew rest in your town tonight? We spend plenty of coin.',()=>{G(rg(35));if(R()<.2){H(-2);say('A brawl broke out at the tavern!')}},()=>0),
 ()=>ask('Candle Maker','#eb6','Will you buy candles for the castle halls for 20 gold?',()=>{G(-20);H(1)},()=>0),
 ()=>ask('Dog Owner','#9a7','May my dog join the royal guards?',()=>{H(3);say('The dog guards very well!')},()=>H(-1)),
 ()=>ask('Orphan Keeper','#a9c','Will you pay 60 gold to build a home for the orphans?',()=>{G(-60);H(6);U(-3)},()=>H(-3)),
 ()=>ask('Runner','#5a9','May we hold a footrace in the square? The prize is 25 gold.',()=>{G(-25);H(5)},()=>H(-1)),
-()=>ask('Fortune Teller','#a4a','Do you want to hear your fortune for free?',()=>{if(R()<.6){G(30);say('She says great luck ahead!')}else{H(-2);say('She sees a dark cloud ahead...')}},()=>0),
-()=>ask('Pickpocket','#555','I took some coins. May I give them back and walk free?',()=>{G(30);H(1)},()=>{U(3);say('The guards took him away.')}),
+()=>ask('Fortune Teller','#a4a','Do you want to hear your fortune for free?',()=>{if(R()<.6){G(rg(30));say('She says great luck ahead!')}else{H(-2);say('She sees a dark cloud ahead...')}},()=>0),
+()=>ask('Pickpocket','#555','I took some coins. May I give them back and walk free?',()=>{G(rg(30));H(1)},()=>{U(3);say('The guards took him away.')}),
 ()=>ask('Stable Boy','#a86','Will you buy a stronger horse for 60 gold?',()=>{G(-60);S.troops+=2;say('Your cavalry grew stronger.')},()=>0),
 ()=>ask('Librarian','#79a','Will you buy new books for 50 gold?',()=>{G(-50);if(S.know<4&&R()<.5){S.know++;say('You learned something new!')}},()=>0),
 ()=>ask('Cartographer','#ba7','May I draw a map of your kingdom for 30 gold?',()=>{G(-30);H(1);say('A fine map now hangs in your hall.')},()=>0),
@@ -181,7 +182,7 @@ EV.push(
 ()=>ask('Court Jester','#e5a','May I tell a joke about the guards?',()=>{H(2);U(-1);say('Even the guards laughed.')},()=>0),
 ()=>ask('Royal Cook','#c63','Will you pay 30 gold for fresh spices for tonights feast?',()=>{G(-30);H(3)},()=>H(-1)),
 ()=>ask('Messenger','#68b','May I deliver your letters for 10 gold a day?',()=>{G(-10);H(1)},()=>0),
-()=>ask('Cat Lady','#b9a','May my cats live in your barns? They catch rats.',()=>{H(1);G(5)},()=>0),
+()=>ask('Cat Lady','#b9a','May my cats live in your barns? They catch rats.',()=>{H(1);G(rg(5))},()=>0),
 ()=>ask('Stable Master','#a75','Will you pay 60 gold to repair the stables?',()=>{G(-60);S.troops+=2},()=>H(-1)),
 ()=>ask('Lord Ned','#97a','May I borrow some of your guards for my wedding day?',()=>{H(3);say('The wedding was lovely.')},()=>U(1)));
 EV.push(
@@ -189,8 +190,8 @@ EV.push(
 ()=>ask('Messenger','#68b','A sealed letter, for your eyes only. Open it?',()=>{if(atk('letter',.12,'The letter was coated in poison!'))return;H(1);say('Just a love letter.')},()=>say('You burned it unread.')),
 ()=>ask('Hooded Man','#334','I bring a gift: a fine dagger. Try the edge?',()=>{if(atk('townsperson',.2,'The gift dagger found your ribs!'))return;S.troops+=1;say('A fine dagger.')},()=>say('He slipped away.'),()=>kill(1)),
 ()=>ask('Servant','#789','The upper stairs are shiny, majesty. Walk ahead of me?',()=>{if(atk('servant',.1,'You were pushed down the stairs!'))return;say('Nothing happened.')},()=>say('You took the other stairs.')),
-()=>ask('Rival Envoy','#a33','A gift chest from our king! Open it now?',()=>{if(atk('rival',.18,'The chest held a blade trap!'))return;G(60);say('A gift of 60g!')},()=>{say('You had it inspected.');if(R()<.4)G(20)}),
-()=>ask('Courtier','#97a','Walk with me alone to the garden, majesty. I have a secret.',()=>{if(atk('townsperson',.15,'It was an ambush in the garden!'))return;G(40);say('He sold you a secret worth 40g.')},()=>0));
+()=>ask('Rival Envoy','#a33','A gift chest from our king! Open it now?',()=>{if(atk('rival',.18,'The chest held a blade trap!'))return;const g=rg(60);G(g);say('A gift of '+g+'g!')},()=>{say('You had it inspected.');if(R()<.4)G(rg(20))}),
+()=>ask('Courtier','#97a','Walk with me alone to the garden, majesty. I have a secret.',()=>{if(atk('townsperson',.15,'It was an ambush in the garden!'))return;const g=rg(40);G(g);say('He sold you a secret worth '+g+'g.')},()=>0));
 const CH=['Villager: "Nice weather for a walk, majesty."','Villager: "Have you tried the bread? It is good today."','Child: "Is the crown heavy?"','Old Man: "I remember when this street was just mud."','Villager: "Long live the ruler!"','Merchant: "Best prices in the kingdom!"','Villager: "Careful, the cobbles are slippery."','Child: "Look, a bird!"','Villager: "I heard a dragon lives in the hills."','Baker: "Fresh bread, still warm!"','Villager: "My cat had kittens last week."','Guard: "All quiet in town, majesty."'];
 let bag=[],npcs=[],px=500,dir=0,gt=null,tid;
 const nq=()=>{if(!bag.length)bag=TQ.map((_,i)=>i).sort(()=>R()-.5);return bag.pop()};
@@ -213,10 +214,10 @@ const X=()=>{$('pn').hidden=1;pump(800)};
 function tx(d){S.tax=Math.max(0,Math.min(60,S.tax+d));upd();M()}
 function RW(i){const r=rows[i];if(r[1]&&S.gold<r[1])return say('Not enough gold!');G(-(r[1]||0));r[2]();upd();if(!B&&Q.length)pump(1500);if(!B&&!mo&&!$('pn').hidden)M()}
 const KT=['Weapons','Slingshots','Catapults','Wall fire & spikes','Wall upgrades','Elite troops'],KN=['','Weapons unlocked: troop upgrades!','Slingshots unlocked!','Catapults unlocked!','Wall fire & spikes unlocked!','Wall upgrades (level 4+) unlocked!','Elite troops (level 4+) unlocked!'],AS=[['tax','Tax collector (+10% income)'],['doc','Physician (halves plague deaths)'],['cap','Guard captain (calms unrest)'],['tutor','Tutor (cheaper books)']];
-const rR=()=>{const d=S.dm,rc=d.h*50+d.f*60+d.w*90;return [['Custom house / shop',150,mkHouse],['Crop field (sells daily)',80,()=>{S.farms++}],['Hire miner',300,()=>{S.mines++}],['Upgrade pickaxes (lvl '+S.pick+')',250+S.pick*150,()=>{S.pick++}],['Expand kingdom',300,expand],['Invest in a townsperson business',120,invest],['Library: study '+(KT[S.know]||'(all read)')+' ('+S.know+'/6)',Math.round((100+S.know*60)*(S.ast.tutor?.7:1)),()=>{S.know++;say(KN[S.know])},S.know>=6],['Rebuild ruins ('+d.h+' homes, '+d.f+' fields, '+d.w+' walls)',rc,rebuild,!rc]]};
+const rR=()=>{const d=S.dm,rc=d.h*50+d.f*60+d.w*90;return [['Custom house / shop',150,mkHouse],['Crop field (sells daily)',80,()=>{S.farms++}],['Upgrade pickaxes (lvl '+S.pick+')',250+S.pick*150,()=>{S.pick++}],['Expand kingdom',300,expand],['Invest in a townsperson business',120,invest],['Library: study '+(KT[S.know]||'(all read)')+' ('+S.know+'/6)',Math.round((100+S.know*60)*(S.ast.tutor?.7:1)),()=>{S.know++;say(KN[S.know])},S.know>=6],['Rebuild ruins ('+d.h+' homes, '+d.f+' fields, '+d.w+' walls)',rc,rebuild,!rc]]};
 const fw=()=>S.troops-S.wp.t-S.wp.b-S.wp.f,post=p=>{S.wp[p]+=5};
-const rA=()=>[['Train 10 troops',60,()=>{S.troops+=10}],['Upgrade troops (lvl '+S.tl+')',200+S.tl*150,()=>{S.tl++},S.know<1||(S.tl>=3&&S.know<6)],['Build slingshot ('+S.sling+')',150,()=>{S.sling++},S.know<2],['Build catapult ('+S.mach+')',250,()=>{S.mach++},S.know<3],['Wall (lvl '+S.walls+')',150+S.walls*100,()=>{S.walls++},S.walls>=3&&S.know<5],['Wall fire & spikes',200,()=>{S.wx++},S.know<4||!S.walls],['Hire 1 guard',125,()=>{S.guards+=1}],['Wall posts: top '+S.wp.t+' / behind '+S.wp.b+' / front '+S.wp.f+' (free '+fw()+')',0,()=>0,1],['Post 5 troops ON TOP (best vs attacks)',0,()=>post('t'),!S.walls||fw()<5],['Post 5 troops BEHIND (best vs rebels)',0,()=>post('b'),!S.walls||fw()<5],['Post 5 troops IN FRONT (weak, takes losses)',0,()=>post('f'),!S.walls||fw()<5],['Clear wall posts',0,()=>{S.wp={t:0,b:0,f:0}}]];
-const rS=()=>[['Hire informant (news & spy)',80,()=>{S.inf=1},S.inf],[S.slaves>=2?'Slaves cook for you (free)':'Hire personal chef',S.slaves>=2?0:40,()=>{S.chef=1},S.chef],['Keep a hitman on retainer (cuts assassin odds)',150,()=>{S.hm=1},S.hm]].concat(AS.map(a=>[a[1]+(S.slaves>=2?' - slaves do it free':' (90g, 6g/day)'),S.slaves>=2?0:90,()=>{S.ast[a[0]]=1},S.ast[a[0]]]),[['Security: '+S.guards+'/'+S.land*3+' guards needed for your land',0,()=>0,1]]);
+const rA=()=>[['Upgrade troops (lvl '+S.tl+')',200+S.tl*150,()=>{S.tl++},S.know<1||(S.tl>=3&&S.know<6)],['Build slingshot ('+S.sling+')',150,()=>{S.sling++},S.know<2],['Build catapult ('+S.mach+')',250,()=>{S.mach++},S.know<3],['Wall (lvl '+S.walls+')',150+S.walls*100,()=>{S.walls++},S.walls>=3&&S.know<5],['Wall fire & spikes',200,()=>{S.wx++},S.know<4||!S.walls],['Wall posts: top '+S.wp.t+' / behind '+S.wp.b+' / front '+S.wp.f+' (free '+fw()+')',0,()=>0,1],['Post 5 troops ON TOP (best vs attacks)',0,()=>post('t'),!S.walls||fw()<5],['Post 5 troops BEHIND (best vs rebels)',0,()=>post('b'),!S.walls||fw()<5],['Post 5 troops IN FRONT (weak, takes losses)',0,()=>post('f'),!S.walls||fw()<5],['Clear wall posts',0,()=>{S.wp={t:0,b:0,f:0}}]];
+const rS=()=>[['Hire 1 guard',125,()=>{S.guards+=1}],['Train 10 troops',60,()=>{S.troops+=10}],['Hire miner',300,()=>{S.mines++}],['Hire informant (news & spy)',80,()=>{S.inf=1},S.inf],[S.slaves>=2?'Slaves cook for you (free)':'Hire personal chef',S.slaves>=2?0:40,()=>{S.chef=1},S.chef],['Keep a hitman on retainer (cuts assassin odds)',150,()=>{S.hm=1},S.hm]].concat(AS.map(a=>[a[1]+(S.slaves>=2?' - slaves do it free':' (90g, 6g/day)'),S.slaves>=2?0:90,()=>{S.ast[a[0]]=1},S.ast[a[0]]]),[['Security: '+S.guards+'/'+S.land*3+' guards needed for your land',0,()=>0,1]]);
 const rT=()=>[[S.shop.on?'Manage your shop (prices & items)':'Open your own shop',S.shop.on?0:100,()=>{S.shop.on=1;shopUI()}],['Crops: '+(S.cm?'STOCKING (not selling)':'selling daily')+' - switch',0,()=>{S.cm=1-S.cm}],['Sell stored crops ('+S.grain+')',0,()=>{G(S.grain*6);say('Sold '+S.grain+' crops.');S.grain=0},!S.grain]].concat(S.ks.flatMap(k=>k.dead?[]:[['Send a merchant to '+k.n+' to sell crops (20g)',20,()=>sendE(k,'c'),!S.grain||k.enemy||k.skel||S.env]]));
 const rD=()=>S.ks.flatMap(k=>k.dead?[]:[[k.n+(k.ally?' (ally)':'')+': ask to ally',0,()=>ally(k),k.ally||k.skel],[k.n+': trade for gold',0,()=>trade(k),k.enemy||k.skel],[k.n+': declare war (power '+ksp(k)+')',0,()=>war(k)],[k.n+': hitman (weakens them)',150,()=>hit(k)],[k.n+': steal (risky)',0,()=>steal(k),k.skel]].concat(k.ally?[[k.n+': BETRAY (conquer or steal)',0,()=>betray(k)]]:[]));
 const rSl=()=>[['Buy 3 slaves',60,()=>{S.slaves+=3;U(2)}],['Build slave pen (+8 slots)',80,()=>{S.pens++}],['Sell 3 slaves to townspeople (+90g, people uneasy)',0,()=>sellS(3,0),S.slaves<3]].concat(S.ks.flatMap(k=>k.dead?[]:[['Send envoy to '+k.n+' to sell 3 slaves (20g)',20,()=>sendE(k,'s'),S.slaves<3||k.enemy||k.skel||S.env]]),[['Execute ALL slaves (unrest +15, happiness -10)',0,()=>{S.slaves=0;U(15);H(-10)},!S.slaves]]);
@@ -261,7 +262,7 @@ al.forEach(kgrow);
 if(al.length>1&&S.day>1){const pk=()=>al[F(R()*al.length)];
 if(R()<.3){const k=pk();if(!k.skel)Q.push(()=>ask(k.n+' envoy','#58a','Will you send 3 troops to help us in our war?',()=>{S.troops=Math.max(0,S.troops-3);k.rel+=12;say('They are grateful.')},()=>{k.rel-=8;if(k.ally&&R()<.5){k.ally=0;say('Your alliance is shaken!')}}))}
 if(R()<.2){const k=pk();if(!k.ally&&!k.skel&&!k.enemy)Q.push(()=>ask(k.n,'#4a8','Will you ally with us, Your Majesty?',()=>{k.ally=1;k.rel+=20;say('Allied with '+k.n)},()=>{k.rel-=3}))}
-if(R()<.15){const k=pk();if(!k.enemy)Q.push(()=>ask(k.n+' trader','#b83','Trade goods with us?',()=>{if(R()<.8){G(60+S.farms*20);say('Profitable trade!')}else{G(-40);say('They cheated you!')}},()=>0))}
+if(R()<.15){const k=pk();if(!k.enemy)Q.push(()=>ask(k.n+' trader','#b83','Trade goods with us?',()=>{if(R()<.8){G(rg(40));say('Profitable trade!')}else{G(-40);say('They cheated you!')}},()=>0))}
 if(R()<.12&&!S.pw)kwar(pk(),pk());}
 al.forEach(k=>{if(S.warn<0&&!k.ally&&R()<(k.enemy?(k.skel?.12:.1):k.rel<-20?.05:.01)*(S.wt>0?2.5:1)){S.warn=S.ks.indexOf(k);if(S.inf)say('Informant: '+k.n+' plans to attack tomorrow!')}});
 upd();pump(4000)}
