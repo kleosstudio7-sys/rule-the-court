@@ -775,4 +775,126 @@ try{S=JSON.parse(localStorage.getItem('realm1'))}catch(e){}
 S=Object.assign(DEF(),S||{});S.ks.forEach((k,i)=>{const d=DEF().ks[i];if(d)for(const f in d)if(k[f]===undefined)k[f]=d[f]});
 drawH();seated($('rl'),S);$('vs').style.display='none';upd();if(!S.made)creator();
 setInterval(tick,1000);addEventListener('beforeunload',save);
+
+/* ===== EMPIRE UPDATE: builders, heroes, spells, raids, towns, vassals, clan ===== */
+const EX=()=>{const e=S.e=S.e||{},d={bq:[],bd:1,lv:[0,0,0,0],hr:[0,0,0],sp:{r:0,l:0,h:0},wb:0,hl:0,tw:[],rt:[],cl:0,cd:0,cw:null};for(const k in d)if(e[k]===undefined)e[k]=d[k];return e};
+const BLD=[['Barracks','+3 special-unit room, +4% raid power'],['Forge','+8% troop strength in raids'],['Mint','+4g a day, +5% raid loot'],['Spell Lab','+1 spell storage']],
+HR=[['Sir Galen','#e8761d',400,'Shield wall: halves your losses this phase'],['Queen Brienna','#a45bd8',600,'Volley: +50% attack this phase'],['Old Warden','#3e9d8a',800,'Revive: brings back half your fallen']],
+SPL={r:['Rage',50,'+50% attack this phase'],l:['Lightning',60,'cracks their defense'],h:['Heal',50,'revives half your fallen']},
+PH=['Breach the wall','Beat the towers','Storm the hall'],TI=['Easy','Medium','Hard'];
+const ebc=l=>Math.round(120*Math.pow(l+1,1.4)),bdays=l=>l+1,ecap=()=>4+EX().lv[0]*3,scap=()=>2+EX().lv[3],qn=k=>k[0]=='B'?BLD[+k[1]][0]:HR[+k[1]][0],qlv=k=>k[0]=='B'?EX().lv[+k[1]]:EX().hr[+k[1]];
+function qa(k){const e=EX(),L=qlv(k);if(e.bq.length>=e.bd)return say('All builders are busy!');e.bq.push({k,d:bdays(L)});say('🔨 Builder started on '+qn(k)+' (level '+(L+1)+'), '+bdays(L)+' days.')}
+function qdone(x){const e=EX(),i=+x.k[1];x.k[0]=='B'?e.lv[i]++:e.hr[i]++;say('✅ '+qn(x.k)+' is now level '+qlv(x.k)+'!');sfx('g')}
+function rushDone(x){EX().bq=EX().bq.filter(y=>y!==x);qdone(x)}
+function rtGen(){const e=EX(),b=10+S.day*1.4+S.land*4,m=[.7,1,1.5],g=[1,2,3.5],nm=['Goblin Camp','Bandit Fort','Ogre Den','Raider Cove','Troll Bridge'];e.rt=[0,1,2].map(i=>({n:nm[F(R()*nm.length)],d:TI[i],s:Math.round(b*m[i]),g:Math.round(b*g[i]*3+20)}));
+S.ks.forEach((k,i)=>{if(k.dead||k.ally||k.vas)return;if(!k.skel&&e.tw.filter(t=>t.k==i).length>=3)return;const s=Math.round(Math.max(b*.8,ksp(k)*.55));e.rt.push({n:k.n+(k.skel?' Bone Outpost':' border town'),d:'Town',s,g:Math.round(s*3+30),tw:1,k:i})});
+if(e.cw&&!e.cw.a)e.rt.push({n:'CLAN WAR vs '+S.ks[e.cw.k].n,d:'War',s:Math.round(Math.max(b,ksp(S.ks[e.cw.k])*.6)),g:Math.round(b*6),cw:1,k:e.cw.k})}
+function vas(k,n){if(R()<Math.min(.9,.2+n*.2+(pw()>ksp(k)?.25:0))){k.vas=1;k.enemy=0;k.ally=0;k.rel=-10;k.tr0=k.tr||'';k.tr=(k.tr0?k.tr0+' | ':'')+'YOUR VASSAL, pays tribute';if(S.warn==S.ks.indexOf(k))S.warn=-1;say('👑 '+k.n+' kneels and becomes your vassal!')}else{k.rel-=10;say(k.n+' refuses to kneel!')}}
+function donateT(){const al=S.ks.filter(k=>k.ally&&!k.dead);let n=0;al.forEach(k=>{if(R()<.55+k.rel/200){n+=2+F(R()*4);k.rel+=1}});EX().cd=3;if(n){S.troops+=n;say('🛡 Clan allies sent '+n+' troops!')}else say('Your allies sent no one this time.')}
+function cwStart(i){EX().cw={k:i,d:S.day+3,st:0,a:0};rtGen();say('⚔ Clan war against '+S.ks[i].n+' begins! Raid their base within 3 days.')}
+function cwEnd(){const e=EX(),c=e.cw,al=S.ks.filter(k=>k.ally&&!k.dead);let a=c.st;al.forEach(k=>a+=Math.min(3,F(R()*(2.4+k.rel/70))));const en=Math.round((al.length+1)*(.6+R()*1.7));e.cw=null;
+if(a>en){const g=120+a*50;G(g);H(6);al.forEach(k=>k.rel+=5);say('🏆 Clan war WON, '+a+' stars to '+en+'! +'+g+'g')}else{H(-3);say('Clan war lost, '+a+' stars to '+en+'. Your clan will try again.')}}
+function edawn(){const e=EX();e.bq=e.bq.filter(x=>{if(--x.d<=0){qdone(x);return 0}return 1});let inc=e.lv[2]*4-e.hl*3;e.tw.forEach(t=>inc+=t.i);
+S.ks.forEach(k=>{if(k.vas&&!k.dead){inc+=Math.round(5+k.p*.25);if(R()<.03&&ksp(k)>pw()*.8){k.vas=0;k.enemy=1;k.rel=-40;say('⚔ '+k.n+' broke free and is your enemy again!')}}});
+if(inc!=0){G(inc);say('🏰 Empire income: '+(inc>0?'+':'')+inc+'g')}if(e.cd>0)e.cd--;rtGen();if(e.cw&&S.day>=e.cw.d)cwEnd()}
+const _dawn=dawn;dawn=function(){const d=S.day;_dawn.apply(this,arguments);if(S.day>d)try{edawn()}catch(x){}};
+let esub='Raids';
+const ESUB=[['Raids','⚔ Raids'],['Build','🔨 Build'],['Heroes','🦸 Heroes'],['Lands','🏰 Lands'],['Clan','🛡 Clan'],['Court','📖 Court']];
+IN.Empire=()=>{const e=EX();return 'Gold '+S.gold+' · Army: '+(S.troops-S.ar-S.gi)+' swords, '+S.ar+' archers, '+S.gi+' giants · Builders '+e.bq.length+'/'+e.bd};
+const rE=()=>{const e=EX(),r=[],L=t=>r.push([t,0,()=>0,0,1]),al=S.ks.filter(k=>k.ally&&!k.dead),full=e.sp.r+e.sp.l+e.sp.h>=scap(),sl=e.wb+e.hl>=ecap();
+ESUB.forEach(x=>r.push([(esub==x[0]?'▶ ':'')+x[1],0,()=>{esub=x[0]}]));
+if(esub=='Raids'){L('⚔ Attack camps and towns for gold. Raids have 3 phases; use spells and heroes.');if(!e.rt.length)rtGen();
+e.rt.forEach((t,i)=>r.push([(t.rv?'👹 ':t.cw?'🛡 ':t.tw?'🏰 ':'⚔ ')+t.n+' ['+t.d+'] · strength '+t.s+' · loot '+t.g+'g',0,()=>rdOpen(i),S.troops<1]))}
+else if(esub=='Build'){L('🔨 Upgrades take days. Pay gold to rush them.');e.bq.forEach(x=>r.push(['⏩ Rush '+qn(x.k)+' ('+x.d+'d left)',40*x.d,()=>rushDone(x)]));if(e.bd<3)r.push(['➕ Hire builder #'+(e.bd+1),e.bd*500,()=>{e.bd++}]);
+BLD.forEach((b,i)=>{const l=e.lv[i];r.push([b[0]+' lv'+l+' → '+(l+1)+' · '+bdays(l)+'d · '+b[1],ebc(l),()=>qa('B'+i),l>=6||e.bq.some(x=>x.k=='B'+i)||e.bq.length>=e.bd])})}
+else if(esub=='Heroes'){L('🦸 Heroes make raids stronger. Upgrades use a builder.');HR.forEach((h,i)=>{const l=e.hr[i];l?r.push([h[0]+' lv'+l+' → '+(l+1)+' · '+bdays(l)+'d',150*(l+1),()=>qa('H'+i),l>=5||e.bq.some(x=>x.k=='H'+i)||e.bq.length>=e.bd]):r.push(['Recruit '+h[0]+': '+h[3],h[2],()=>{e.hr[i]=1;say('🦸 '+h[0]+' joins you!')}])});
+L('⚗ Raid units '+(e.wb+e.hl)+'/'+ecap()+' · Spells '+(e.sp.r+e.sp.l+e.sp.h)+'/'+scap());r.push(['Wall-Breaker ×'+e.wb+': one-use, blows up walls',45,()=>{e.wb++},sl],['Healer ×'+e.hl+': fewer losses · 3g/day wage',60,()=>{e.hl++},sl]);for(const k in SPL)r.push([SPL[k][0]+' ×'+e.sp[k]+': '+SPL[k][2],SPL[k][1],()=>{e.sp[k]++},full])}
+else if(esub=='Lands'){L('🏰 Towns pay gold every day. Take 2 towns from a kingdom to demand vassalage.');if(!e.tw.length)L('No towns yet. Win a 2-star raid on a border town.');e.tw.forEach(t=>L('🏰 '+t.n+' · +'+t.i+'g a day'));
+S.ks.forEach((k,i)=>{if(k.dead||k.skel)return;const n=e.tw.filter(t=>t.k==i).length;if(k.vas)L('👑 '+k.n+' is your vassal and pays tribute');else if(n>=2)r.push(['Demand vassalage from '+k.n+' ('+n+' towns)',0,()=>vas(k,n)])})}
+else if(esub=='Clan'){L(e.cl?(al.length?'🛡 Your clan has '+al.length+' ally(ies). They send troops and join clan wars.':'🛡 Your clan has no allies right now. Make an ally to use it.'):'🛡 A clan lets your allies help you. You need 1 ally first.');
+if(!e.cl)r.push(['Found a clan',100,()=>{e.cl=1;say('🛡 Clan founded!')},!al.length]);else{r.push(['Ask allies for troops'+(e.cd>0?' (ready in '+e.cd+'d)':''),0,donateT,e.cd>0||!al.length]);
+if(e.cw)L('⚔ Clan war vs '+S.ks[e.cw.k].n+': '+e.cw.st+' stars, ends in '+Math.max(0,e.cw.d-S.day)+'d'+(e.cw.a?'':' · raid them in Raids'));else S.ks.forEach((k,i)=>{if(!k.dead&&!k.ally&&!k.vas)r.push(['Clan war vs '+k.n,0,()=>cwStart(i),!al.length])})}}
+else rC().forEach(x=>r.push(x));
+return r};
+const _Me=M;M=function(t){if(t=='Empire'||(!t&&tab=='Empire')){tab='Empire';rows=rE();const p=$('pn');p.hidden=0;p.innerHTML='<div class="tb">'+['Realm','Troops','Staff','Slaves','Trade','Allies','Royal','Powers','Empire'].map(k=>'<button class="'+(k==tab?'on':'')+'" onclick="M(\''+k+'\')">'+k+'</button>').join('')+'<button onclick="X()">✕ Close</button></div><div class="bd"><p>'+IN.Empire()+'</p>'+rows.map((r,i)=>r[4]?'<p style="margin-top:8px;border-bottom:3px solid #2b2118"><b>'+r[0]+'</b></p>':'<button class="rw" '+(r[3]?'disabled':'')+' onclick="RW('+i+')"><span>'+r[0]+'</span><span>'+(r[1]?r[1]+'g':'')+'</span></button>').join('')+'</div>';return}
+const v=_Me.apply(this,arguments),bar=document.querySelector('#pn .tb');if(bar&&!$('pn').hidden&&!bar.querySelector('.emp')){const x=document.createElement('button');x.className='emp';x.textContent='Empire';x.setAttribute('onclick',"M('Empire')");bar.insertBefore(x,bar.lastElementChild)}return v};
+const baseSvg=f=>{const o=i=>1-.65*f[i],x=(i,y)=>f[i]>=1?'<path d="M-22 '+(y-30)+'L22 '+y+'M22 '+(y-30)+'L-22 '+y+'" stroke="#d9372f" stroke-width="8" fill="none"/>':'',tw=(c)=>'<g transform="translate('+c+',70)" opacity="'+o(1)+'"><rect x="-22" y="-50" width="44" height="90" fill="#d9d0bb"/><path d="M-28 -50L0 -78L28 -50Z" fill="#c44"/>'+x(1,0)+'</g>';
+return '<svg viewBox="0 0 400 150" style="width:min(100%,380px);height:auto;filter:url(#wob)"><g stroke="#2b2118" stroke-width="5" stroke-linejoin="round"><rect x="10" y="80" width="380" height="50" fill="#c9bfa8" opacity="'+o(0)+'"/>'+tw(80)+tw(320)+'<g transform="translate(200,70)" opacity="'+o(2)+'"><rect x="-45" y="-30" width="90" height="70" fill="#e6c9a0"/><path d="M-55 -30L0 -75L55 -30Z" fill="#8a5a30"/><rect x="-12" y="0" width="24" height="40" fill="#6b3f1d"/>'+x(2,10)+'</g></g></svg>'};
+let RD=null;
+function rdOpen(i){const e=EX(),t=e.rt[i];if(!t)return;RD={t,f:[0,0,0],l:{s:0,a:0,g:0,h:0},ab:0,ph:0,u:{},hero:-1};mo=1;$('pn').hidden=1;$('md').hidden=0;
+const a=(m,id,l)=>'<div>'+l+' <input type="range" id="'+id+'" min="0" max="'+m+'" value="'+m+'" oninput="this.nextElementSibling.textContent=this.value"> <b>'+m+'</b></div>';
+$('md').innerHTML='<h2 style="margin:0">⚔ '+t.n+'</h2><p>'+baseSvg(RD.f)+'</p><div style="display:grid;gap:6px;max-width:360px">'+a(S.troops-S.ar-S.gi,'rs','Swordsmen')+a(S.ar,'ra','Archers')+a(S.gi,'rg2','Giants')+a(e.wb,'rw','Wall-Breakers')+a(e.hl,'rh','Healers')+'Hero <select id="rhe"><option value="-1">none</option>'+HR.map((h,j)=>e.hr[j]?'<option value="'+j+'">'+h[0]+' lv'+e.hr[j]+'</option>':'').join('')+'</select><button onclick="rdGo()">Attack!</button><button onclick="rdEnd()">Back</button></div>'}
+function rdGo(){const v=i=>+$(i).value,u=RD.u={s:v('rs'),a:v('ra'),g:v('rg2'),w:v('rw'),h:v('rh')};RD.hero=+$('rhe').value;if(u.s+u.a+u.g+u.w<1)return say('Pick some troops first!');EX().wb-=u.w;rdPh(0)}
+function rdPh(p){RD.ph=p;const e=EX(),h=RD.hero>=0?HR[RD.hero]:0;$('md').innerHTML='<h2 style="margin:0">Phase '+(p+1)+'/3: '+PH[p]+'</h2><p>'+baseSvg(RD.f)+'</p><p>Cast a spell or use your hero, then charge!</p><div style="display:grid;gap:6px;max-width:360px"><button onclick="rdDo(0)">Charge! (no spell)</button>'+Object.keys(SPL).map(k=>'<button '+(e.sp[k]?'':'disabled')+" onclick=\"rdDo('"+k+"')\">"+SPL[k][0]+' ×'+e.sp[k]+': '+SPL[k][2]+'</button>').join('')+(h?'<button '+(RD.ab?'disabled':'')+" onclick=\"rdDo('ab')\">🦸 "+h[0]+': '+h[3]+'</button>':'')+'</div>'}
+function rdDo(k){const e=EX(),u=RD.u,p=RD.ph,t=RD.t,hi=RD.hero,fm=(1+S.tl*.3)*(1+.08*e.lv[1])*(1+.04*e.lv[0])*(1+(hi>=0?.1*e.hr[hi]:0));
+let A=[u.g*6+u.w*16+u.s*1.5+u.a*.5,u.a*3.2+u.s*2+u.g*2,u.s*3+u.g*3.5+u.a*2][p]*fm,D=t.s*[.5,.6,.7][p],lm=1,heal=0;
+if(k&&k!='ab'){e.sp[k]--;if(k=='r')A*=1.5;if(k=='l')D*=.65;if(k=='h')heal=1}if(k=='ab'){RD.ab=1;if(hi==0)lm=.5;if(hi==1)A*=1.5;if(hi==2)heal=1}
+if(p==0)u.w=0;const f=Math.min(1,A/Math.max(1,D)),ls=Math.min(.6,D/(A+D+1)*.5)*lm*(1-Math.min(.5,.08*u.h)),ap=(c,n)=>{if(c=='s')S.troops+=n;if(c=='a'){S.troops+=n;S.ar+=n}if(c=='g'){S.troops+=n;S.gi+=n}if(c=='h')e.hl+=n};RD.f[p]=f;
+['s','a','g','h'].forEach(c=>{const n=Math.min(u[c],Math.ceil(u[c]*ls));u[c]-=n;RD.l[c]+=n;ap(c,-n)});
+if(heal)['s','a','g','h'].forEach(c=>{const n=Math.floor(RD.l[c]/2);RD.l[c]-=n;u[c]+=n;ap(c,n)});
+S.troops=Math.max(0,S.troops);S.ar=Math.max(0,S.ar);S.gi=Math.max(0,S.gi);e.hl=Math.max(0,e.hl);sfx('h');
+const fk={n:t.n,p:t.s,up:Math.min(4,F(t.s/60)),m:0,wl:0},fx=k=='r'?'😡':k=='l'?'⚡':k=='h'||(k=='ab'&&hi==2)?'💚':k=='ab'?'✨':'';
+$('md').hidden=1;scn(arm(fk)+(hi>=0?'<g class="bmv" style="--mx:-380px">'+fg(330,420,HR[hi][1],{w:1})+'</g>':'')+(fx?[0,1,2].map(i=>'<text class="bsp" x="'+(300+i*200)+'" y="'+(300+(i%2)*40)+'" text-anchor="middle" font-size="64" style="animation-delay:'+(1.2+i*.25)+'s">'+fx+'</text>').join(''):''),3000);
+setTimeout(()=>{mo=1;$('md').hidden=0;p<2?rdPh(p+1):rdRes()},3000)}
+function rdRes(){const e=EX(),t=RD.t,f=RD.f,d=Math.round(f[0]*20+f[1]*35+f[2]*45),st=(d>=50)+(f[2]>=.99)+(d>=99),g=Math.round(t.g*[0,.35,.7,1][st]*(1+.05*e.lv[2])),k=S.ks[t.k];let m='';G(g);
+if(t.tw&&k&&!k.skel){k.rel-=8;if(st>=2)k.p=Math.max(5,Math.round(k.p*.9))}
+if(st>=2&&t.tw){const c=e.tw.filter(x=>x.k==t.k).length,nm=k.n+' '+['Ford','Hollow','Watch'][c%3],i=Math.round(3+t.s*.12);e.tw.push({n:nm,k:t.k,i});if(!k.skel){k.rel-=17;k.enemy=1;k.ally=0}m='<p>🏰 You captured <b>'+nm+'</b>! It pays you '+i+'g every day.</p>'}
+if(st==3&&R()<.5&&e.sp.r+e.sp.l+e.sp.h<scap()){const s=['r','l','h'][F(R()*3)];e.sp[s]++;m+='<p>✨ Found a '+SPL[s][0]+' spell!</p>'}
+if(t.cw&&e.cw){e.cw.st+=st;e.cw.a=1}e.rt=e.rt.filter(x=>x!==t);H(st?2:-1);
+$('md').innerHTML='<h2 style="margin:0">'+(st?'🏆 Victory!':'💀 Raid failed')+'</h2><p style="font-size:2em;margin:0">'+'★'.repeat(st)+'☆'.repeat(3-st)+'</p><p>'+baseSvg(f)+'</p><p>Destroyed '+d+'% · Loot <b>+'+g+'g</b> · Lost '+RD.l.s+' swordsmen, '+RD.l.a+' archers, '+RD.l.g+' giants, '+RD.l.h+' healers. Survivors return home by nightfall.</p>'+m+'<button onclick="rdEnd()">Done</button>';sfx('g')}
+function rdEnd(){RD=null;hx();M('Empire')}
+
+/* ===== STORY UPDATE: named rulers, hero & character arcs, court traitor, rival conqueror ===== */
+const styS=()=>{const s=S.st=S.st||{},d={p:{},nx:{},tr:null,rv:null,rvd:10,ri:0,trd:8,f:{}};for(const k in d)if(s[k]===undefined)s[k]=d[k];return s};
+const styRUL=[['Warlord Grath','#c33','wants your land'],['Lady Orsolya','#d9a21b','loves gold and gifts'],['High Marshal Brann','#58a','respects only strength'],['The Bone King Valdrek','#99a','hungers for the living']],
+styADV={tax:['Treasurer Pell','ink on his fingers'],doc:['Physician Mirel','a smell of herbs on her robe'],cap:['Captain Dorn','mud on his boots'],tutor:['Tutor Wynn','chalk dust on her sleeves']},
+styRV=['Vexa the Cruel','Kragg Ironjaw','Lord Malvane','Sable the Red','Duke Thorne','Morwen of the Ash'];
+const styA=(w,c,pg,q,y,n,need)=>({w,c,pg,q,y,n,need});
+const styAR=[
+{k:'oat',t:'The Cursed Blade',need:()=>EX().hr[0]>=2,s:[
+styA('Sir Galen','#e8761d',['Majesty... my sword hums at night.',"It was my father's. They say it is cursed."],'Pay 60g for a priest to bless the blade?',()=>{G(-60);H(2);styS().f.oat=1;say('The blade glows warmly.')},()=>{H(-1);say('Galen sleeps beside the humming sword.')}),
+styA('Sir Galen','#e8761d',['The sword talks now, majesty!','It says there is treasure under the old mill.'],'Dig under the mill? (30g)',()=>{G(-30);if(R()<(styS().f.oat?.85:.55)){G(220);say('💰 Treasure! +220g')}else say('Only a very confused badger.')},()=>say('Galen sighs at his talking sword.'),()=>EX().hr[0]>=3)]},
+{k:'bri',t:"Brienna's Brother",need:()=>EX().hr[1]>=2,s:[
+styA('Queen Brienna','#a45bd8',['My brother vanished in the Stonehelm marches.','I cannot sleep, majesty.'],'Send 3 troops to look for him?',()=>{if(S.troops<3)return say('You have too few troops.');S.troops-=3;styS().f.bri=1;say('Three scouts ride out.')},()=>say('Brienna looks away quietly.')),
+styA('Queen Brienna','#a45bd8',()=>styS().f.bri?['Your scouts found him! He fell in with bandits.','He begs your pardon, majesty.']:['He came home on his own, with a bandit crew.','He begs your pardon, majesty.'],'Pardon him and take him into your army?',()=>{S.troops+=styS().f.bri?6:3;H(2);say('Her brother and his bandits join you!')},()=>{H(-2);say('Brienna weeps quietly.')},()=>EX().hr[1]>=3)]},
+{k:'war',t:'The Whispering Wood',need:()=>EX().hr[2]>=2,s:[
+styA('Old Warden','#3e9d8a',['The old forest whispers, majesty.','A sickness is coming. I can brew herbs against it.'],'Buy herbs for 80g?',()=>{G(-80);P(3);H(3);say('The herbs keep people healthy. +3 people')},()=>say('The Warden shrugs. The forest remembers.')),
+styA('Old Warden','#3e9d8a',['The oldest tree wants to grow in your courtyard.'],'Plant the sacred tree? (50g)',()=>{G(-50);H(8);U(-5);say('🌳 The tree calms the whole kingdom.')},()=>{H(-2);say('The forest sulks.')},()=>EX().hr[2]>=3)]},
+{k:'red',t:'Redbeard Returns',need:()=>S.day>=8,s:[
+styA('Captain Redbeard','#a63',['Ahoy, king! Word is ye treat sailors fair.','I have a map and need a patron.'],'Buy his treasure map for 50g?',()=>{G(-50);say('A crumpled map goes in your pocket.')},()=>{styS().p.red=99;say('Redbeard tips his hat and sails away.')}),
+styA('Captain Redbeard','#a63',['The map leads to Skull Isle, majesty!'],'Send an expedition (5 troops, 40g)?',()=>{if(S.troops<5||S.gold<40)return say('You cannot afford the expedition.');G(-40);if(R()<.65){G(350);say('🏴‍☠ Skull Isle treasure! +350g')}else{S.troops-=2;say('The isle was trapped. Lost 2 troops.')}},()=>say('Redbeard sails off, grumbling.'),()=>S.day>=14)]},
+{k:'mira',t:"Mira's Prophecy",need:()=>S.day>=5,s:[
+styA('Fortune Teller','#a4a',['I saw your crown in the fire...','A rival banner will rise beyond your borders.'],'Pay 25g to hear more?',()=>{G(-25);say('Mira nods: the rival will come.')},()=>say('The fire flickers out.')),
+styA('Fortune Teller','#a4a',['The fire shows a crowned fool and a rising warlord.'],'Pay 40g for a blessing on your borders?',()=>{G(-40);U(-6);H(3);say('Mira blesses your borders.')},()=>say('Mira cackles quietly.'),()=>S.day>=12)]},
+{k:'vault',t:'The Sealed Vault',need:()=>S.day>=12&&S.people>=15,s:[
+styA('Old Woman','#8a6',['Dearie, there is a door under the old inn.'],'Pay a mason 20g to look?',()=>{G(-20);say('The mason finds strange symbols.')},()=>{styS().p.vault=99;say('She shuffles away muttering.')}),
+styA('Mason','#a63',['The symbols spell the vault of King Aldwin!','We need 50g of tools to open it.'],'Buy tools (50g)?',()=>{G(-50);say('The mason works through the night...')},()=>{styS().p.vault=99;say('The mason packs up.')}),
+styA('Mason','#a63',['It opened! Gold... and a cursed crown.'],'Take the gold (Y, +300g but unrest) or seal it (N, calms the realm)?',()=>{G(300);U(8);H(-2);say('You take the cursed gold.')},()=>{H(8);say('You seal it. The people sleep easier.')})]}];
+function styRuler(){const ks=S.ks.map((k,i)=>[k,i]).filter(x=>!x[0].dead);if(!ks.length)return null;const[k,i]=ks[F(R()*ks.length)],r=styRUL[i%4],w=r[0],c=r[1];
+if(k.vas)return()=>mono(w,c,['I bow, liege. My tribute comes early.'],()=>{G(40);say('👑 '+w+' sent 40g early.')});
+if(k.ally)return EX().tw.length>=3&&R()<.5?()=>ask(w,c,'Your towns grow... I grow uneasy, friend. Share 80g to prove you are loyal?',()=>{G(-80);k.rel+=15;say(w+' relaxes.')},()=>{k.rel-=15;if(k.rel<-30){k.ally=0;k.enemy=1;say('💔 '+w+' BETRAYS you and breaks the alliance!')}else say(w+' grows cold.')}):()=>ask(w,c,'Friend, my army is thin. Lend me 60g?',()=>{G(-60);k.rel+=12;say(w+' will remember this.')},()=>{k.rel-=6;say(w+' frowns.')});
+if(k.enemy)return()=>ask(w,c,k.skel?'The dead march at dawn. Give me 3 living souls or we strike!':'Pay 60g or my riders burn your border.',()=>{k.skel?P(-3):G(-60);k.rel+=5;say(w+' backs off for now.')},()=>{k.rel-=5;if(R()<.4){dmg(.4);say('🔥 '+w+' raids your border!')}else say(w+' swears revenge.')});
+return k.skel?null:()=>ask(w,c,'I come with a gift and a pact, majesty. Seal friendship for 40g?',()=>{G(-40);k.rel+=15;say(w+' warms to you.')},()=>say(w+' leaves politely.'))}
+function styTr(s){let t=s.tr;const h=Object.keys(styADV).filter(k=>S.ast[k]);
+if(!t){if(h.length>=2&&S.day>=s.trd&&R()<.25)s.tr={k:h[F(R()*h.length)],c:0,d:S.day+1,cl:[]};return null}
+if(!S.ast[t.k]){s.tr=null;s.trd=S.day+6;return null}if(S.day<t.d)return null;
+if(t.c<2){t.c++;t.d=S.day+2;const cl=styADV[t.k][1];t.cl.push(cl);return()=>mono('Palace Guard','#678',['Majesty, someone slipped a sealed letter to a foreign rider.','I only noticed '+cl+'.'],()=>say('🕵 A traitor hides in your court...'))}
+if(t.c==2){t.c=3;return styAcc}
+if(t.c>=4){const n=styADV[t.k][0];S.ast[t.k]=0;G(-120);s.tr=null;s.trd=S.day+6;return()=>mono(n,'#556',['Your secrets are already sold, little king.'],()=>say('🗡 '+n+' fled with 120g!'))}return null}
+function styAcc(){const s=styS(),t=s.tr;if(!t)return;mo=1;$('pn').hidden=1;$('md').hidden=0;$('md').innerHTML='<h2 style="margin:0">🕵 Traitor hunt</h2><p>Clues: '+t.cl.join('; ')+'.</p><div style="display:grid;gap:6px;max-width:360px">'+Object.keys(styADV).filter(k=>S.ast[k]).map(k=>"<button onclick=\"styPick('"+k+"')\">Accuse "+styADV[k][0]+'</button>').join('')+'<button onclick="styPick(0)">Wait and watch</button></div>'}
+function styPick(k){const s=styS(),t=s.tr;if(t){if(!k){t.c=4;t.d=S.day+2;say('You wait... the traitor grows bold.')}else if(k==t.k){S.ast[k]=0;G(150);H(3);s.tr=null;s.trd=S.day+7;say('⚖ Traitor caught! '+styADV[k][0]+' is dragged away. +150g')}else{S.ast[k]=0;G(-60);H(-3);t.w=(t.w||0)+1;if(t.w>=2){t.c=4;t.d=S.day+2;say('Wrong again! The traitor slips away tonight...')}else{t.c=2;t.d=S.day+1;say('Wrong! '+styADV[k][0]+' leaves in tears. Keep hunting...')}}}hx()}
+function styRival(s){if(!s.rv){if(S.day>=s.rvd){const n=styRV[s.ri%styRV.length];s.rv={n,l:0};return()=>mono(n,'#7a2c2c',['A new warlord rises beyond your borders...','I am '+n+'. Every kingdom will kneel, yours too!'],()=>say('⚔ '+n+' now raids the lands. Find the warband in the Empire tab.'))}return null}
+if(S.day%4==0)s.rv.l++;if(S.day%6==0)return()=>ask(s.rv.n,'#7a2c2c','Your walls are paper, little king. Pay 100g or I march?',()=>{G(-100);say('He laughs and rides off.')},()=>{if(R()<Math.min(.8,.3+.1*s.rv.l)){dmg(.4);G(-Math.round(S.gold*.08));say('🔥 '+s.rv.n+"'s warband raided your border!")}else say('He swears revenge.')});return null}
+function styDay(){const s=styS(),q=[],a=styRival(s),b=styTr(s);a&&q.push(a);b&&q.push(b);
+const cd=styAR.filter(x=>{const p=s.p[x.k]||0;return p<x.s.length&&S.day>=(s.nx[x.k]||0)&&(p>0||x.need())&&(!x.s[p].need||x.s[p].need())});
+if(cd.length&&R()<.6){const x=cd[F(R()*cd.length)],p=s.p[x.k]||0,st=x.s[p];s.p[x.k]=p+1;s.nx[x.k]=S.day+2+F(R()*3);q.push(()=>mq(st.w,st.c,typeof st.pg=='function'?st.pg():st.pg,()=>ask(st.w,st.c,st.q,st.y,st.n)))}else if(R()<.4)q.push(styRuler());
+q.forEach(f=>f&&Q.push(f))}
+const styVc=()=>S.ks.forEach(k=>{if(k.vas&&(k.ally||k.enemy)){k.vas=0;say('👑 '+k.n+' is no longer your vassal.')}if(!k.vas&&k.tr0!==undefined){k.tr=k.tr0;delete k.tr0}});
+const _M=M;M=function(){styVc();return _M.apply(this,arguments)};
+const _ed=edawn;edawn=function(){styVc();_ed();try{styDay()}catch(x){}};
+const _rg=rtGen;rtGen=function(){_rg();const s=styS(),e=EX();if(s.rv){const b=10+S.day*1.4+S.land*4;e.rt.push({n:s.rv.n+"'s Warband",d:'Rival',s:Math.round(b*(1.3+.25*s.rv.l)),g:Math.round(b*8+100),rv:1})}};
+const _rr=rdRes;rdRes=function(){const t=RD&&RD.t,f=RD?RD.f:[0,0,0];_rr();if(t&&t.rv){const s=styS(),d=Math.round(f[0]*20+f[1]*35+f[2]*45);if(s.rv){if(d>=99){say('🏆 You crushed '+s.rv.n+'! Their banner falls.');G(150);H(5);s.rv=null;s.ri++;s.rvd=S.day+3}else{s.rv.l++;say(s.rv.n+' grows stronger!')}}}};
+const rC=()=>{const s=styS(),r=[],L=t=>r.push([t,0,()=>0,0,1]);L('👑 Rulers and their goals');S.ks.forEach((k,i)=>{if(!k.dead)L(styRUL[i%4][0]+' of '+k.n+': '+styRUL[i%4][2]+' ('+(k.vas?'vassal':k.ally?'ally':k.enemy?'enemy':'neutral')+')')});
+L('👹 Rival conqueror: '+(s.rv?s.rv.n+' (power '+s.rv.l+')':'none right now'));L('🕵 Court: '+(s.tr?'someone is whispering to foreign riders...':'your advisors seem loyal'));
+L('📖 Stories');styAR.forEach(x=>L(x.t+': '+Math.min(s.p[x.k]||0,x.s.length)+'/'+x.s.length));return r};
 </script></body></html>
