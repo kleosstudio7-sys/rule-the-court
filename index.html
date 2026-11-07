@@ -1005,4 +1005,69 @@ const _rr=rdRes;rdRes=function(){const t=RD&&RD.t,f=RD?RD.f:[0,0,0];_rr();if(t&&
 const rC=()=>{const s=styS(),r=[],L=t=>r.push([t,0,()=>0,0,1]);L('👑 Rulers and their goals');S.ks.forEach((k,i)=>{if(!k.dead)L(styRUL[i%4][0]+' of '+k.n+': '+styRUL[i%4][2]+' ('+(k.vas?'vassal':k.ally?'ally':k.enemy?'enemy':'neutral')+')')});
 L('👹 Rival conqueror: '+(s.rv?s.rv.n+' (power '+s.rv.l+')':'none right now'));L('🕵 Court: '+(s.tr?'someone is whispering to foreign riders...':'your advisors seem loyal'));
 L('📖 Stories');styAR.forEach(x=>L(x.t+': '+Math.min(s.p[x.k]||0,x.s.length)+'/'+x.s.length));return r};
+
+/* ===== UNIQUE VISITORS: own face, height, hair, hat and clothes. Same outfit every visit. ===== */
+(function(){
+const I='#2b2118',H=s=>{let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return h>>>0},
+RG=a=>()=>{a=a+1831565813|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296},
+P=(r,a)=>a[Math.floor(r()*a.length)],pa=(d,f,x)=>'<path d="'+d+'" fill="'+f+'"'+(x||'')+'/>',ci=(x,y,r,f,e)=>'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+f+'"'+(e||'')+'/>',N=' stroke="none"',SN=d=>'<path d="'+d+'" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="4" stroke-linecap="round"/>',ln=(d,c,w)=>'<path d="'+d+'" fill="none" stroke="'+c+'" stroke-width="'+(w||4)+'"/>';
+const CL=[['pir',/pirate|sailor|redbeard|dock/i],['arm',/knight|guard|soldier|captain|warrior|champion|brawler|scout|oatmeal|galen|hero|defector|slaver|marshal|warlord|grath|brann|rook|vorn/i],['roy',/king|queen|prince|lord |lady|duke|baron|noble|courtier|chamberlain|envoy|bride|orsolya|brienna|valdrek|advisor/i],['wiz',/wizard|mage|prophet|fortune|astronomer|oracle|cult|warden|time traveler|healer|cat lady/i],['pri',/priest|monk|pilgrim/i],['thf',/thief|pickpocket|shady|whisper|stranger|hooded|informant|gambler|outsider|wanderer|traveler/i],['svt',/servant|nanny|nurse|runner|messenger|stable|water|maid/i],['sch',/scholar|teacher|tutor|librarian|poet|painter|cartographer|pell|mirel|wynn/i],['brd',/bard|minstrel|musician|juggler|jester|festival|statue/i],['crf',/cook|baker|tavern|egg|candle|blacksmith|mason|carpenter|cobbler|tailor|merchant|trader|peddler|guild|mirror|cellar|fisherman/i]],
+PAL={vil:['#8a6a3a','#6a8a4a','#9a5a3a','#5a7a9a','#a05a6a','#7a7a4a','#c8a45a'],arm:['#b8c0cc'],roy:['#7a2c9a','#b3262c','#1f4e9a','#1e7a4a','#c9902b'],wiz:['#4a3a9a','#2a5a8a','#7a2a7a','#2a6a5a'],pri:['#d9d0bb','#6b4a33','#5a5a7a'],thf:['#3a3745','#2e3a2e','#4a2e2e'],svt:['#6a8ab0','#9ab08a','#b08a9a'],sch:['#5a4a7a','#7a5a3a','#3a5a6a'],brd:['#d9532f','#2f9a8a','#d9a21b'],crf:['#a0522d','#c98a3a','#5a7a5a','#8a5a8a'],pir:['#a02c2c','#2c3a6a','#4a4a4a']},
+HT={vil:['straw','straw','cap','kerch','none','none','band'],arm:['helm','helm','vik','plume'],roy:['crown','circ','plume','none'],wiz:['wiz','wiz','turb','hood'],pri:['hood','none','hood'],thf:['hood','hood','band'],svt:['maid','cap','none','band'],sch:['beret','none','top'],brd:['feath','jest','feath'],crf:['none','cap','top','fez'],pir:['tri','band','tri']},
+CT={vil:['tun','rag','apr'],arm:['arm'],roy:['nob'],wiz:['rob'],pri:['rob'],thf:['cloak'],svt:['apr','tun'],sch:['coat'],brd:['mot'],crf:['apr','coat'],pir:['strp']};
+const SH='M-33 -2Q-34 -40 0 -40Q34 -40 33 -2Q16 -18 0 -10Q-16 -18 -33 -2Z',
+HA={sh:c=>['',pa(SH,c)],bald:c=>['',''],bal:c=>['',pa('M-33 -2Q-37 -22 -31 -28Q-24 -10 -24 0Z',c)+pa('M33 -2Q37 -22 31 -28Q24 -10 24 0Z',c)+pa('M-5 -38Q0 -52 5 -38Z',c)],
+long:c=>[pa('M-34 -4Q-40 30 -34 52Q0 60 34 52Q40 30 34 -4Z',c),pa(SH,c)],mow:c=>['',pa('M-34 -6Q-34 -26 -28 -30L-24 -18Q-30 -10 -34 -6Z',c)+pa('M-11 -32L-8 -66L0 -42L8 -70L11 -32Z',c)],
+afro:c=>[[[-26,-20],[-14,-36],[0,-42],[14,-36],[26,-20],[-34,-4],[34,-4]].map(p=>ci(p[0],p[1],17,c)).join(''),pa('M-26 -12Q0 -30 26 -12Q12 -20 0 -14Q-12 -20 -26 -12Z',c)],
+bun:c=>[ci(0,-50,13,c),pa(SH,c)],tail:c=>[pa('M24 -14Q56 -10 48 34Q44 48 36 32Q42 10 22 -6Z',c),pa(SH,c)],swoop:c=>['',pa('M-33 -2Q-34 -40 0 -42Q36 -40 33 -2Q10 -26 -14 -14Q-26 -10 -33 -2Z',c)]},
+CAP='M-34 -8Q-32 -46 0 -46Q34 -46 34 -8Q0 -22 -34 -8Z',DOME='M-37 -4Q-38 -52 0 -52Q38 -52 37 -4Z',
+HW={none:()=>'',straw:h=>pa('M-24 -26Q-22 -58 0 -58Q22 -58 24 -26Z','#e5c46b')+'<ellipse cx="0" cy="-26" rx="50" ry="11" fill="#e5c46b"/>'+pa('M-23 -30Q0 -24 23 -30L24 -36Q0 -30 -24 -36Z',h),
+cap:h=>pa(CAP,h)+pa('M-34 -8Q-52 -6 -46 4Q-30 2 -24 -8Z',h),kerch:h=>pa('M-34 -2Q-36 -46 0 -46Q36 -46 34 -2Q18 -22 0 -16Q-18 -22 -34 -2Z',h)+ci(32,-12,7,h),band:h=>pa('M-34 -10Q0 -30 34 -10L34 -2Q0 -20 -34 -2Z',h)+pa('M30 -8L46 -2L36 10Z',h),
+helm:h=>pa(DOME,'#b8c0cc')+SN('M-26 -32Q-14 -44 -2 -46')+pa('M-37 -6H37V4H-37Z','#9aa4b2')+pa('M-4 4H4V24H-4Z','#9aa4b2'),vik:h=>HW.helm()+pa('M-34 -30Q-62 -34 -54 -64Q-44 -44 -30 -42Z','#f0e6c8')+pa('M34 -30Q62 -34 54 -64Q44 -44 30 -42Z','#f0e6c8'),plume:h=>HW.helm()+pa('M-4 -50Q-6 -88 24 -80Q8 -72 6 -50Z',h),
+crown:h=>pa('M-26 -30L-30 -58L-14 -44L0 -62L14 -44L30 -58L26 -30Z','#e8c35a')+ci(0,-40,4,'#d9372f',N),circ:h=>pa('M-30 -22Q0 -40 30 -22L30 -17Q0 -35 -30 -17Z','#e8c35a')+ci(0,-30,5,'#4aa3d9'),
+wiz:h=>pa('M-38 -26Q0 -42 38 -26L10 -88Q4 -100 -8 -84Z',h)+'<ellipse cx="0" cy="-26" rx="44" ry="9" fill="'+h+'"/>'+ci(6,-50,5,'#ffe066',N),
+turb:h=>pa('M-34 -4Q-36 -46 0 -50Q36 -46 34 -4Q0 -18 -34 -4Z','#f4efe6')+ln('M-30 -24Q0 -36 30 -24M-33 -13Q0 -26 33 -13',I,3)+ci(0,-34,5,'#d9372f',N),hood:h=>pa('M-38 8Q-44 -50 0 -56Q44 -50 38 8Q32 -16 0 -24Q-32 -16 -38 8Z',h),
+chef:h=>pa('M-26 -24H26V-40H-26Z','#fff')+ci(-16,-50,15,'#fff')+ci(0,-58,16,'#fff')+ci(16,-50,15,'#fff'),maid:h=>pa('M-30 -22Q0 -50 30 -22Q0 -34 -30 -22Z','#fff'),beret:h=>pa('M-36 -22Q-30 -52 6 -50Q40 -48 34 -22Q0 -34 -36 -22Z',h)+ci(6,-52,3,I,N),
+top:h=>'<ellipse cx="0" cy="-28" rx="42" ry="9" fill="#2b2833"/>'+pa('M-26 -28V-80H26V-28Z','#2b2833')+pa('M-26 -38H26V-48H-26Z',h),fez:h=>pa('M-26 -26L-20 -56H20L26 -26Z','#b3262c')+ln('M0 -56Q22 -52 24 -30','#e8c35a',4),
+feath:h=>pa(CAP,h)+pa('M10 -44Q40 -80 54 -70Q36 -60 22 -44Z','#d9372f'),jest:h=>pa('M-32 -14Q-60 -40 -52 -70Q-30 -50 -4 -42Z',h)+pa('M32 -14Q60 -40 52 -70Q30 -50 4 -42Z','#e8c35a')+ci(-52,-70,6,'#e8c35a')+ci(52,-70,6,h),
+tri:h=>pa('M-54 -22L0 -64L54 -22Q0 -36 -54 -22Z','#2b2833')+ci(0,-40,7,'#f4efe6',N)+ci(-2.5,-41,1.6,I,N)+ci(2.5,-41,1.6,I,N)};
+function SG(nm,k){const n=nm||'',r=RG(nm?H(nm):Math.floor(Math.random()*4294967295));let cl='vil';for(const[c,x]of CL)if(x.test(n)){cl=c;break}
+const kid=/boy|kid|child|girl|little|orphan/i.test(n),old=/old|elder|beggar|widow|elda|prophet|gerald|cat lady|warden/i.test(n),gob=/goblin|orc|ogre|troll/i.test(n),
+s={nm,cl,sk:gob?'#8fbf6a':P(r,['#f6dcc3','#f2d6b8','#e0b48c','#c98f65','#b9805a','#8d5a3b','#6b4430']),hc:old?P(r,['#e9e9e9','#bfc3c9','#8a8a8a']):P(r,['#2b2118','#4a2e1a','#6b3f1d','#a0622a','#c9a24b','#e8c96a','#b5472a','#1c1c28','#8a8a8a']),
+cc:nm?P(r,PAL[cl]):k.c,ac:P(r,['#d9372f','#2f7ac9','#e8c35a','#3aa55a','#a45bd8','#e8761d']),hh:P(r,['#a0522d','#3a5a9a','#2f7a4a','#8a2c2c','#5a3a7a','#2b2833','#c98a3a']),
+ht:P(r,HT[cl]),ct:P(r,CT[cl]),ha:P(r,old?['bald','bal','long','bun','sh']:['sh','sh','long','mow','afro','bun','tail','swoop','bald','bal']),
+sc:kid?.78:+(.88+r()*.26).toFixed(2),hs:kid?1.18:+(.92+r()*.16).toFixed(2),sx:+(.88+r()*.3).toFixed(2),e:P(r,[9,11,13]),er:P(r,[3.5,4.5,5.5]),ey:P(r,[3,4,6]),br:Math.floor(r()*5),
+mu:P(r,['M-9 16Q0 24 9 16','M-8 18H8','M-11 15Q0 28 11 15','M-9 18Q-2 22 9 14','M-5 18Q0 21 5 18']),no:Math.floor(r()*3),fh:r()<(old?.8:.35)?P(r,['mus','beard','goat','long']):'',gl:r()<.18?P(r,['rnd','mon']):'',pt:r()<.05,fr:r()<.2,sr:r()<.1,ea:r()<.12};
+if(cl=='crf'&&/cook|baker/i.test(n))s.ht='chef';if(cl=='wiz'&&!s.fh&&r()<.6)s.fh='long';if(kid)s.fh='';if(/wizard|mage/i.test(n))s.ht='wiz';if(['straw','helm','vik','plume','wiz','top','chef','beret','hood','tri','turb','jest','fez','maid','cap','feath','kerch'].includes(s.ht)&&['afro','mow','bun'].includes(s.ha))s.ha=P(r,['sh','long','tail']);if(s.ht=='wiz'||s.ht=='hood'||s.ht=='plume'||s.ht=='jest'||s.ht=='feath')s.hh=cl=='wiz'?s.cc:s.hh;if((cl=='vil'&&r()<.55)||(cl=='svt'&&r()<.3)){s.ht='none';s.ha=P(r,['sh','swoop','long','tail','bun','sh']);s.ct=P(r,['tun','tun','rag','apr']);s.gl='';s.pt=0;s.sr=0;s.ea=0;if(s.fh=='long')s.fh=''}
+return s}
+function BD(s,o){const t=s.ct;let d=pa('M-40 90Q-45 20 0 20Q45 20 40 90L55 120L-55 120Z',t=='arm'?'#b8c0cc':s.cc)+(o.n?'<ellipse cx="0" cy="22" rx="15" ry="7" fill="#b4766a"/>':'')+pa('M22 21Q46 24 40 90L55 120H28Q38 80 22 21Z','#000',' fill-opacity=".14" stroke="none"');
+if(t=='tun')d+=pa('M-14 22L0 52L14 22Z','#f4efe6',' stroke-width="4"')+ln('M-42 92H42','#6b3f1d',9)+ci(0,92,5,'#e8c35a');
+if(t=='rag')d+=pa('M-26 50h18v16h-18z','#c9b48a',' stroke-width="3"')+pa('M10 78h16v14h-16z','#8a9a6a',' stroke-width="3"');
+if(t=='apr')d+=pa('M-24 40H24L32 118H-32Z','#f4efe6')+ln('M-24 40L-15 22M24 40L15 22',I,4);
+if(t=='arm')d+=pa('M-32 26Q0 40 32 26L30 78Q0 88 -30 78Z','#cfd5de')+ci(-42,34,15,'#aab3c0')+ci(42,34,15,'#aab3c0')+pa('M-7 40H7L9 112H-9Z',s.ac)+[[-16,50],[16,50],[-16,68],[16,68]].map(p=>ci(p[0],p[1],3,I,N)).join('')+SN('M-50 30Q-46 24 -40 24')+SN('M34 24Q40 24 46 30')+SN('M-24 34Q-22 46 -24 58');
+if(t=='nob')d+=pa('M-32 24Q-18 38 0 30Q18 38 32 24Q22 14 0 18Q-22 14 -32 24Z','#f4efe6')+ln('M0 34V118','#e8c35a',7)+ci(0,58,9,'#e8c35a');
+if(t=='rob')d+=ln('M-52 110H52',s.ac,9)+(s.cl=='pri'?pa('M-4 40h8v28h-8zM-12 48h24v7h-24z','#e8c35a'):[[-22,50],[18,68],[-8,90],[28,44]].map(p=>ci(p[0],p[1],4,'#ffe066',N)).join(''));
+if(t=='cloak')d+=pa('M-14 22L0 80L14 22Z','#2b2833',' stroke-width="3"')+ci(0,32,6,'#c9a24b');
+if(t=='coat')d+=pa('M-14 22L-3 62L-24 52Z','#f4efe6',' stroke-width="3"')+pa('M14 22L3 62L24 52Z','#f4efe6',' stroke-width="3"')+ci(0,74,3.5,I,N)+ci(0,92,3.5,I,N);
+if(t=='mot')d+=pa('M0 20Q45 20 40 90L55 120H0Z',s.ac)+ci(-30,100,5,'#e8c35a')+ci(30,100,5,'#e8c35a');
+if(t=='strp')d+=[44,60,76,92,108].map(y=>ln('M-40 '+y+'H40','#f4efe6',7)).join('')+ln('M-42 98H42',s.ac,8);
+return d}
+function HD(s,o){const e=s.e,y=s.ey,hc=s.hc,k=s.sk,ha=HA[s.ha](hc),sw=(a,b,d)=>d==null?a:'<g class="ea" style="animation-delay:'+d+'s">'+a+'</g><g class="ed" style="animation-delay:'+d+'s">'+b+'</g>',
+fh={mus:'',beard:pa('M-30 6Q-30 46 0 50Q30 46 30 6Q20 24 0 22Q-20 24 -30 6Z',hc),goat:pa('M-9 22Q0 44 9 22Z',hc),long:pa('M-30 6Q-36 62 0 90Q36 62 30 6Q20 24 0 22Q-20 24 -30 6Z',hc)}[s.fh]||'',
+x=(a,b)=>'M'+(a-5)+' '+(y-5)+'L'+(a+5)+' '+(y+5)+'M'+(a+5)+' '+(y-5)+'L'+(a-5)+' '+(y+5);
+return ha[0]+ci(-30,4,6,k)+ci(30,4,6,k)+(s.ea?ci(-31,13,3.5,'#e8c35a',' stroke-width="2"'):'')+ci(0,0,30,k)+fh
++'<ellipse cx="-19" cy="14" rx="6" ry="4" fill="#e8756a" opacity=".3" stroke="none"/><ellipse cx="19" cy="14" rx="6" ry="4" fill="#e8756a" opacity=".3" stroke="none"/>'
++(s.fr?[[-14,13],[-9,16],[-18,17],[14,13],[9,16],[18,17]].map(p=>ci(p[0],p[1],1.6,'#a0623a',N)).join(''):'')+(s.sr?ln('M10 -10L22 14','#b04a4a',3):'')
++sw(ci(-e,y,s.er,I,N)+ci(e,y,s.er,I,N),ln(x(-e)+x(e),I,3.5),o.d)+['',ln('M-18 -7H-5M5 -7H18',I,4),ln('M-18 -11L-5 -5M18 -11L5 -5',I,4),ln('M-18 -5L-5 -10M18 -5L5 -10',I,4),ln('M-19 -8H-4M4 -8H19',hc,7)][s.br]
++['',ci(0,11,4.5,'#c9754f',N+' opacity=".55"'),ln('M0 4Q-6 14 2 15','#8a5a3a',3)][s.no]
++sw('<path d="'+s.mu+'" stroke-width="3.5" fill="none"/>','<ellipse cx="0" cy="19" rx="6" ry="8" fill="'+I+'" stroke="none"/>',o.g)
++(s.fh=='mus'?pa('M-15 14Q-7 7 0 13Q7 7 15 14Q7 20 0 15Q-7 20 -15 14Z',hc,' stroke-width="3"'):'')
++(s.gl=='rnd'?ci(-e,y,8,'rgba(255,255,255,.3)',' stroke-width="3"')+ci(e,y,8,'rgba(255,255,255,.3)',' stroke-width="3"')+ln('M'+(-e+8)+' '+y+'H'+(e-8),I,3):s.gl=='mon'?ci(e,y,9,'rgba(255,255,255,.3)',' stroke-width="3"')+ln('M'+(e+9)+' '+y+'Q'+(e+16)+' 30 '+(e+8)+' 44',I,2):'')
++(s.pt?ci(e,y,8,I,N)+ln('M-31 -6L31 12',I,3):'')+ha[1]+(s.ha=='bald'||s.ha=='bal'?'':SN('M-20 -33Q-8 -38 4 -35'))+HW[s.ht](s.hh)}
+const _na=npcArt,_vis=vis,_mono=mono;let ST=null;
+npcArt=function(k,o){o=o||{};if(!k)return _na.apply(this,arguments);if(!k._u||(ST&&!k._u.nm))k._u=SG(ST,k);const s=k._u;k.sk=s.sk;k.hc=s.hc;
+return '<g stroke="'+I+'" stroke-width="5" stroke-linejoin="round"><g transform="translate(0,120) scale('+s.sc+') translate(0,-120)">'+(o.p=='h'?'':'<g transform="scale('+s.sx+',1)">'+BD(s,o)+'</g>')+(o.p=='b'?'':'<g transform="scale('+s.hs+')">'+HD(s,o)+'</g>')+'</g></g>'};
+vis=function(){ST=AW;try{return _vis.apply(this,arguments)}finally{ST=null}};
+mono=function(w){ST=w;try{return _mono.apply(this,arguments)}finally{ST=null}};
+})();
 </script></body></html>
