@@ -1021,7 +1021,7 @@ long:c=>[pa('M-34 -4Q-40 30 -34 52Q0 60 34 52Q40 30 34 -4Z',c),pa(SH,c)],mow:c=>
 afro:c=>[[[-26,-20],[-14,-36],[0,-42],[14,-36],[26,-20],[-34,-4],[34,-4]].map(p=>ci(p[0],p[1],17,c)).join(''),pa('M-26 -12Q0 -30 26 -12Q12 -20 0 -14Q-12 -20 -26 -12Z',c)],
 bun:c=>[ci(0,-50,13,c),pa(SH,c)],tail:c=>[pa('M24 -14Q56 -10 48 34Q44 48 36 32Q42 10 22 -6Z',c),pa(SH,c)],swoop:c=>['',pa('M-33 -2Q-34 -40 0 -42Q36 -40 33 -2Q10 -26 -14 -14Q-26 -10 -33 -2Z',c)]},
 CAP='M-34 -8Q-32 -46 0 -46Q34 -46 34 -8Q0 -22 -34 -8Z',DOME='M-37 -4Q-38 -52 0 -52Q38 -52 37 -4Z',
-HW={none:()=>'',straw:h=>pa('M-24 -26Q-22 -58 0 -58Q22 -58 24 -26Z','#e5c46b')+'<ellipse cx="0" cy="-26" rx="50" ry="11" fill="#e5c46b"/>'+pa('M-23 -30Q0 -24 23 -30L24 -36Q0 -30 -24 -36Z',h),
+HW={none:()=>'',laur:()=>[[-30,-6],[-27,-18],[-18,-28],[-6,-33],[6,-33],[18,-28],[27,-18],[30,-6]].map(p=>ci(p[0],p[1],6,'#a3aa9c')).join(''),straw:h=>pa('M-24 -26Q-22 -58 0 -58Q22 -58 24 -26Z','#e5c46b')+'<ellipse cx="0" cy="-26" rx="50" ry="11" fill="#e5c46b"/>'+pa('M-23 -30Q0 -24 23 -30L24 -36Q0 -30 -24 -36Z',h),
 cap:h=>pa(CAP,h)+pa('M-34 -8Q-52 -6 -46 4Q-30 2 -24 -8Z',h),kerch:h=>pa('M-34 -2Q-36 -46 0 -46Q36 -46 34 -2Q18 -22 0 -16Q-18 -22 -34 -2Z',h)+ci(32,-12,7,h),band:h=>pa('M-34 -10Q0 -30 34 -10L34 -2Q0 -20 -34 -2Z',h)+pa('M30 -8L46 -2L36 10Z',h),
 helm:h=>pa(DOME,'#b8c0cc')+SN('M-26 -32Q-14 -44 -2 -46')+pa('M-37 -6H37V4H-37Z','#9aa4b2')+pa('M-4 4H4V24H-4Z','#9aa4b2'),vik:h=>HW.helm()+pa('M-34 -30Q-62 -34 -54 -64Q-44 -44 -30 -42Z','#f0e6c8')+pa('M34 -30Q62 -34 54 -64Q44 -44 30 -42Z','#f0e6c8'),plume:h=>HW.helm()+pa('M-4 -50Q-6 -88 24 -80Q8 -72 6 -50Z',h),
 crown:h=>pa('M-26 -30L-30 -58L-14 -44L0 -62L14 -44L30 -58L26 -30Z','#e8c35a')+ci(0,-40,4,'#d9372f',N),circ:h=>pa('M-30 -22Q0 -40 30 -22L30 -17Q0 -35 -30 -17Z','#e8c35a')+ci(0,-30,5,'#4aa3d9'),
@@ -1039,6 +1039,7 @@ ht:P(r,HT[cl]),ct:P(r,CT[cl]),ha:P(r,old?['bald','bal','long','bun','sh']:['sh',
 sc:kid?.78:+(.88+r()*.26).toFixed(2),hs:kid?1.18:+(.92+r()*.16).toFixed(2),sx:+(.88+r()*.3).toFixed(2),e:P(r,[9,11,13]),er:P(r,[3.5,4.5,5.5]),ey:P(r,[3,4,6]),br:Math.floor(r()*5),
 mu:P(r,['M-9 16Q0 24 9 16','M-8 18H8','M-11 15Q0 28 11 15','M-9 18Q-2 22 9 14','M-5 18Q0 21 5 18']),no:Math.floor(r()*3),fh:r()<(old?.8:.35)?P(r,['mus','beard','goat','long']):'',gl:r()<.18?P(r,['rnd','mon']):'',pt:r()<.05,fr:r()<.2,sr:r()<.1,ea:r()<.12};
 if(cl=='crf'&&/cook|baker/i.test(n))s.ht='chef';if(cl=='wiz'&&!s.fh&&r()<.6)s.fh='long';if(kid)s.fh='';if(/wizard|mage/i.test(n))s.ht='wiz';if(['straw','helm','vik','plume','wiz','top','chef','beret','hood','tri','turb','jest','fez','maid','cap','feath','kerch'].includes(s.ht)&&['afro','mow','bun'].includes(s.ha))s.ha=P(r,['sh','long','tail']);if(s.ht=='wiz'||s.ht=='hood'||s.ht=='plume'||s.ht=='jest'||s.ht=='feath')s.hh=cl=='wiz'?s.cc:s.hh;if((cl=='vil'&&r()<.55)||(cl=='svt'&&r()<.3)){s.ht='none';s.ha=P(r,['sh','swoop','long','tail','bun','sh']);s.ct=P(r,['tun','tun','rag','apr']);s.gl='';s.pt=0;s.sr=0;s.ea=0;if(s.fh=='long')s.fh=''}
+s.wand=/wizard|mage/i.test(n);s.stat=/statue/i.test(n);if(s.stat)Object.assign(s,{sk:'#b7bbc2',hc:'#8f939b',cc:'#a9adb5',ct:'stat',ha:'sh',ht:'laur',fh:'beard',br:1,gl:'',pt:0,fr:0,sr:0,ea:0,no:0,sc:1.12,hs:1.06,sx:1.1,e:11,er:4.5,ey:4});
 return s}
 function BD(s,o){const t=s.ct;let d=pa('M-40 90Q-45 20 0 20Q45 20 40 90L55 120L-55 120Z',t=='arm'?'#b8c0cc':s.cc)+(o.n?'<ellipse cx="0" cy="22" rx="15" ry="7" fill="#b4766a"/>':'')+pa('M22 21Q46 24 40 90L55 120H28Q38 80 22 21Z','#000',' fill-opacity=".14" stroke="none"');
 if(t=='tun')d+=pa('M-14 22L0 52L14 22Z','#f4efe6',' stroke-width="4"')+ln('M-42 92H42','#6b3f1d',9)+ci(0,92,5,'#e8c35a');
@@ -1051,14 +1052,16 @@ if(t=='cloak')d+=pa('M-14 22L0 80L14 22Z','#2b2833',' stroke-width="3"')+ci(0,32
 if(t=='coat')d+=pa('M-14 22L-3 62L-24 52Z','#f4efe6',' stroke-width="3"')+pa('M14 22L3 62L24 52Z','#f4efe6',' stroke-width="3"')+ci(0,74,3.5,I,N)+ci(0,92,3.5,I,N);
 if(t=='mot')d+=pa('M0 20Q45 20 40 90L55 120H0Z',s.ac)+ci(-30,100,5,'#e8c35a')+ci(30,100,5,'#e8c35a');
 if(t=='strp')d+=[44,60,76,92,108].map(y=>ln('M-40 '+y+'H40','#f4efe6',7)).join('')+ln('M-42 98H42',s.ac,8);
+if(t=='stat')d+=pa('M-38 30L22 104H40L-18 22Z','#c6cad1',' stroke-width="4"')+ln('M-30 52Q0 70 28 54M-34 78Q0 96 36 80',I,3)+ci(26,40,5,'#7fa56a',N)+pa('M-64 104H64V122H-64Z','#8e939b')+pa('M-70 98H70V106H-70Z','#a2a7af')+ln('M-50 114H50','#fff',2);
+if(s.wand)d+=ln('M46 70L62 18',I,10)+ln('M46 70L62 18','#a8703a',5)+ci(63,14,7,'#ffe066')+ln('M63 2V-4M75 14H81M51 14H45M72 5L76 1',I,3)+ci(46,72,10,s.sk);
 return d}
 function HD(s,o){const e=s.e,y=s.ey,hc=s.hc,k=s.sk,ha=HA[s.ha](hc),sw=(a,b,d)=>d==null?a:'<g class="ea" style="animation-delay:'+d+'s">'+a+'</g><g class="ed" style="animation-delay:'+d+'s">'+b+'</g>',
 fh={mus:'',beard:pa('M-30 6Q-30 46 0 50Q30 46 30 6Q20 24 0 22Q-20 24 -30 6Z',hc),goat:pa('M-9 22Q0 44 9 22Z',hc),long:pa('M-30 6Q-36 62 0 90Q36 62 30 6Q20 24 0 22Q-20 24 -30 6Z',hc)}[s.fh]||'',
 x=(a,b)=>'M'+(a-5)+' '+(y-5)+'L'+(a+5)+' '+(y+5)+'M'+(a+5)+' '+(y-5)+'L'+(a-5)+' '+(y+5);
 return ha[0]+ci(-30,4,6,k)+ci(30,4,6,k)+(s.ea?ci(-31,13,3.5,'#e8c35a',' stroke-width="2"'):'')+ci(0,0,30,k)+fh
-+'<ellipse cx="-19" cy="14" rx="6" ry="4" fill="#e8756a" opacity=".3" stroke="none"/><ellipse cx="19" cy="14" rx="6" ry="4" fill="#e8756a" opacity=".3" stroke="none"/>'
++(s.stat?ln('M-12 -26L-6 -16L-13 -8',I,2.5)+ci(18,-14,6,'#7fa56a',N)+ci(-21,18,4,'#7fa56a',N)+ci(-10,-12,1.6,'#8a8e96',N)+ci(14,16,1.6,'#8a8e96',N):'<ellipse cx="-19" cy="14" rx="6" ry="4" fill="#e8756a" opacity=".3" stroke="none"/><ellipse cx="19" cy="14" rx="6" ry="4" fill="#e8756a" opacity=".3" stroke="none"/>')
 +(s.fr?[[-14,13],[-9,16],[-18,17],[14,13],[9,16],[18,17]].map(p=>ci(p[0],p[1],1.6,'#a0623a',N)).join(''):'')+(s.sr?ln('M10 -10L22 14','#b04a4a',3):'')
-+sw(ci(-e,y,s.er,I,N)+ci(e,y,s.er,I,N),ln(x(-e)+x(e),I,3.5),o.d)+['',ln('M-18 -7H-5M5 -7H18',I,4),ln('M-18 -11L-5 -5M18 -11L5 -5',I,4),ln('M-18 -5L-5 -10M18 -5L5 -10',I,4),ln('M-19 -8H-4M4 -8H19',hc,7)][s.br]
++(s.stat?(se=>sw(se,se,o.d))(ci(-e,y,5.5,'#e4e6ea',' stroke-width="3"')+ci(e,y,5.5,'#e4e6ea',' stroke-width="3"')):sw(ci(-e,y,s.er,I,N)+ci(e,y,s.er,I,N),ln(x(-e)+x(e),I,3.5),o.d))+['',ln('M-18 -7H-5M5 -7H18',I,4),ln('M-18 -11L-5 -5M18 -11L5 -5',I,4),ln('M-18 -5L-5 -10M18 -5L5 -10',I,4),ln('M-19 -8H-4M4 -8H19',hc,7)][s.br]
 +['',ci(0,11,4.5,'#c9754f',N+' opacity=".55"'),ln('M0 4Q-6 14 2 15','#8a5a3a',3)][s.no]
 +sw('<path d="'+s.mu+'" stroke-width="3.5" fill="none"/>','<ellipse cx="0" cy="19" rx="6" ry="8" fill="'+I+'" stroke="none"/>',o.g)
 +(s.fh=='mus'?pa('M-15 14Q-7 7 0 13Q7 7 15 14Q7 20 0 15Q-7 20 -15 14Z',hc,' stroke-width="3"'):'')
