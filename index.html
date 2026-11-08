@@ -396,15 +396,18 @@ const fl2=(x,y,s)=>`<g class="fl" style="animation-delay:${-(Math.abs(x*7+y*3)%9
 skK=()=>S.ks.find(k=>k.skel&&!k.dead),GV=()=>sd(0,112,1.1,{a:1,t:'#3b5ea8',w:'s'});
 function skHurt(l){S.guards=Math.max(0,S.guards-l);S.troops=Math.round(S.troops*.85);G(-Math.round(S.gold*.1));H(-8);S.unrest=Math.min(100,(S.unrest||0)+10);gdr();upd()}
 function skBurn(){const n=S.houses.length+S.farms+S.walls;dmg(Math.max(1,Math.min(3,n*.35)));S.fire=1;S.fireT=Date.now();S.fx=60+S.houses.length*15;drawH();wk2='';drawW()}
-function skDone(){const k=skK();S.skon=0;S.skd=(S.skd|0)+1;S.nsk=S.day+3;S.skt=200+F(R()*500);
+function skDone(w){const k=skK();S.skon=0;if(w===false){S.nsk=S.day+3;S.skt=200+F(R()*500);say('☠ The skeletons were not driven back. They will return, so build a real army!');upd();return}S.skd=(S.skd|0)+1;S.nsk=S.day+3;S.skt=200+F(R()*500);
 if(S.skd>=5){if(k){k.dead=1;k.enemy=0}S.skw=0;G(400);H(10);say('☠ Bonereach is defeated! The skeleton war is over. +400 gold!')}else say('⚔ Skeleton war: '+S.skd+'/5 attacks repelled.');upd()}
 function skCastle(k){k=k||skK();if(!k)return;S.skon=1;k.enemy=1;S.skw=1;const l=Math.min(S.guards,1+F(R()*2));skBurn();skHurt(l);
-mono('Captain','#58a',['Majesty! The skeletons of Bonereach are storming the town!','Your guards held the castle gate, you are safe... but the fires are spreading!','They have retreated, for now. We lost '+l+' guard'+(l==1?'':'s')+'. Rebuild in the Realm tab.'],()=>skDone(),0,GV())}
+mono('Captain','#58a',['Majesty! The skeletons of Bonereach are storming the town!','Your guards held the castle gate, you are safe... but the fires are spreading!','They have retreated, for now. We lost '+l+' guard'+(l==1?'':'s')+'. Rebuild in the Realm tab.'],()=>skRsl(k),0,GV())}
 function skTown(k){S.skon=1;k.enemy=1;S.skw=1;const n=2+Math.min(3,S.skd|0);for(let i=0;i<n;i++){const x=R()<.5?-40-i*70:1040+i*70,e=document.createElementNS('http://www.w3.org/2000/svg','g');e.setAttribute('transform','translate('+x+',455)');e.innerHTML=sd(0,0,.55,{sk:1,a:F(R()*2),t:'#6a5a48',w:R()<.5?'s':'w',sh:R()<.5?1:0});$('np').appendChild(e);sx.push({x,e})}say('☠ Skeletons from Bonereach are attacking the city!')}
-function skHit(){if(!sx.length)return;sx.forEach(a=>{a.x+=Math.sign(px-a.x)*5;a.e.setAttribute('transform','translate('+a.x+',455)')});
+function skRsl(k){k=k||skK();if(!k)return skDone();const mm=pw()-S.guards*1.5+wpw('a'),e=ksp(k)*(.8+R()*.5);
+if(S.troops<1&&S.mach<1&&S.sling<1){const mercy=!S.mercy;S.mercy=1;P(-Math.round(S.people*(mercy?.12:.15)));G(-Math.round(S.gold*(mercy?.2:.3)));dmg(mercy?1.2:1.5);say(mercy?'🛡 Guard: Majesty, we have NO soldiers! We barely survived this time, but we will not be so lucky again. Build an army!':'☠ With no soldiers to fight, the skeletons overran the kingdom! You lost people and gold.',25000);return skDone(false)}
+if(R()<mm/(mm+e))return skDone();P(-Math.round(S.people*.1));G(-Math.round(S.gold*.15));dmg(1);say('☠ The skeletons broke through your defenses! You lost people and gold.',25000);skDone(false)}
+function skHit(){if(!sx.length)return;const k0=skK();sx.forEach(a=>{a.x+=Math.sign(px-a.x)*5;a.e.setAttribute('transform','translate('+a.x+',455)')});
 if(sx.some(a=>Math.abs(a.x-px)<70)){const n=sx.length,g=S.guards,l=g>=n?Math.min(g,F(n/2)+1):g;sx.forEach(a=>a.e.remove());sx=[];
 if(g>=n)say('🛡 Skeletons attacked the city! Your guards fought them off and protected you!');else{G(-Math.round(S.gold*.15));say('☠ You barely escaped the skeletons! Your guards fell protecting you.')}
-skBurn();skHurt(l);skDone()}}
+skBurn();skHurt(l);skRsl(k0)}}
 function skTrig(){const k=skK();if(!k||S.skon||S.day<(S.nsk||9))return;if(S.t<(S.skt=S.skt||200+F(R()*500)))return;if(tn){if(!B)skTown(k)}else if(idle())skCastle(k)}
 function skRef(){if(!S.skw||!skK())return EV[F(R()*(EV.length-2))]();
 mono('Skeleton','#9a9',['Great king... please... I flee the bone lords.','I beg you for refuge in your kingdom...'],()=>{
@@ -1400,12 +1403,13 @@ mono=function(w){ST=w;try{return _mono.apply(this,arguments)}finally{ST=null}};
 
 FUP.kin=()=>{const n=1+F(R()*2);if(S.guards>=n){say('🛡 '+gpick()+' cut down '+(n>1?'two relatives':'a relative')+' of the victim who came for you!');return}die('The victim\'s '+(n>1?'two relatives':'relative')+' came for revenge, and you had too few guards!')};
 /* ===== DEFENSE FIX: attacks are decided by who is actually defending ===== */
-battle=function(k){const D=S.troops+S.guards+S.mach*5+S.sling*2,need=Math.max(2,Math.ceil(ksp(k)/25)),mf=Math.min(1,.4+.6*D/need),m=(pw()+wpw('a'))*mf,e=ksp(k)*(.8+R()*.5);
+battle=function(k){const mm=pw()-S.guards*1.5+wpw('a'),e=ksp(k)*(.8+R()*.5);
 say('⚔ '+k.n+' attacks!'+(k.skel?' Skeletons climb the walls in the dark!':''));
-const win=D>0&&R()<m/(m+e);
-if(S.troops<1){say(D<1?'No guards, soldiers or machines were left to defend the castle!':S.guards>0?'Only your guards and machines held the gate, with no soldiers to back them.':'Only your war machines stood against them, with nobody to guard them.');pump(1500)}else scn(arm(k,win,84.8,Math.min(m,e)/Math.max(m,e,1)),84800);
+if(S.troops<1&&S.mach<1&&S.sling<1){const mercy=k.skel&&!S.mercy;if(mercy)S.mercy=1;P(-S.people*(mercy?.12:.15));G(-S.gold*(mercy?.25:.3));U(8);H(-8);dmg(mercy?1.2:1.5);say(mercy?'🛡 Guard: Majesty, we have NO soldiers! The castle barely survived this time, but we will not be so lucky again. Build an army!':'The castle fell: you had no soldiers or machines to defend it! You lost people and gold.',25000);pump(1500);return}
+const win=R()<mm/(mm+e);
+scn(arm(k,win,84.8,Math.min(mm,e)/Math.max(mm,e,1)),84800);
 if(win){const fr=S.wp.f/Math.max(1,S.troops);S.troops=Math.round(S.troops*(.88-Math.min(.1,fr*.2)));k.rel-=5;if(k.skel){k.p=Math.round(k.p*1.15);say('They reassemble...')}say('You held the line!')}
-else{S.troops=Math.round(S.troops*.6);P(-S.people*.12);G(-S.gold*.25);U(8);H(-8);say(D<1?'The castle fell with nobody to defend it! You lost people and gold.':'You lost people and gold.');dmg(.8)}};
+else{S.troops=Math.round(S.troops*.6);P(-S.people*.12);G(-S.gold*.25);U(8);H(-8);say('You lost people and gold.');dmg(.8)}};
 
 /* ===== Duck Oracle now faces the throne (queen/king) ===== */
 SPA['Duck Oracle']=()=>'<g transform="scale(-1,1)">'+DUCKART+'</g>';
