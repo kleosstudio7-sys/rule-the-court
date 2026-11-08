@@ -946,9 +946,26 @@ function tick(){if(!S.made||slp||mo||!$('pn').hidden||!$('mp').hidden)return;S.t
 
 try{S=JSON.parse(localStorage.getItem('realm1'))}catch(e){}
 S=Object.assign(DEF(),S||{});S.ks.forEach((k,i)=>{const d=DEF().ks[i];if(d)for(const f in d)if(k[f]===undefined)k[f]=d[f]});
-drawH();seated($('rl'),S);$('vs').style.display='none';upd();if(!S.made)creator();
+drawH();seated($('rl'),S);$('vs').style.display='none';upd();if(!S.made)titleScreen();
 setInterval(tick,1000);addEventListener('beforeunload',save);
 
+function titleScreen(){mo=1;const I='#2b2118',FN='font-family="Londrina Solid,Impact,sans-serif"',t=document.createElement('div');t.id='ti';t.style.cssText='position:absolute;inset:0;z-index:50;background:#a6dcec;overflow:hidden';
+const tree=(x,y,sc)=>'<g transform="translate('+x+','+y+') scale('+sc+')" stroke="'+I+'" stroke-width="4"><rect x="-6" y="0" width="12" height="46" fill="#8a5a33"/><circle cy="-10" r="32" fill="#4f9a4a"/><circle cx="-14" cy="-2" r="6" fill="#ffffff22" stroke="none"/></g>',
+fl=(x,y,c)=>'<g stroke="'+I+'" stroke-width="3"><path d="M'+x+' '+y+'V'+(y-34)+'" fill="none"/><path d="M'+x+' '+(y-34)+'L'+(x+22)+' '+(y-28)+'L'+x+' '+(y-20)+'Z" fill="'+c+'"/></g>';
+t.innerHTML='<style>#ti button{font-family:inherit;cursor:pointer;border:5px solid '+I+';border-radius:22px 26px 21px 25px/25px 21px 26px 22px;font-size:max(26px,calc(8*var(--u)));font-weight:900;letter-spacing:.03em;padding:.15em .8em;background:linear-gradient(#ffb64e,#ec6f2a);color:#fff;text-shadow:-2px -2px 0 '+I+',2px -2px 0 '+I+',-2px 2px 0 '+I+',2px 2px 0 '+I+',0 3px 0 '+I+';box-shadow:0 7px 0 '+I+',inset 0 3px 0 #fff8,inset 0 -7px 0 #c8501a;animation:tip 1.4s ease-in-out infinite alternate}#ti button:hover{filter:brightness(1.1)}#ti button:active{transform:translateX(-50%) translateY(5px);box-shadow:0 2px 0 '+I+',inset 0 -7px 0 #c8501a}@keyframes tip{to{margin-bottom:10px}}</style>'
++'<svg viewBox="0 0 1000 625" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%"><g filter="url(#wob)"><rect width="1000" height="625" fill="url(#sk)"/>'
++'<g stroke="'+I+'" stroke-width="4"><circle cx="840" cy="120" r="58" fill="#ffe066"/><circle cx="840" cy="120" r="40" fill="#fff2a0" stroke="none"/></g>'
++'<g class="cl" fill="#fff" stroke="'+I+'" stroke-width="4"><path transform="translate(-120,0)" d="M120 150Q110 128 140 124Q148 98 184 108Q210 88 236 116Q270 114 266 142Q272 158 246 158H140Q116 162 120 150Z"/></g><g class="cl" style="animation-delay:-30s" fill="#fff" stroke="'+I+'" stroke-width="4"><path transform="translate(-700,60)" d="M700 80Q692 62 716 58Q724 38 752 46Q774 34 794 54Q820 54 816 76Q822 88 800 88H714Q696 92 700 80Z"/></g>'
++'<path d="M-10 470Q150 380 320 450Q480 370 640 440Q800 380 1010 450V540H-10Z" fill="#a5cdbd" stroke="'+I+'" stroke-width="4"/>'
++'<rect x="-10" y="470" width="1020" height="80" fill="#8fbf5e" stroke="'+I+'" stroke-width="5"/>'
++tree(90,420,1.5)+tree(180,450,1.1)+tree(910,415,1.6)+tree(820,450,1.1)
++'<g stroke="'+I+'" stroke-width="4" stroke-linejoin="round" transform="translate(500,520)"><path d="M-70 0L-40 -60H40L70 0Z" fill="#d8c08a"/></g>'
++mcs(500,508,'#f5c22b',4,3.5)+fl(300,500,'#d9372f')+fl(700,500,'#d9372f')
++'<rect y="508" width="1000" height="117" fill="url(#cb)" stroke="'+I+'" stroke-width="6"/>'
++'<text x="500" y="118" text-anchor="middle" font-size="104" font-weight="900" fill="#ffb64e" stroke="'+I+'" stroke-width="16" paint-order="stroke" stroke-linejoin="round" '+FN+'>Rule the Court</text>'
++'<text x="500" y="158" text-anchor="middle" font-size="34" font-weight="900" fill="#f7ecd0" stroke="'+I+'" stroke-width="9" paint-order="stroke" stroke-linejoin="round" '+FN+'>Build. Rule. Survive.</text></g></svg>'
++'<button style="position:absolute;left:50%;bottom:9%;transform:translateX(-50%)">Start Kingdom</button>';
+$('g').appendChild(t);t.querySelector('button').onclick=()=>{t.remove();creator()}}
 /* ===== EMPIRE UPDATE: builders, heroes, spells, raids, towns, vassals, clan ===== */
 const EX=()=>{const e=S.e=S.e||{},d={bq:[],bd:1,lv:[0,0,0,0],hr:[0,0,0],sp:{r:0,l:0,h:0},wb:0,hl:0,tw:[],rt:[],cl:0,cd:0,cw:null};for(const k in d)if(e[k]===undefined)e[k]=d[k];return e};
 const BLD=[['Barracks','+3 special-unit room, +4% raid power'],['Forge','+8% troop strength in raids'],['Mint','+4g a day, +5% raid loot'],['Spell Lab','+1 spell storage']],
