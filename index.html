@@ -1499,4 +1499,22 @@ const _upd=upd,_sp=spawnN;
 upd=function(){const r=_upd.apply(this,arguments);try{ns()}catch(e){}return r};
 spawnN=function(){if(night())return;return _sp.apply(this,arguments)};
 })();
+</script><script>
+/* faint medieval background music (synthesized, starts on first click/tap) */
+(function(){let ac,mg,on=0,t0,step=0,tm,bt=.62,fc=0;
+const D=[293.66,329.63,349.23,392,440,493.88,523.25,587.33],
+ph=[[0,2,4,2,3,2,1,0],[4,3,2,4,5,4,3,2],[2,4,5,7,5,4,2,3],[4,2,3,1,2,1,0,0]],
+dr=[146.83,146.83,174.61,110];
+function n(f,t,d,v,ty){const o=ac.createOscillator(),g=ac.createGain(),lp=ac.createBiquadFilter();o.type=ty||'triangle';o.frequency.value=f;lp.type='lowpass';lp.frequency.value=1400;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(lp);lp.connect(g);g.connect(mg);o.start(t);o.stop(t+d+.05)}
+function sched(){if(!on)return;while(t0<ac.currentTime+1.5){const bar=Math.floor(step/8)%4,i=step%8;
+if(i==0){n(dr[bar],t0,bt*7,.5,'sine');n(dr[bar]*1.5,t0,bt*7,.22,'sine')}
+if(!(step%16>13)||i<4||fc){const k=ph[bar][i];n(D[k],t0,bt*1.8,.55);if(fc&&i%2==0)n(D[k]*2,t0,bt,.25);if(fc&&i%2==0)n(73.4,t0,.25,.9,'sine');if(i%4==0)n(D[k]/2,t0,bt*2,.3,'sine')}
+t0+=bt;step++}
+tm=setTimeout(sched,400)}
+window.musicFight=function(ms){if(!ac)return;fc++;bt=.42;mg.gain.cancelScheduledValues(ac.currentTime);mg.gain.setTargetAtTime(.13,ac.currentTime,.4);setTimeout(()=>{if(--fc<=0){fc=0;bt=.62;if(ac)mg.gain.setTargetAtTime(.045,ac.currentTime,1.2)}},ms)};
+function go(){if(on)return;try{ac=new(window.AudioContext||window.webkitAudioContext)();mg=ac.createGain();mg.gain.value=.045;mg.connect(ac.destination);on=1;t0=ac.currentTime+.2;sched()}catch(e){}}
+['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,go,{once:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!ac)return;if(document.hidden){on=0;clearTimeout(tm);ac.suspend()}else{ac.resume();if(!on){on=1;t0=ac.currentTime+.2;sched()}}});
+})();
+(function(){const _s=scn;scn=function(h,ms){try{musicFight(ms||10000)}catch(e){}return _s.apply(this,arguments)}})();
 </script></body></html>
