@@ -120,7 +120,7 @@ input,select{font:inherit;color:var(--ink);background:#fff8e6;border:3px solid v
 <script>
 const $=i=>document.getElementById(i),R=Math.random,F=Math.floor,cl=v=>Math.max(0,Math.min(100,Math.round(v)));
 let S,B=null,AF=null,Q=[],slp=0,mo=0,rows=[],tab='Realm',lg=[],lt,hr=60;
-const DEF=()=>({name:'Aria',king:0,skin:'#f2c9a0',hair:'#2a1a3a',robe:'#4a78c8',crown:'#f2c230',cr:0,hs:0,ey:0,br:0,mt:0,fl:0,bd:0,gold:75,people:2,happy:70,unrest:10,tax:15,troops:0,tl:0,walls:0,wx:0,guards:1,mach:0,farms:0,mines:0,pick:0,biz:0,land:1,houses:[],inf:0,chef:0,slaves:0,sw:{f:0,m:0},fh:0,bl:[],ar:0,gi:0,gl:0,swl:0,arl:0,know:0,pens:1,env:null,ast:{},sling:0,wp:{t:0,b:0,f:0},dm:{h:0,f:0,w:0},shop:{on:0,pr:100,it:{bread:1,cloth:0,tools:0,swords:0}},grain:0,cm:0,hm:0,wt:0,pw:null,day:1,nj:2,nf:3,wd:null,t:0,sl:0,loans:[],warn:-1,deaths:0,debtors:0,fear:0,made:0,ks:[{n:'Redmoor',p:40,rel:0,tr:'warlike, loves siege machines',gr:1.1,sp:2,of:0,ch:.9,w:[3,2,4,1],um:5,mm:8,wm:2},{n:'Goldvale',p:28,rel:10,tr:'rich, trains elite troops',gr:.9,sp:3,of:1,ch:.55,w:[2,4,1,3],um:7,mm:3,wm:5},{n:'Stonehelm',p:75,rel:-5,tr:'big army, builds fortress walls, a real challenge',gr:.7,sp:4,of:2,ch:1.25,w:[5,1,1,4],um:4,mm:4,wm:6},{n:'Bonereach',p:60,rel:0,skel:1,tr:'undead, steady growth',gr:1,sp:3,of:0,ch:1,w:[3,3,3,0],um:5,mm:6,wm:0}]});
+const DEF=()=>({name:'Aria',king:0,skin:'#f2c9a0',hair:'#2a1a3a',robe:'#4a78c8',crown:'#f2c230',cr:0,hs:0,ey:0,br:0,mt:0,fl:0,bd:0,gold:75,people:2,happy:70,unrest:10,tax:25,troops:0,tl:0,walls:0,wx:0,guards:1,mach:0,farms:0,mines:0,pick:0,biz:0,land:1,houses:[],inf:0,chef:0,slaves:0,sw:{f:0,m:0},fh:0,bl:[],ar:0,gi:0,gl:0,swl:0,arl:0,know:0,pens:1,env:null,ast:{},sling:0,wp:{t:0,b:0,f:0},dm:{h:0,f:0,w:0},shop:{on:0,pr:100,it:{bread:1,cloth:0,tools:0,swords:0}},grain:0,cm:0,hm:0,wt:0,pw:null,day:1,nj:2,nf:3,wd:null,t:0,sl:0,loans:[],warn:-1,deaths:0,debtors:0,fear:0,made:0,ks:[{n:'Redmoor',p:40,rel:0,tr:'warlike, loves siege machines',gr:1.1,sp:2,of:0,ch:.9,w:[3,2,4,1],um:5,mm:8,wm:2},{n:'Goldvale',p:28,rel:10,tr:'rich, trains elite troops',gr:.9,sp:3,of:1,ch:.55,w:[2,4,1,3],um:7,mm:3,wm:5},{n:'Stonehelm',p:75,rel:-5,tr:'big army, builds fortress walls, a real challenge',gr:.7,sp:4,of:2,ch:1.25,w:[5,1,1,4],um:4,mm:4,wm:6},{n:'Bonereach',p:60,rel:0,skel:1,tr:'undead, steady growth',gr:1,sp:3,of:0,ch:1,w:[3,3,3,0],um:5,mm:6,wm:0}]});
 const save=()=>{try{localStorage.setItem('realm1',JSON.stringify(S))}catch(e){}};
 const G=d=>(d>0&&sfx('g'),S.gold=Math.max(0,Math.round(S.gold+d))),H=d=>S.happy=cl(S.happy+d),U=d=>S.unrest=cl(S.unrest+d),P=d=>S.people=Math.max(0,Math.round(S.people+d));
 let sAC,lsx=0;function sfx(t){try{const n=Date.now();if(n-lsx<90)return;lsx=n;sAC=sAC||new(window.AudioContext||window.webkitAudioContext)();const o=(f,s,d,ty,v)=>{const a=sAC.createOscillator(),g=sAC.createGain(),T=sAC.currentTime+s;a.type=ty;a.frequency.value=f;g.gain.setValueAtTime(v,T);g.gain.exponentialRampToValueAtTime(.001,T+d);a.connect(g);g.connect(sAC.destination);a.start(T);a.stop(T+d)};if(t=='g'){o(988,0,.08,'square',.05);o(1319,.08,.12,'square',.05)}else if(t=='h'){o(196,0,.5,'sawtooth',.1);o(147,.45,.7,'sawtooth',.1)}else[1568,2093,2637,3136].forEach((f,i)=>o(f,i*.07,.2,'sine',.07))}catch(e){}}
@@ -405,7 +405,7 @@ function skHit(){if(!sx.length)return;sx.forEach(a=>{a.x+=Math.sign(px-a.x)*5;a.
 if(sx.some(a=>Math.abs(a.x-px)<70)){const n=sx.length,g=S.guards,l=g>=n?Math.min(g,F(n/2)+1):g;sx.forEach(a=>a.e.remove());sx=[];
 if(g>=n)say('🛡 Skeletons attacked the city! Your guards fought them off and protected you!');else{G(-Math.round(S.gold*.15));say('☠ You barely escaped the skeletons! Your guards fell protecting you.')}
 skBurn();skHurt(l);skDone()}}
-function skTrig(){const k=skK();if(!k||S.skon||S.day<(S.nsk||5))return;if(S.t<(S.skt=S.skt||200+F(R()*500)))return;if(tn){if(!B)skTown(k)}else if(idle())skCastle(k)}
+function skTrig(){const k=skK();if(!k||S.skon||S.day<(S.nsk||9))return;if(S.t<(S.skt=S.skt||200+F(R()*500)))return;if(tn){if(!B)skTown(k)}else if(idle())skCastle(k)}
 function skRef(){if(!S.skw||!skK())return EV[F(R()*(EV.length-2))]();
 mono('Skeleton','#9a9',['Great king... please... I flee the bone lords.','I beg you for refuge in your kingdom...'],()=>{
 mono('Guard','#58a',['*A guard strikes the skeleton down before you can answer!*','"Forgive me, your majesty... he killed my wife."'],()=>{
@@ -422,7 +422,7 @@ const EV=[
 ()=>mq('Scholar','#68a',["Greetings, majesty. I have traveled twelve kingdoms.","In my bag is a book few dare to read.","It speaks of war... and how to win one."],()=>ask('Scholar','#68a','Will you buy a rare book of war for 90 gold?',()=>{G(-90);if(S.know>=4||R()<.3)say('It was a fake!');else{S.know++;say('You learned something new!')}},()=>0)),
 ()=>TQ[F(R()*TQ.length)](),
 ()=>mq('Fortune Teller','#a4a',["Ahh... the cards whisper about you, ruler.","I see a crown, a storm, and shining gold...","The spirits told me where treasure sleeps."],()=>ask('Fortune Teller','#a4a','Will you pay 40 gold for me to find treasure for you?',()=>{G(-40);if(R()<.5){G(rg(150));say('Treasure found!')}else say('Nothing but dirt.')},()=>0)),
-()=>ask('Smiling Cook','#c33','A drink for the weary ruler?',()=>{if(R()<(S.guards?.08:.25)*(S.chef?.3:1))return die('The drink was poisoned!');H(1);say('Delicious!')},()=>say('You wisely refused.')),
+()=>ask('Smiling Cook','#c33','A drink for the weary ruler?',()=>{if(S.day>3&&R()<(S.guards?.08:.25)*(S.chef?.3:1))return die('The drink was poisoned!');H(1);say('Delicious!')},()=>say('You wisely refused.')),
 ()=>ask('Debtor','#a85','Will you give me one more week to pay my taxes?',()=>{H(5);G(-20)},()=>{G(rg(20));U(4)},()=>kill(1)),
 ()=>ghost(),
 ()=>skRef()];
@@ -490,12 +490,12 @@ EV.push(
 ()=>ask('Stable Master','#a75','Will you pay 60 gold to repair the stables?',()=>{G(-60);S.troops+=2},()=>H(-1)),
 ()=>ask('Lord Ned','#97a','May I borrow some of your guards for my wedding day?',()=>{H(3);say('The wedding was lovely.')},()=>U(1)));
 EV.push(
-()=>ask('Servant','#789','Your bath is ready, majesty. Shall I help you in?',()=>{if(atk('servant',.1,'A servant held you under in the bath!'))return;H(2);say('Relaxing!')},()=>say('You bathed alone.'),()=>kill(1)),
-()=>ask('Messenger','#68b','A sealed letter, for your eyes only. Open it?',()=>{if(atk('letter',.12,'The letter was coated in poison!'))return;H(1);say('Just a love letter.')},()=>say('You burned it unread.')),
-()=>ask('Hooded Man','#334','I bring a gift: a fine dagger. Try the edge?',()=>{if(atk('townsperson',.2,'The gift dagger found your ribs!'))return;S.troops+=1;say('A fine dagger.')},()=>say('He slipped away.'),()=>kill(1)),
-()=>ask('Servant','#789','The upper stairs are shiny, majesty. Walk ahead of me?',()=>{if(atk('servant',.1,'You were pushed down the stairs!'))return;say('Nothing happened.')},()=>say('You took the other stairs.')),
-()=>ask('Rival Envoy','#a33','A gift chest from our king! Open it now?',()=>{if(atk('rival',.18,'The chest held a blade trap!'))return;const g=rg(60);G(g);say('A gift of '+g+'g!')},()=>{say('You had it inspected.');if(R()<.4)G(rg(20))}),
-()=>ask('Courtier','#97a','Walk with me alone to the garden, majesty. I have a secret.',()=>{if(atk('townsperson',.15,'It was an ambush in the garden!'))return;const g=rg(40);G(g);say('He sold you a secret worth '+g+'g.')},()=>0));
+()=>ask('Servant','#789','Your bath is ready, majesty. Shall I help you in?',()=>{if(S.day>3&&atk('servant',.1,'A servant held you under in the bath!'))return;H(2);say('Relaxing!')},()=>say('You bathed alone.'),()=>kill(1)),
+()=>ask('Messenger','#68b','A sealed letter, for your eyes only. Open it?',()=>{if(S.day>3&&atk('letter',.12,'The letter was coated in poison!'))return;H(1);say('Just a love letter.')},()=>say('You burned it unread.')),
+()=>ask('Hooded Man','#334','I bring a gift: a fine dagger. Try the edge?',()=>{if(S.day>3&&atk('townsperson',.2,'The gift dagger found your ribs!'))return;S.troops+=1;say('A fine dagger.')},()=>say('He slipped away.'),()=>kill(1)),
+()=>ask('Servant','#789','The upper stairs are shiny, majesty. Walk ahead of me?',()=>{if(S.day>3&&atk('servant',.1,'You were pushed down the stairs!'))return;say('Nothing happened.')},()=>say('You took the other stairs.')),
+()=>ask('Rival Envoy','#a33','A gift chest from our king! Open it now?',()=>{if(S.day>3&&atk('rival',.18,'The chest held a blade trap!'))return;const g=rg(60);G(g);say('A gift of '+g+'g!')},()=>{say('You had it inspected.');if(R()<.4)G(rg(20))}),
+()=>ask('Courtier','#97a','Walk with me alone to the garden, majesty. I have a secret.',()=>{if(S.day>3&&atk('townsperson',.15,'It was an ambush in the garden!'))return;const g=rg(40);G(g);say('He sold you a secret worth '+g+'g.')},()=>0));
 RY.push('My family will sing about you!','Finally, a ruler with a heart!','The gods smile on you, majesty!','I will tell everyone in the market!','A thousand blessings upon your crown!','Best. Ruler. Ever!');RN.push('I will tell my grandmother about this!','Well, that was rude.','I will remember this at the next harvest!','The bards will sing of your stinginess!','My cat is more generous than you!','Mark my words, majesty!');
 const NT=['Nothing came of it.','He shrugged and wandered off.','No harm done, it seems.'];const askF=(w,c,t,y,n,x,xl)=>ask(w,c,t,y,()=>{if(R()<.4)say(NT[F(R()*NT.length)]);else n&&n()},x,xl);
 const ltr=(k,d)=>{(S.fu=S.fu||[]).push([S.day+d,k])};
@@ -627,10 +627,10 @@ function dawn2(){const d=S.day,m=S.ms=S.ms||{},mk=(k,c,t,g)=>{if(!m[k]&&c){m[k]=
 mk('d5',d>=5,'Village Chief',30);mk('d15',d>=15,'Local Lord',60);mk('d30',d>=30,'Duke of the Valley',120);mk('d60',d>=60,'Grand Sovereign',250);mk('d100',d>=100,'Legendary Ruler',500);mk('p30',S.people>=30,'Beloved of Thirty',50);mk('p100',S.people>=100,'Father of a Town',150);mk('t20',S.troops>=20,'Warlord',100);mk('g1k',S.gold>=1000,'Dragon of Gold',200);mk('gu5',S.guards>=5,'Captain of Guards',60);mk('al',S.ks.some(k=>k.ally),'Friend of Kings',80);mk('kn',S.know>=6,'Grand Scholar',150);mk('w3',S.walls>=3,'Wall Builder',100);
 if(d>1&&d%8==1){const i=F((d-1)/8)%4;if(i==0){H(3);say('🌸 Spring! Flowers bloom and spirits rise.')}else if(i==1){S.grain+=S.farms*10;say('☀ Summer! Long warm days help the fields.')}else if(i==2){const g=S.farms*15;S.grain+=g;say('🍂 Autumn harvest! +'+g+' crops.')}else{const c=Math.round(S.people*.4);G(-c);H(-2);say('❄ Winter! Heating costs '+c+'g.')}}
 if(d%8==7)Q.push(()=>ask('Festival Master','#e5a','The '+SEAN[F((d-1)/8)%4]+' Festival is coming! Throw a big party for 60 gold?',()=>{if(S.gold<60)return say('Not enough gold for a party.');G(-60);H(8);U(-5);if(R()<.25){G(rg(80));say('Merchants flooded in and spent big!')}else if(R()<.2){H(-2);say('A food fight broke out!')}else say('A wonderful festival!')},()=>H(-2)));
-if(d>=15&&!S.heir&&!S.heirq){S.heirq=1;Q.push(()=>{mo=1;$('pn').hidden=1;$('md').hidden=0;$('md').innerHTML='<h2 style="margin:0">A royal heir is born!</h2><div style="display:grid;gap:6px;max-width:340px">Name the heir <input id="hnm" maxlength="12" value="Alex"><button onclick="hrSet()">Confirm</button></div>'})}
+if(d>=19&&!S.heir&&!S.heirq){S.heirq=1;Q.push(()=>{mo=1;$('pn').hidden=1;$('md').hidden=0;$('md').innerHTML='<h2 style="margin:0">A royal heir is born!</h2><div style="display:grid;gap:6px;max-width:340px">Name the heir <input id="hnm" maxlength="12" value="Alex"><button onclick="hrSet()">Confirm</button></div>'})}
 if(d%12==0&&S.guards>0)Q.push(()=>{const g=(S.gr||[]).filter(x=>x.n).sort((p,q)=>q.lv-p.lv)[0];ask('Tournament Herald','#c84','The Royal Tournament begins! Enter '+(g?g.n+' ('+RK[g.lv]+')':'a guard')+' for 50 gold?',()=>{if(S.gold<50)return say('Not enough gold to enter.');G(-50);const lv=g?g.lv:0;if(R()<.25+lv*.12){const p=150+lv*40;G(p);H(6);say('🏆 '+(g?g.n:'Your guard')+' won the tournament! +'+p+'g');if(g&&g.lv<5){g.lv++;say('⭐ '+g.n+' is now a '+RK[g.lv]+'!')}}else{H(-1);say('Your champion lost, but fought bravely.')}},()=>0)});
-if(d>=30&&!m.c1){m.c1=1;say('☄ A strange comet appears in the night sky...')}
-if(d>=36&&!m.c2){m.c2=1;Q.push(()=>ask('Astronomer','#68a','The comet blazes overhead! Study it for 50 gold (Y) or pray to it (N)?',()=>{G(-50);if(S.know<6){S.know++;say('You learned secrets from the stars!')}else{G(250);say('Star-metal worth 250 gold fell nearby!')}},()=>{H(10);U(-6);say('The people feel hopeful.')},()=>{if(R()<.5){dmg(1);say('A meteor struck the town!')}else{G(rg(200)+100);say('A meteor shower dropped gold nuggets!')}},'🎲 Ignore it'))}}
+if(d>=34&&!m.c1){m.c1=1;say('☄ A strange comet appears in the night sky...')}
+if(d>=40&&!m.c2){m.c2=1;Q.push(()=>ask('Astronomer','#68a','The comet blazes overhead! Study it for 50 gold (Y) or pray to it (N)?',()=>{G(-50);if(S.know<6){S.know++;say('You learned secrets from the stars!')}else{G(250);say('Star-metal worth 250 gold fell nearby!')}},()=>{H(10);U(-6);say('The people feel hopeful.')},()=>{if(R()<.5){dmg(1);say('A meteor struck the town!')}else{G(rg(200)+100);say('A meteor shower dropped gold nuggets!')}},'🎲 Ignore it'))}}
 function hrSet(){const v=($('hnm').value||'').replace(/[<>&"']/g,'').trim().slice(0,12)||'Little One';S.heir={n:v,b:S.day};say('👑 Heir '+v+' is born!');hx();ltr('heir1',6)}
 Object.assign(FUP,{
 heir1:()=>S.heir&&ask('Royal Nanny','#e9a',S.heir.n+' is walking! The little one wants to see the throne room. Allow it?',()=>{H(4);say(S.heir.n+' giggled and sat on your crown.');ltr('heir2',7)},()=>{H(-1);ltr('heir2',7)}),
@@ -663,8 +663,8 @@ if(S.egg&&d>=S.egg){S.egg=0;Q.push(()=>ask('Royal Nurse','#e9a','The dragon egg 
 if(S.pet){S.pet.age++;const a=S.pet.age;if(R()<.2)say(['🐉 '+S.pet.n+' sneezed and singed the curtains.','🐉 '+S.pet.n+' ate a whole barrel of apples.','🐉 '+S.pet.n+' chased a goose around the castle.'][F(R()*3)]);
 if(a%8==0)Q.push(()=>ask(S.pet.n,'#6a5',S.pet.n+' dug up a shiny treasure! Take it?',()=>{G(rg(80));H(2)},()=>H(1)));
 if(a==10&&!m.rd){m.rd=1;G(100);say('🏆 Title earned: Dragon Rider! +100g');Q.push(()=>ask('Stable Master','#a75',S.pet.n+' is big enough to ride! Take a flight over the kingdom?',()=>{if(R()<.2){H(-3);say('A bumpy landing in the pigsty!')}else{G(rg(150));H(4);say('From above you spotted hidden gold!')}},()=>H(-1)))}}
-if(d>=12&&R()<.04)Q.push(()=>ask('Pirate Captain','#356','Arr! Pay 60 gold tribute or we raid yer shores!',()=>{G(-60);say('The pirates sail off, laughing.');if(R()<.3)ltr('pirate2',3)},()=>{if(R()<.5){dmg(.5);G(-Math.round(S.gold*.1));say('Pirates raided the docks!')}else{G(rg(40));say('Your guards chased them off and kept their loot!')}}));
-if(d>=10&&!m.tg&&R()<.15){m.tg=1;Q.push(()=>ask('Shady Man','#445','Psst... the Shadow Guild offers protection for 30 gold. Join us?',()=>{G(-30);say('He tipped his hat and vanished.');ltr('tg2',3)},()=>{if(R()<.3){G(-25);say('They pickpocketed you anyway!')}}))}}
+if(d>=16&&R()<.04)Q.push(()=>ask('Pirate Captain','#356','Arr! Pay 60 gold tribute or we raid yer shores!',()=>{G(-60);say('The pirates sail off, laughing.');if(R()<.3)ltr('pirate2',3)},()=>{if(R()<.5){dmg(.5);G(-Math.round(S.gold*.1));say('Pirates raided the docks!')}else{G(rg(40));say('Your guards chased them off and kept their loot!')}}));
+if(d>=14&&!m.tg&&R()<.15){m.tg=1;Q.push(()=>ask('Shady Man','#445','Psst... the Shadow Guild offers protection for 30 gold. Join us?',()=>{G(-30);say('He tipped his hat and vanished.');ltr('tg2',3)},()=>{if(R()<.3){G(-25);say('They pickpocketed you anyway!')}}))}}
 const _d2=dawn2;dawn2=function(){_d2();dawn3()};
 Object.assign(FUP,{
 pirate2:()=>ask('Pirate Captain','#356','Yer fair and square! Invest 80 gold in a treasure voyage? Double or nothing!',()=>{G(-80);if(R()<.5){G(200);say('The voyage returned 200 gold!')}else say('The ship sank. Arr...')},()=>say('He sailed away without you.')),
@@ -772,7 +772,7 @@ if(h.k>=3&&!h.pend&&d>=h.fd){h.pend=1;Q.push(()=>hkParley(()=>ask('Hollow King',
 function dawn4(){const d=S.day;let bz=0;S.laws=S.laws||{};Object.keys(S.laws).forEach(k=>{const l=LAW.find(x=>x.k==k);l&&l.dy()});advDay();if(S.cc==1)G(5);if(S.cc==2){G(12);U(1)}
 if(!S.lawD)S.lawD=d+2;if(d>=S.lawD){S.lawD=d+3+(R()<.35?1:0);lawAsk();bz=1}
 if(!S.advD)S.advD=d+3;if((S.adv||[]).length<3&&d>=S.advD){S.advD=d+4+F(R()*3);advAsk();bz=1}
-if(d>=12&&!S.cu)S.cu={ph:0,t:d,tol:0};const c=S.cu;if(c&&!c.end&&d>=c.t){cultStep(c);bz=1}
+if(d>=16&&!S.cu)S.cu={ph:0,t:d,tol:0};const c=S.cu;if(c&&!c.end&&d>=c.t){cultStep(c);bz=1}
 if(S.arcV!=2){S.arcV=2;S.arcN=0;S.arcT=0;if(S.cu&&S.cu.end&&!S.hkDone)S.arcT=d+10+F(R()*3)}
 if(S.arcT&&!bz&&d>=S.arcT&&!S.hkDone&&S.arcN<=ARCS.length)hkStep(d);
 if(S.hk&&!S.hkDone)hkCamp(d);
@@ -836,7 +836,7 @@ if(a.length>1&&R()<.15){const f=a.filter(x=>!x.lv2);if(f.length>1){const x=f[F(R
 function gStory(){const a=(S.gr||[]).filter(x=>x.n&&(x.lv2||x.rv||x.db||x.hs||x.gf));if(!a.length)return;const x=a[F(R()*a.length)],o=[];
 if(x.lv2)o.push('💕 '+x.n+' and '+x.lv2+' share a quiet moment by the well.');if(x.rv)o.push('😠 '+x.n+' glares at '+x.rv+' across the square.');if(x.db)o.push('💰 '+x.n+' avoids the baker. '+x.n+' owes '+x.db+' gold to '+GSN[(x.n.length+x.db)%6]+'.');if(x.hs)o.push('🏠 '+x.n+' stares down the road, homesick.');if(x.gf){o.push('🕯 '+x.n+' lights a candle for a lost love.');if(R()<.3)x.gf=0}
 say(o[F(R()*o.length)])}
-function dawn5(){const d=S.day;gLife();if(!S.pgd)S.pgd=Math.max(d+8,20+F(R()*4));if(!S.plgDone&&d>=S.pgd&&Q.length<2&&nev5(d)){S.plgDone=1;plgGo()}}
+function dawn5(){const d=S.day;gLife();if(!S.pgd)S.pgd=Math.max(d+8,24+F(R()*4));if(!S.plgDone&&d>=S.pgd&&Q.length<2&&nev5(d)){S.plgDone=1;plgGo()}}
 const _d5=dawn2;dawn2=function(){_d5();dawn5()};
 setInterval(()=>{try{if(tn&&!mo&&!B&&$('pn').hidden)gStory()}catch(e){}},22000);
 function slvAsk(){Q.push(()=>ask('Slaver','#833','I have one slave for sale. 150 gold. Will you buy him?',()=>{if(S.gold<150)return say('Not enough gold.');G(-150);S.slaves+=1;U(2);say('You bought a slave.')},()=>0))}
@@ -932,14 +932,14 @@ if(S.inf){if(S.unrest>40)say('Informant: rebels are building up ('+S.unrest+'% u
 S.loans=S.loans.filter(l=>{if(l.d>S.day)return 1;if(R()<.65+S.fear){G(l.a);say('A loan was repaid.')}else{S.debtors++;say('A borrower defaulted!')}return 0});
 if(S.day>=S.nj){S.nj=S.day+1+F(R()*2);if(S.happy>40)Q.push(()=>{if(S.people>=cap())return;ask('Traveler','#8a6','Your Majesty, may I join your kingdom?',()=>{P(1);say('A newcomer settled in.')},()=>say('You turned them away.'))})}
 if(S.day>=S.nf){S.nf=S.day+2+F(R()*2);const fm=R()<.5;if(S.happy>40)Q.push(()=>{const n=Math.min(cap()-S.people,5+F(S.people/10));if(n<1)return;ask('Townsperson','#8a6','Your Majesty, may my '+(fm?'family':'friends')+' ('+n+' people) join your kingdom?',()=>{P(n);say(n+' newcomers settled in.')},()=>say('You turned them away.'))})}
-if(S.unrest>55&&R()<S.unrest/150)Q.unshift(prep);if(R()<.07)disaster();
+if(S.unrest>55&&R()<S.unrest/150)Q.unshift(prep);if(S.day>3&&R()<.07)disaster();
 al.forEach(kgrow);
 if(al.length>1&&S.day>1){const pk=()=>al[F(R()*al.length)];
 if(R()<.3){const k=pk();if(!k.skel)Q.push(()=>ask(k.n+' envoy','#58a','Will you send 3 troops to help us in our war?',()=>{S.troops=Math.max(0,S.troops-3);k.rel+=12;say('They are grateful.')},()=>{k.rel-=8;if(k.ally&&R()<.5){k.ally=0;say('Your alliance is shaken!')}}))}
 if(R()<.2){const k=pk();if(!k.ally&&!k.skel&&!k.enemy)Q.push(()=>ask(k.n,'#4a8','Will you ally with us, Your Majesty?',()=>{k.ally=1;k.rel+=20;say('Allied with '+k.n)},()=>{k.rel-=3}))}
 if(R()<.15){const k=pk();if(!k.enemy)Q.push(()=>ask(k.n+' trader','#b83','Trade goods with us?',()=>{if(R()<.8){G(rg(40));say('Profitable trade!')}else{G(-40);say('They cheated you!')}},()=>0))}
 if(R()<.12&&!S.pw)kwar(pk(),pk());}
-al.forEach(k=>{if(S.warn<0&&!k.ally&&R()<(k.enemy?(k.skel?.12:.1):k.rel<-20?.05:.01)*(S.wt>0?2.5:1)){S.warn=S.ks.indexOf(k);if(S.inf)say('Informant: '+k.n+' plans to attack tomorrow!')}});
+al.forEach(k=>{if(S.warn<0&&!k.ally&&(S.day>3||k.enemy)&&R()<(k.enemy?(k.skel?.12:.1):k.rel<-20?.05:.01)*(S.wt>0?2.5:1)){S.warn=S.ks.indexOf(k);if(S.inf)say('Informant: '+k.n+' plans to attack tomorrow!')}});
 upd();pump(4000)}
 function sleep(){if(tn)return say('Return to the castle first.');if(B||mo)return say('Finish first.');slp=1;$('zz').hidden=0;$('pn').hidden=1;setTimeout(()=>{slp=0;$('zz').hidden=1;if(R()<.06*(1-Math.min(.9,S.guards*.1)))return die('An assassin found you in your sleep!');S.sl=0;dawn();say('☀ You wake up. Checkpoint saved.')},5000)}
 function tick(){if(!S.made||slp||mo||!$('pn').hidden||!$('mp').hidden)return;S.t++;skTrig();if(S.t==900)say('🌙 Night falls. Sleep, or stay awake...');if(S.t>=1020){S.sl++;if(S.sl==1)say('🥱 You are exhausted. Sleep tonight or you will collapse!');dawn();return}if(S.t<900&&S.t%60==0&&idle()){if(Q.length)Q.shift()();else{const A=R()<.5?EV:TQ;A[F(R()*A.length)]()}}if(S.sl>=2&&S.t%30==0)say('👻 Boo... go to sleep.');upd()}
@@ -1018,7 +1018,7 @@ $('md').innerHTML='<h2 style="margin:0">'+(st?'🏆 Victory!':'💀 Raid failed'
 function rdEnd(){RD=null;hx();M('Empire')}
 
 /* ===== STORY UPDATE: named rulers, hero & character arcs, court traitor, rival conqueror ===== */
-const styS=()=>{const s=S.st=S.st||{},d={p:{},nx:{},tr:null,rv:null,rvd:10,ri:0,trd:8,f:{}};for(const k in d)if(s[k]===undefined)s[k]=d[k];return s};
+const styS=()=>{const s=S.st=S.st||{},d={p:{},nx:{},tr:null,rv:null,rvd:14,ri:0,trd:12,f:{}};for(const k in d)if(s[k]===undefined)s[k]=d[k];return s};
 const styRUL=[['Warlord Grath','#c33','wants your land'],['Lady Orsolya','#d9a21b','loves gold and gifts'],['High Marshal Brann','#58a','respects only strength'],['The Bone King Valdrek','#99a','hungers for the living']],
 styADV={tax:['Treasurer Pell','ink on his fingers'],doc:['Physician Mirel','a smell of herbs on her robe'],cap:['Captain Dorn','mud on his boots'],tutor:['Tutor Wynn','chalk dust on her sleeves']},
 styRV=['Vexa the Cruel','Kragg Ironjaw','Lord Malvane','Sable the Red','Duke Thorne','Morwen of the Ash'];
@@ -1033,13 +1033,13 @@ styA('Queen Brienna','#a45bd8',()=>styS().f.bri?['Your scouts found him! He fell
 {k:'war',t:'The Whispering Wood',need:()=>EX().hr[2]>=2,s:[
 styA('Old Warden','#3e9d8a',['The old forest whispers, majesty.','A sickness is coming. I can brew herbs against it.'],'Buy herbs for 80g?',()=>{G(-80);P(3);H(3);say('The herbs keep people healthy. +3 people')},()=>say('The Warden shrugs. The forest remembers.')),
 styA('Old Warden','#3e9d8a',['The oldest tree wants to grow in your courtyard.'],'Plant the sacred tree? (50g)',()=>{G(-50);H(8);U(-5);say('🌳 The tree calms the whole kingdom.')},()=>{H(-2);say('The forest sulks.')},()=>EX().hr[2]>=3)]},
-{k:'red',t:'Redbeard Returns',need:()=>S.day>=8,s:[
+{k:'red',t:'Redbeard Returns',need:()=>S.day>=12,s:[
 styA('Captain Redbeard','#a63',['Ahoy, king! Word is ye treat sailors fair.','I have a map and need a patron.'],'Buy his treasure map for 50g?',()=>{G(-50);say('A crumpled map goes in your pocket.')},()=>{styS().p.red=99;say('Redbeard tips his hat and sails away.')}),
-styA('Captain Redbeard','#a63',['The map leads to Skull Isle, majesty!'],'Send an expedition (5 troops, 40g)?',()=>{if(S.troops<5||S.gold<40)return say('You cannot afford the expedition.');G(-40);if(R()<.65){G(350);say('🏴‍☠ Skull Isle treasure! +350g')}else{S.troops-=2;say('The isle was trapped. Lost 2 troops.')}},()=>say('Redbeard sails off, grumbling.'),()=>S.day>=14)]},
-{k:'mira',t:"Mira's Prophecy",need:()=>S.day>=5,s:[
+styA('Captain Redbeard','#a63',['The map leads to Skull Isle, majesty!'],'Send an expedition (5 troops, 40g)?',()=>{if(S.troops<5||S.gold<40)return say('You cannot afford the expedition.');G(-40);if(R()<.65){G(350);say('🏴‍☠ Skull Isle treasure! +350g')}else{S.troops-=2;say('The isle was trapped. Lost 2 troops.')}},()=>say('Redbeard sails off, grumbling.'),()=>S.day>=18)]},
+{k:'mira',t:"Mira's Prophecy",need:()=>S.day>=9,s:[
 styA('Fortune Teller','#a4a',['I saw your crown in the fire...','A rival banner will rise beyond your borders.'],'Pay 25g to hear more?',()=>{G(-25);say('Mira nods: the rival will come.')},()=>say('The fire flickers out.')),
-styA('Fortune Teller','#a4a',['The fire shows a crowned fool and a rising warlord.'],'Pay 40g for a blessing on your borders?',()=>{G(-40);U(-6);H(3);say('Mira blesses your borders.')},()=>say('Mira cackles quietly.'),()=>S.day>=12)]},
-{k:'vault',t:'The Sealed Vault',need:()=>S.day>=12&&S.people>=15,s:[
+styA('Fortune Teller','#a4a',['The fire shows a crowned fool and a rising warlord.'],'Pay 40g for a blessing on your borders?',()=>{G(-40);U(-6);H(3);say('Mira blesses your borders.')},()=>say('Mira cackles quietly.'),()=>S.day>=16)]},
+{k:'vault',t:'The Sealed Vault',need:()=>S.day>=16&&S.people>=15,s:[
 styA('Old Woman','#8a6',['Dearie, there is a door under the old inn.'],'Pay a mason 20g to look?',()=>{G(-20);say('The mason finds strange symbols.')},()=>{styS().p.vault=99;say('She shuffles away muttering.')}),
 styA('Mason','#a63',['The symbols spell the vault of King Aldwin!','We need 50g of tools to open it.'],'Buy tools (50g)?',()=>{G(-50);say('The mason works through the night...')},()=>{styS().p.vault=99;say('The mason packs up.')}),
 styA('Mason','#a63',['It opened! Gold... and a cursed crown.'],'Take the gold (Y, +300g but unrest) or seal it (N, calms the realm)?',()=>{G(300);U(8);H(-2);say('You take the cursed gold.')},()=>{H(8);say('You seal it. The people sleep easier.')})]}];
@@ -1140,7 +1140,7 @@ vis=function(){ST=AW;try{return _vis.apply(this,arguments)}finally{ST=null}};
 mono=function(w){ST=w;try{return _mono.apply(this,arguments)}finally{ST=null}};
 })();
 
-FUP.kin=()=>{atk('kin',.25,'The victims family cornered and stabbed you!')};
+FUP.kin=()=>{const n=1+F(R()*2);if(S.guards>=n){say('🛡 '+gpick()+' cut down '+(n>1?'two relatives':'a relative')+' of the victim who came for you!');return}die('The victim\'s '+(n>1?'two relatives':'relative')+' came for revenge, and you had too few guards!')};
 /* ===== DEFENSE FIX: attacks are decided by who is actually defending ===== */
 battle=function(k){const D=S.troops+S.guards+S.mach*5+S.sling*2,need=Math.max(2,Math.ceil(ksp(k)/25)),mf=Math.min(1,.4+.6*D/need),m=(pw()+wpw('a'))*mf,e=ksp(k)*(.8+R()*.5);
 say('⚔ '+k.n+' attacks!'+(k.skel?' Skeletons climb the walls in the dark!':''));
