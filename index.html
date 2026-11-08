@@ -189,7 +189,7 @@ function ask(w,c,t,y,n,x,xl){KP=null;{const c=$('yn').children;c[0].textContent=
 function pump(d){setTimeout(()=>{if(idle()&&Q.length)Q.shift()()},d)}
 const RY=['Thank you, majesty! You will not regret it!','Bless you! You are kind and wise!','You are the best ruler ever!','Oh thank you, thank you!','Long live the crown!','I will never forget this!','You have made me so happy!'],RN=['How dare you! You will regret this!','Fine! Remember this day!','Unbelievable! The people will hear of this!','You are a terrible ruler!','Hmph! I expected better!','You will pay for this!','Shameful! Just shameful!'];
 function vleave(){const v=$('vs').querySelector('.vin');clearTimeout(vt);if(v){v.classList.add('vout');vt=setTimeout(()=>{$('vs').style.display='none'},2000)}else $('vs').style.display='none'}
-function ch(k){if(!B)return;const f=k=='i'?()=>H(-1):B[k],rx=(k=='y'||k=='n')&&!KP&&$('vs').style.display!='none';B=null;$('bb').hidden=1;$('yn').hidden=1;if(!rx)vleave();f&&f();if(!B)VL=null;upd();if(rx&&!B){const sp=(k=='y'?SY:SN)[$('who').textContent],a=sp&&R()<.6?sp:k=='y'?RY:RN;$('tx').textContent='"'+a[F(R()*a.length)]+'"';$('bb').hidden=0;clearTimeout(vt);vt=setTimeout(()=>{if(!B)$('bb').hidden=1;vleave()},2400)}if(!B){const a=AF;AF=null;if(a)a();if(!B&&Q.length)pump(15000)}}
+function ch(k){if(!B)return;const f=k=='i'?(B.i||(()=>H(-1))):B[k],rx=(k=='y'||k=='n')&&!KP&&$('vs').style.display!='none';B=null;$('bb').hidden=1;$('yn').hidden=1;if(!rx)vleave();f&&f();if(!B)VL=null;upd();if(rx&&!B){const sp=(k=='y'?SY:SN)[$('who').textContent],a=sp&&R()<.6?sp:k=='y'?RY:RN;$('tx').textContent='"'+a[F(R()*a.length)]+'"';$('bb').hidden=0;clearTimeout(vt);vt=setTimeout(()=>{if(!B)$('bb').hidden=1;vleave()},2400)}if(!B){const a=AF;AF=null;if(a)a();if(!B&&Q.length)pump(15000)}}
 function kill(f){H(f?-3:-12);U(f?3:18);P(-1);say(f?'Justice served.':'Killed for no reason... the people whisper.');exe(f,tn);if(f){S.fear=Math.min(.3,S.fear+.02)}else{H(-3);P(-1);if(R()<.3)ltr('kin',1)}}
 function sDie(m){const t=document.createElementNS('http://www.w3.org/2000/svg','g');seated(t,S);const E=x=>String(x).replace(/[<>&]/g,''),L=['',''],F2="font-family=\"Londrina Solid,Impact,sans-serif\"";E(m).split(' ').forEach(x=>{const i=L[0].length<44?0:1;L[i]+=(L[i]?' ':'')+x});
 const T=(y,z,c,w,d,tx,k)=>'<text x="500" y="'+y+'" text-anchor="middle" font-size="'+z+'" font-weight="900" fill="'+c+'" stroke="#2b2118" stroke-width="'+w+'" paint-order="stroke" stroke-linejoin="round" '+F2+' '+xa(k||'dxt',.6,d)+'>'+tx+'</text>';
@@ -943,7 +943,7 @@ else if(g==8)[[.07,1],[.15,.65]].forEach(a=>{const x=W*a[0],r=W*.07*a[1]*1.3;s+=
 else if(g==9)[[.0,.05],[.04,.14],[-.03,.23]].forEach(a=>{s+=P('M'+n(mid+W*a[0]-W*.08)+' '+n(W*a[1])+'a'+n(W*.08)+' '+n(W*.035)+' 0 1 0 '+n(W*.16)+' 0a'+n(W*.08)+' '+n(W*.035)+' 0 1 0 '+n(-W*.16)+' 0Z','#b3a99f',' stroke-width="'+n(sw*.7)+'"')});
 return '<g stroke="'+I+'" stroke-width="'+sw+'" stroke-linejoin="round" stroke-linecap="round">'+s+'</g>'}
 function HMdes(){const g=i=>$('hd_'+i),v=i=>+g(i).value;return{sz:v('sz'),rf:v('rf'),wl:v('wl'),dr:v('dr'),wn:v('wn'),ch:v('ch'),x1:v('x1'),x2:v('x2'),gd:v('gd'),rc:g('rc').value,tr:g('tr').value,dc:g('dc').value,wc:g('wc').value,ac:g('ac').value}}
-function mkHouse(f){hr=f===true?0:150;mo=1;$('pn').hidden=1;$('md').hidden=0;
+function mkHouse(f){hr=f===true?0:250;mo=1;$('pn').hidden=1;$('md').hidden=0;
 const rw=(l,x)=>'<div style="display:flex;gap:6px;align-items:center;justify-content:space-between"><span>'+l+'</span>'+x+'</div>',cp=(i,v)=>'<input type="color" id="hd_'+i+'" value="'+v+'">';
 $('md').innerHTML='<h2 style="margin:0">Design a building</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><svg viewBox="-40 -300 230 330" style="position:sticky;top:0;align-self:flex-start;width:36%;min-width:150px;background:#9fd8ec;border:3px solid #2b2118;border-radius:10px"><rect x="-40" y="0" width="230" height="40" fill="#8fbf5e" stroke="#2b2118" stroke-width="3"/><g id="hpv"></g></svg><div style="display:grid;gap:6px;align-content:start;flex:1;min-width:190px;max-width:380px">'
 +rw('Name','<input id="hn" value="New shop" maxlength="16">')+rw('Type','<select id="hk"><option>shop</option><option>home</option><option>tavern</option><option>smithy</option></select>')
@@ -958,16 +958,67 @@ const up=()=>{$('hpv').innerHTML=HMX({n:'',k:$('hk').value,c:$('hc').value,d:HMd
 window.HMrnd=()=>{const pk=a=>a[F(R()*a.length)],rn=a=>F(R()*a.length);['sz','rf','wl','dr','wn','ch','gd'].forEach(i=>$('hd_'+i).value=rn(HMO[i]));$('hd_x1').value=rn(HMO.ex);$('hd_x2').value=rn(HMO.ex);
 $('hc').value=pk(['#e9d9b5','#d9774a','#cfd9c4','#e8cdb8','#c9b2e8','#f2c230','#9fd0e8','#f0a0a0']);$('hd_rc').value=pk(['#b4533a','#3e9d8a','#d9372f','#4a78c8','#8a5ac8','#e8761d','#5a5a66','#c9a24b']);$('hd_tr').value=pk(['#8d6a55','#f4efe6','#6b6b78','#5b4638']);$('hd_dc').value=pk(['#6b4a33','#d9372f','#3e9d8a','#2f5ea8','#e8761d']);$('hd_wc').value=pk(['#8ec6df','#ffe066','#b8f0e0','#d0b8ff']);$('hd_ac').value=pk(['#d9372f','#2f86d6','#e8761d','#a45bd8','#3e9d8a']);up()};
 up()}
-function hb(){S.houses.push({n:$('hn').value||'House',k:$('hk').value,c:$('hc').value,d:HMdes()});say('Built '+S.houses[S.houses.length-1].n+'!');drawH();hx()}
+function hb(){S.houses.push({n:$('hn').value||'House',k:$('hk').value,c:$('hc').value,d:HMdes(),paid:hr,lv:0,inv:0,st:0,id:(S.hid=(S.hid||0)+1)});say('Built '+S.houses[S.houses.length-1].n+'!');drawH();hx()}
+/* ===== PROPERTIES: keep, sell, rent, invest, late rent court ===== */
+const RENT=50,TNM=['Tom the Cobbler','Greta Fenn','Old Barnaby','Mira Holt','Pip Tanner','Wendell Moss','Dora Quill','Hob Ashby','Lysa Reed','Bram Cooper','Nell Thatcher','Fitz Marlow','Odo the Baker','Sela Brook'],
+HUP=[{c:100,n:'Repaint, flower boxes & garden',f:d=>{d.gd=d.gd||1;if(!d.x1)d.x1=4;else if(!d.x2)d.x2=4}},
+{c:180,n:'Build it bigger',f:d=>{const o=d.sz|0,m=[1,2,2,3,4][o];if(m!==o)d.sz=m;else d.rf=d.rf==0?1:d.rf==5?0:d.rf;d.gd=d.gd||2}},
+{c:280,n:'Grand makeover (flag, chimney, stone walls)',f:d=>{d.ch=d.ch||3;d.x1=1;d.wl=d.wl||3;if(d.gd==1)d.gd=6}}],
+hE=x=>String(x).replace(/[<>&"]/g,''),
+hBase=h=>Math.max(100,h.paid==null?150:h.paid),hVal=h=>2*(hBase(h)+(h.inv||0)),
+hVac=h=>{h.st=0;h.tn=h.due=h.od=h.scn=h.gd=h.rd=h.sd=0},
+hRef=()=>{hk0='';wk2='';try{drawH();drawW()}catch(e){}},
+hStat=h=>h.st==1?'for sale ('+hVal(h)+'g)':h.st==3?'for rent, finding a tenant':h.st==2?(h.od?'⚠ '+hE(h.tn)+' is LATE with rent':hE(h.tn)+' rents it, next rent day '+h.due):'yours';
+const _askIG=ask;ask=function(){$('ig').textContent='Ignore';return _askIG.apply(this,arguments)};
+function hLate(h){h.od=S.day;h.scn=F(R()*3);const a=(S.adv||[])[F(R()*(S.adv||[]).length)];
+if(a)Q.push(()=>{const k=S.houses.find(x=>x.id==h.id);if(!k||k.st!=2||!k.od)return;ask(a.n+' ('+RLN[a.r].toLowerCase()+')','#79a','Majesty, '+hE(k.tn)+', who rents '+hE(k.n)+', has not paid the '+RENT+' gold rent. Shall I bring him before you?',()=>tCourt(k.id),()=>say('You let it slide. '+hE(k.tn)+' is still behind on rent.'))});
+else if(!S.hnt){S.hnt=1;say('📜 A tenant is late with rent. With no advisor to tell you, check the Houses tab.')}}
+function tCourt(id){const h=S.houses.find(x=>x.id==id);if(!h||h.st!=2||!h.od)return;const s=h.scn==null?F(R()*3):h.scn,tn2=hE(h.tn),hn=hE(h.n),done=()=>{h.od=0;h.scn=null;h.due=S.day+3;hRef()},
+vac=()=>{hVac(h);hRef()},kin=p=>{if(R()<p)ltr('kin',1)},
+dem=()=>{const p=[.99,.4,.55][s];if(R()<p){const x=s==0?RENT+15:RENT;G(x);H(-1);say('💰 '+tn2+' paid '+x+' gold'+(s==0?' (rent plus a 15 gold late fee)':', after selling his belongings')+'.');done()}else{U(1);say('😟 '+tn2+' truly has nothing to give. The rent is written off this time.');done()}},
+forg=()=>{if(s==0){G(RENT);say('🙏 '+tn2+' paid the rent and wept with thanks. You forgave the lateness.')}else say('🕊 You forgave '+tn2+'. The rent is waived this time.');H(2);U(-1);h.lp=(h.lp||0)+(s==0?.05:.1);done()},
+grant=()=>{h.od=0;h.scn=null;h.gd=S.day+1;say('⏳ '+tn2+' has one more day to pay.')},
+kick=()=>{if(s==0){G(RENT);H(-4);U(4);say('🚪 '+tn2+' paid and you threw him out anyway. The people mutter about fairness.')}else{H(s==1?-1:-2);U(s==1?1:2);say('🚪 '+tn2+' was thrown out of '+hn+'.')}vac()},
+exec=()=>{if(s==0)G(RENT);H(s==0?-10:s==1?-6:-8);U(s==0?10:s==1?6:8);P(-1);say('💀 '+tn2+' was executed over rent. The whole street stares at the ground.');nlog('Tenant '+tn2+' Executed Over Unpaid Rent. Landlords Nervous');kin(s==0?.35:.25);vac()};
+const t=['"Majesty! I have the '+RENT+' gold right here. Forgive me for being late, I beg you!"','"Majesty... I have nothing. The shop made no coin this week. Please understand."','"Majesty, one more day! Just one, and I swear I will have all '+RENT+' gold."'][s];
+ak(tn2+' ('+hn+')','#a85',t,s==2?grant:dem,s==2?dem:forg,{x:kick,xl:'🚪 Kick out',ly:s==2?'⏳ Grant':'💰 Demand',ln:s==2?'💰 Pay now':'🕊 Forgive'});
+if(B){B.i=exec;$('ig').textContent='⚔ Execute'}}
+function houseDay(){let c=0;S.houses.slice().forEach(h=>{if(!h.st)return;
+if(h.st==1&&S.day>=h.sd){const v=hVal(h);G(v);S.houses.splice(S.houses.indexOf(h),1);say('🏷 '+hE(h.n)+' sold for '+v+' gold!');nlog('House '+hE(h.n)+' Sold For '+v+' Gold');c=1;return}
+if(h.st==3&&S.day>=h.rd){h.st=2;h.tn=TNM[F(R()*TNM.length)];h.due=S.day+3;h.od=0;say('🔑 '+h.tn+' moved into '+hE(h.n)+'. Rent: '+RENT+' gold every 3 days.');return}
+if(h.st!=2)return;
+if(h.gd&&S.day>=h.gd){h.gd=0;if(R()<.7){G(RENT);H(1);h.due=S.day+3;say('🙏 '+h.tn+' paid the rent one day late, as promised.')}else{say('🏃 '+h.tn+' ran away in the night owing rent!');hVac(h);c=1}return}
+if(h.od){if(S.day-h.od>=6){say('🏃 '+h.tn+' skipped town owing rent on '+hE(h.n)+'.');hVac(h);c=1}return}
+if(S.day>=h.due){if(R()<Math.min(.6,.22+(h.lp||0)))hLate(h);else{G(RENT);h.due+=3;say('🏠 '+h.tn+' paid '+RENT+' gold rent for '+hE(h.n)+'.')}}});
+if(c)hRef()}
+const _rfu=runFU;runFU=function(){const r=_rfu.apply(this,arguments);try{houseDay()}catch(e){}return r};
+const rHs=()=>{const o=[['Your properties: '+S.houses.length+'. Click one to sell it, rent it out, or invest in it.',0,()=>0,1,1]];
+S.houses.forEach((h,i)=>o.push([(h.st==2&&h.od?'⚠ ':'')+(i+1)+'. '+hE(h.n)+' ('+h.k+') — '+hStat(h)+(h.lv?' · level '+h.lv:''),0,()=>hMan(i),0]));
+if(!S.houses.length)o.push(['No houses yet. Build one in the Realm tab.',0,()=>0,1]);return o};
+function hMan(i){const h=S.houses[i];if(!h)return hx();h.id=h.id||(S.hid=(S.hid||0)+1);mo=1;$('pn').hidden=1;$('md').hidden=0;
+const up=HUP[h.lv||0],b=(a,l,dis)=>'<button '+(dis?'disabled ':'')+'onclick="hAct(\''+a+'\','+i+')">'+l+'</button>';
+let bt='';
+if(h.st==0)bt+=b('sell','🏷 Put up for sale ('+hVal(h)+'g, sells in about 4-5 days)')+b('rent','🔑 Put up for rent ('+RENT+'g every 3 days)');
+else if(h.st==1||h.st==3)bt+=b('keep','↩ Take it off the market');
+else bt+=(h.od?b('sum','⚖ Summon '+hE(h.tn)+' (rent is late)'):'')+b('keep','↩ End the lease');
+bt+=h.st==1?'':up?b('inv','🔨 Invest '+up.c+'g: '+up.n):b('x','✨ Fully upgraded',1);
+$('md').innerHTML='<h2 style="margin:0">'+hE(h.n)+'</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><svg viewBox="-40 -300 230 330" style="position:sticky;top:0;align-self:flex-start;width:36%;min-width:150px;background:#9fd8ec;border:3px solid #2b2118;border-radius:10px"><rect x="-40" y="0" width="230" height="40" fill="#8fbf5e" stroke="#2b2118" stroke-width="3"/><g>'+HMX({k:h.k,c:h.c,d:h.d||{}},100,100,3.5)+'</g></svg><div style="display:grid;gap:6px;align-content:start;flex:1;min-width:190px;max-width:380px"><div><b>'+hE(h.k)+'</b> · level '+(h.lv||0)+' of 3<br>Status: '+hStat(h)+'<br>Sale price: '+hVal(h)+'g (2× what you put in)<br>Rent: '+RENT+'g every 3 days</div>'+bt+'<button onclick="hx()">Close</button></div></div>'}
+function hAct(a,i){const h=S.houses[i];if(!h)return hx();
+if(a=='sell'){h.st=1;h.sd=S.day+4+F(R()*2)+(R()<.3?1+F(R()*2):0);say('🏷 '+hE(h.n)+' is for sale at '+hVal(h)+'g. A buyer should come in a few days.')}
+else if(a=='rent'){h.st=3;h.rd=S.day+1+F(R()*2);say('🔑 '+hE(h.n)+' is up for rent. A tenant should arrive soon.')}
+else if(a=='keep'){if(h.st==2)say('📜 '+hE(h.tn)+' moved out of '+hE(h.n)+'.');else say(hE(h.n)+' is off the market.');hVac(h)}
+else if(a=='sum'){hx();return tCourt(h.id)}
+else if(a=='inv'){const u=HUP[h.lv||0];if(!u)return;if(S.gold<u.c)return say('Not enough gold!');G(-u.c);h.d=Object.assign({},HMDEF,h.d||{});u.f(h.d);h.lv=(h.lv||0)+1;h.inv=(h.inv||0)+u.c;say('🔨 '+hE(h.n)+' was improved: '+u.n+'. It is worth more now.');hRef()}
+upd();hMan(i)}
 function hx(){mo=0;$('md').hidden=1;upd()}
 
-function M(t){if(t=='Allies')return mapOpen();if(tab=='Allies'&&!t)tab='Realm';if(t)tab=t;const T={Realm:rR,Troops:rA,Staff:rS,Slaves:rSl,Trade:rT,Allies:rD,Royal:rY,Powers:rP,Court:rCt,Fun:rFn};rows=T[tab]();const p=$('pn');p.hidden=0;p.innerHTML=`<div class="tb">${Object.keys(T).map(k=>`<button class="${k==tab?'on':''}" onclick="M('${k}')">${k}</button>`).join('')}<button onclick="X()">✕ Close</button></div><div class="bd">${tab=='Realm'?`<p>Tax ${S.tax}% <button onclick="tx(-5)">−</button><button onclick="tx(5)">+</button> · land ${S.land} · room for ${cap()} people</p>`:''}${IN[tab]?'<p>'+IN[tab]()+'</p>':''}${rows.map((r,i)=>r[4]?'<p style="margin-top:8px;border-bottom:3px solid #2b2118"><b>'+r[0]+'</b></p>':`<button class="rw" ${r[3]?'disabled':''} onclick="RW(${i})"><span>${r[0]}</span><span>${r[1]?r[1]+'g':''}</span></button>`).join('')}</div>`}
+function M(t){if(t=='Allies')return mapOpen();if(tab=='Allies'&&!t)tab='Realm';if(t)tab=t;const T={Realm:rR,Troops:rA,Staff:rS,Slaves:rSl,Trade:rT,Allies:rD,Royal:rY,Powers:rP,Court:rCt,Houses:rHs,Fun:rFn};rows=T[tab]();const p=$('pn');p.hidden=0;p.innerHTML=`<div class="tb">${Object.keys(T).map(k=>`<button class="${k==tab?'on':''}" onclick="M('${k}')">${k}</button>`).join('')}<button onclick="X()">✕ Close</button></div><div class="bd">${tab=='Realm'?`<p>Tax ${S.tax}% <button onclick="tx(-5)">−</button><button onclick="tx(5)">+</button> · land ${S.land} · room for ${cap()} people</p>`:''}${IN[tab]?'<p>'+IN[tab]()+'</p>':''}${rows.map((r,i)=>r[4]?'<p style="margin-top:8px;border-bottom:3px solid #2b2118"><b>'+r[0]+'</b></p>':`<button class="rw" ${r[3]?'disabled':''} onclick="RW(${i})"><span>${r[0]}</span><span>${r[1]?r[1]+'g':''}</span></button>`).join('')}</div>`}
 const X=()=>{$('pn').hidden=1;pump(800)};
 function tx(d){S.tax=Math.max(0,Math.min(60,S.tax+d));upd();M()}
 function RW(i){const r=rows[i];if(r[1]&&S.gold<r[1])return say('Not enough gold!');G(-(r[1]||0));r[2]();upd();if(!B&&Q.length)pump(1500);if(!B&&!mo&&!$('pn').hidden)M()}
 const KT=['Weapons','Slingshots','Catapults','Wall fire & spikes','Wall upgrades','Elite troops'],KN=['','Weapons unlocked: troop upgrades!','Slingshots unlocked!','Catapults unlocked!','Wall fire & spikes unlocked!','Wall upgrades (level 4+) unlocked!','Elite troops (level 4+) unlocked!'],AS=[['tax','Tax collector (+10% income)'],['doc','Physician (halves plague deaths)'],['cap','Guard captain (calms unrest)'],['tutor','Tutor (cheaper books)']];
 const invRows=()=>S.bl.length?S.bl.map((b,i)=>[b.n+"'s "+b.t+': invested '+b.a+'g, earns '+Math.round(b.a*br(b))+'g a day'+(b.up?' (prices +'+b.up+')':'')+' - invest',0,()=>bizUI(i)]):[['Invest in a business: none open yet. A townsperson must first ask to open one ('+(S.biz+S.bl.length)+' of '+S.people+' townspeople run one)',0,()=>0,1]];
-const rR=()=>{const d=S.dm,rc=d.h*50+d.f*60+d.w*90+(S.fire?(S.fx||60):0);return [['Custom house / shop',150,mkHouse],['Build crop field / plantation ('+S.farms+' of '+fCap()+' allowed, needs 1 worker, up to 2)',25+S.farms*10,()=>{S.farms++},S.farms>=fCap()],['Upgrade crop fields (level '+(S.fl||1)+' of 4: '+5*(S.fl||1)+' crops per worker a day'+((S.fl||1)<4?', next level '+5*((S.fl||1)+1):', max')+')',100+30*(S.fl||1),()=>{S.fl=(S.fl||1)+1;say('🌾 Crop fields upgraded! Each worker now grows '+5*S.fl+' crops a day.')},(S.fl||1)>=4||!S.farms],['Upgrade pickaxes (lvl '+S.pick+')',250+S.pick*150,()=>{S.pick++}],['Expand kingdom',300,expand],...invRows(),['Library: study '+(KT[S.know]||'(all read)')+' ('+S.know+'/6)',Math.round((100+S.know*60)*(S.ast.tutor?.7:1)),()=>{S.know++;say(KN[S.know])},S.know>=6],['Rebuild ruins ('+d.h+' homes, '+d.f+' fields, '+d.w+' walls'+(S.fire?', put out the fires':'')+')',rc,rebuild,!rc]]};
+const rR=()=>{const d=S.dm,rc=d.h*50+d.f*60+d.w*90+(S.fire?(S.fx||60):0);return [['Custom house / shop',250,mkHouse],['Build crop field / plantation ('+S.farms+' of '+fCap()+' allowed, needs 1 worker, up to 2)',25+S.farms*10,()=>{S.farms++},S.farms>=fCap()],['Upgrade crop fields (level '+(S.fl||1)+' of 4: '+5*(S.fl||1)+' crops per worker a day'+((S.fl||1)<4?', next level '+5*((S.fl||1)+1):', max')+')',100+30*(S.fl||1),()=>{S.fl=(S.fl||1)+1;say('🌾 Crop fields upgraded! Each worker now grows '+5*S.fl+' crops a day.')},(S.fl||1)>=4||!S.farms],['Upgrade pickaxes (lvl '+S.pick+')',250+S.pick*150,()=>{S.pick++}],['Expand kingdom',300,expand],...invRows(),['Library: study '+(KT[S.know]||'(all read)')+' ('+S.know+'/6)',Math.round((100+S.know*60)*(S.ast.tutor?.7:1)),()=>{S.know++;say(KN[S.know])},S.know>=6],['Rebuild ruins ('+d.h+' homes, '+d.f+' fields, '+d.w+' walls'+(S.fire?', put out the fires':'')+')',rc,rebuild,!rc]]};
 const wk=()=>{const f=Math.min(S.sw.f,S.slaves,S.farms*2),m=Math.min(S.sw.m,S.slaves-f,S.mines*2);return[f,m]};
 const hf=()=>Math.max(0,Math.min(S.fh,S.farms*2-wk()[0])),fwk=()=>wk()[0]+hf();
 const fw=()=>S.troops-S.wp.t-S.wp.b-S.wp.f,post=p=>{S.wp[p]+=5};
@@ -1021,7 +1072,7 @@ function disaster(){const t=F(R()*10);if(t==0){const d=Math.round(S.people*(S.as
 
 function dawn(){if(S.sl>=2)return die('You never slept and collapsed.');if(tn){tn=0;clearInterval(tid);$('g').classList.remove('tw');$('tc').hidden=1;$('wk').textContent='Walk town'}S.day++;S.t=0;runFU();S.wd=wTot();const al=S.ks.filter(k=>!k.dead);
 if(S.warn>=0){const k=S.ks[S.warn];S.warn=-1;if(!k.dead)Q.push(()=>battle(k))}
-const inc=Math.round((Math.max(10,S.people*S.tax*.1)+S.mines*(12+S.pick*14)+(S.biz*28+S.bl.reduce((t,b)=>t+Math.round(b.a*br(b))+(b.up||0)*5,0))+S.houses.filter(h=>h.k=='shop').length*18+S.slaves*6+wk()[1]*14+shopInc())*(S.ast.tax?1.1:1)),ex=Math.round(hf()*5+S.troops*.6+S.guards*3+S.inf*8+(S.chef&&!S.slaves?5:0)+S.walls*3+Object.values(S.ast).filter(Boolean).length*(S.slaves>=2?0:6));G(inc-ex);say('Day '+S.day+': +'+inc+'g income, −'+ex+'g wages');
+const inc=Math.round((Math.max(10,S.people*S.tax*.1)+S.mines*(12+S.pick*14)+(S.biz*28+S.bl.reduce((t,b)=>t+Math.round(b.a*br(b))+(b.up||0)*5,0))+S.houses.filter(h=>h.k=='shop'&&!h.st).length*18+S.slaves*6+wk()[1]*14+shopInc())*(S.ast.tax?1.1:1)),ex=Math.round(hf()*5+S.troops*.6+S.guards*3+S.inf*8+(S.chef&&!S.slaves?5:0)+S.walls*3+Object.values(S.ast).filter(Boolean).length*(S.slaves>=2?0:6));G(inc-ex);say('Day '+S.day+': +'+inc+'g income, −'+ex+'g wages');
 H(S.tax>25?-(S.tax-25)/2:(S.tax<10?3:1));U((S.tax>25?(S.tax-25)/2:-3)-S.guards*.3-(S.ast.cap?1.5:0)+(S.happy<40?4:-1));
 const ov=Math.max(0,S.slaves-S.pens*8);if(ov){U(ov*.5);H(-1);if(R()<.3){S.slaves--;say('Crowded pens: a slave died.')}}
 const nd=S.land*3;if(S.guards<nd){U((nd-S.guards)*.3);if(R()<.15){G(-30);say('🗝 Thieves hit your poorly guarded land! -30g')}}
