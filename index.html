@@ -1674,4 +1674,43 @@ FUP.zsq=()=>zE('General Acornelius','#2c3f6f',['*The general marches in with mud
 const zQ2=[['gb',10,zI.gb],['mm',11,zI.mm],['vp',12,zI.vp],['sc',13,zI.sc],['gn',14,zI.gn],['sn',14,zI.sn],['sq',15,zI.sq]],_rfZ2=runFU;
 runFU=function(){const r=_rfZ2.apply(this,arguments);try{const x=zX();for(const[k,d,fn]of zQ2){if(x[k]==null&&S.day>=d&&!Q.includes(fn)){Q.push(fn)}}}catch(e){}return r};
 </script>
+<script>
+/* ===== MURDER MYSTERY (4 suspects) + SPHINX RIDDLES ===== */
+const MYS=[
+{n:'Sir Garrick Holt',r:'Captain of the Guard',c:'#8a8fa0',p:'Always has torch soot on his gloves.',t:'soot smears',v:'“I checked the locks at supper. He was alive and grumpy when I left. The soot is from my gloves, nothing more.”',d:'“I never went near the study last night. I walked the east wall until dawn. Ask the sentries.”',s:' “Besides, I would never use poison. A sword is more honest.”'},
+{n:'Lady Seraphine Dray',r:'Visiting Noble',c:'#c4569a',p:'Drenched in rose perfume.',t:'a heavy rose perfume',v:'“I asked him about my family’s old debt over wine. He laughed at me, alive and well. Perfume gets everywhere.”',d:'“I never set foot in his study. I played cards in the great hall until midnight, then went to bed.”',s:' “And I never touched his goblet, if that is what you are asking.”'},
+{n:'Brother Ansel Wren',r:'Royal Scribe',c:'#4a5aa0',p:'Ink-black fingertips.',t:'fresh ink fingerprints',v:'“I brought the seal papers at supper and he signed them. Ink is my curse. He was alive when I left.”',d:'“I was copying letters in my room all night. The study? I never went in.”',s:' “And I would never put anything in his wine. I do not even drink it.”'},
+{n:'Mistress Odalys Fenn',r:'Royal Cook',c:'#d9a24a',p:'Dusted in flour up to the elbows.',t:'floury footprints',v:'“I carried in his supper tray. He complained about the soup, alive and loud. Flour is in my bones.”',d:'“I was in the kitchen all night, kneading dough for breakfast. I never went near the study.”',s:' “And I would never put a drop of anything bitter in his goblet.”'}];
+const MYL=['the desk','the doorway','the floor'];
+function dawnMy(){const d=S.day,m=S.my=S.my||{st:0};if(!m.d)m.d=14+F(R()*4);
+if(m.st==0&&d>=m.d&&Q.length<2&&!Q.includes(mysIntro)&&nev5(d))Q.push(mysIntro);
+else if(m.st==2&&d>=(m.rd||0)&&!Q.includes(mysOpen)){m.rd=d+1;Q.push(mysOpen)}}
+function mysIntro(){const m=S.my;m.st=2;m.c=F(R()*4);m.cl=[0,1,2,3].filter(i=>i!=m.c)[F(R()*3)];m.to=[0,1,2,3].filter(i=>i!=m.cl).sort(()=>R()-.5);m.sc=[0,0,0];m.q=[0,0,0,0];m.a=5;m.ac=-1;save();
+mono('Steward Pell','#79a',['Majesty! Terrible news. Lord Bertram Quill, keeper of the royal seal, was found dead at his desk this morning.','The physician says he died around midnight. No wound, no blood, no note. Nobody saw anything.','Four people were in the castle that night, and each knew him well. One of them is lying to you.','The case file is ready. Search the study and question the suspects, but you only have 5 clues of time. An innocent hanged is a stain on any crown.'],()=>mysOpen())}
+function mysOpen(){const m=S.my;if(!m||m.st!=2)return;m.st=2;mo=1;$('pn').hidden=1;$('md').hidden=0;
+let h='<div style="font-size:max(12px,calc(2.4*var(--u)));font-weight:900;line-height:1.15"><h2 style="margin:0">Who killed Lord Bertram?</h2><small>Clues left: <b>'+m.a+'</b>. He died at midnight. One of these four is lying.</small><h3 style="margin:.5em 0 .2em">The study</h3><div class="bd">';
+MYL.forEach((l,k)=>{h+=m.sc[k]?'<p>🔎 On '+MYL[k]+': <b>'+MYS[m.to[k]].t+'</b>.</p>':'<button '+(m.a?'':'disabled ')+'onclick="mysAct(0,'+k+')">Search '+l+'</button>'});
+h+='</div><h3 style="margin:.5em 0 .2em">The suspects</h3>';
+MYS.forEach((s,i)=>{const say2=i==m.c?s.d+s.s:i==m.cl?s.d:s.v;
+h+='<div style="border:3px solid #2b2118;border-radius:12px;padding:6px 8px;margin:6px 0;background:#f9f0d9"><b style="color:'+s.c+';-webkit-text-stroke:.6px #2b2118">'+s.n+'</b> <small>'+s.r+'. '+s.p+'</small><br>'+(m.q[i]?'<i>'+say2+'</i><br>':'<button '+(m.a?'':'disabled ')+'onclick="mysAct(1,'+i+')">Question</button> ')+'<button style="background:linear-gradient(#f2604f,#c9291f);color:#fff" onclick="mysAcc('+i+')">'+(m.ac==i?'Really accuse?':'Accuse')+'</button></div>'});
+h+='<button onclick="mysLater()">Think it over (back tomorrow)</button></div>';$('md').innerHTML=h}
+function mysAct(t,k){const m=S.my;if(m.a<1)return;m.a--;m.ac=-1;if(t)m.q[k]=1;else m.sc[k]=1;save();mysOpen()}
+function mysLater(){S.my.rd=S.day+1;S.my.ac=-1;save();hx();say('You close the case file for now.')}
+function mysAcc(i){const m=S.my;if(m.ac!=i){m.ac=i;return mysOpen()}m.st=3;save();hx();const s=MYS[i],k=MYS[m.c];
+if(i==m.c){nlog('Murder Solved: Seal-Keeper Avenged');mono(s.n,s.c,['*'+s.n+' goes pale, then laughs bitterly.*','“Fine. Bertram was about to ruin me. I put the poison in his wine, and I would do it again.”','“You are cleverer than you look, majesty.”'],()=>ask(s.n,s.c,'Justice! Y: hang the murderer in the square. N: banish them forever.',()=>{G(100+rg(60));H(3);U(-5);exe(1,1);say('⚖ Case closed. The murderer was hanged.')},()=>{G(60);H(1);say('🚪 '+s.n+' was banished from the kingdom.')}))}
+else{nlog('Innocent Accused; Real Killer Walks Free');mono(s.n,s.c,['*'+s.n+' falls to their knees.*','“Majesty, I did NOT do it! Please!”','*Across the hall, somebody is quietly smiling.*'],()=>{G(-40);H(-8);U(10);say('You accused an innocent. The real killer was '+k.n+', who slipped away.')})}}
+const RDL=[['I have cities but no houses, mountains but no trees, and water but no fish. What am I?','A MAP','A DREAM','A LAKE'],['The more of me you take, the more you leave behind. What am I?','FOOTSTEPS','GOLD','TAXES'],['I speak without a mouth and answer whenever you call. What am I?','AN ECHO','A GHOST','A BARD'],['I have hands but cannot clap. What am I?','A CLOCK','A KNIGHT','A TREE'],['I get wetter the more I dry. What am I?','A TOWEL','A SWORD','A SOUP'],['I am lighter than a feather, yet the strongest guard cannot hold me for long. What am I?','BREATH','A FEATHER','A GRUDGE']],
+SPC=['“Wrong. Your crown now smells faintly of soup.”','“Wrong! Every cat in your kingdom now judges you.”','“Wrong. Your left boot is slightly damp. Forever.”','“Incorrect. I swapped your pillow for a very smug rock.”'];
+function dawnSph(){const m=S.sph=S.sph||{st:0};if(!m.d)m.d=24+F(R()*5);if(m.st==0&&S.day>=m.d&&Q.length<2&&!Q.includes(sphGo)&&nev5(S.day))Q.push(sphGo)}
+function sphGo(){const m=S.sph;m.st=1;m.q=[0,1,2,3,4,5].sort(()=>R()-.5).slice(0,3);m.i=0;m.ok=0;save();
+mono('Sphinx','#c9a24b',['*A giant golden cat with a woman’s face sits across the road, blocking a merchant’s cart.*','“I am the Sphinx. None pass until they answer. Three riddles, ruler. Be wise... or be sorry.”'],()=>sphQ())}
+function sphQ(){const m=S.sph,r=RDL[m.q[m.i]],a=[0,1,2].sort(()=>R()-.5),A=a.map(j=>r[1+j]);
+ak('Sphinx','#c9a24b','Riddle '+(m.i+1)+' of 3: '+r[0],()=>sphA(a[0]==0),()=>sphA(a[1]==0),{x:()=>sphA(a[2]==0),xl:A[2],ly:A[0],ln:A[1]})}
+function sphA(ok){const m=S.sph;m.i++;let t;if(ok){m.ok++;G(60);H(1);t='“Correct. Annoying, but correct.”'}else{G(-20);H(-1);t=SPC[F(R()*SPC.length)]}save();mono('Sphinx','#c9a24b',[t],()=>m.i<3?sphQ():sphEnd())}
+function sphEnd(){const m=S.sph,k=m.ok;m.st=3;save();
+if(k==3){G(200);H(5);nlog('Sphinx Stumped By Wise Ruler');mono('Sphinx','#c9a24b',['“Three for three. Impossible.”','“Take my blessing, ruler: gold, knowledge, and my respect.”'],()=>{if(S.know<6){S.know++;say(KN[S.know])}say('🦁 The Sphinx blessed you: +200g and new knowledge!')})}
+else if(k==0){U(3);mono('Sphinx','#c9a24b',['“Zero. Not one.”','“The toll for the road is 60 gold. I take cash and compliments.”'],()=>{G(-60);say('🦁 The Sphinx took 60g and left, unimpressed.')})}
+else mono('Sphinx','#c9a24b',['“'+k+' of 3. Not bad, for royalty.”','“Pass, ruler. The cart behind you has been waiting since breakfast.”'],()=>say('🦁 The Sphinx let you pass.'))}
+const _d8=dawn2;dawn2=function(){_d8();dawnMy();dawnSph()};
+</script>
 </body></html>
