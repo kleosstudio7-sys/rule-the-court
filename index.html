@@ -240,7 +240,7 @@ function steal(k){const g=Math.round(ksp(k)*.8+20);if(R()<.45){G(g);k.rel-=3;say
 function stealP(){const g=Math.round(10+S.people*.9);G(g);H(-3);U(3);if(R()<.35){H(-8);U(10);say('You were seen! The people riot with anger.')}else say('You took '+g+'g from your people. Hopefully unseen.')}
 function dmg(s){const n=Math.max(1,Math.round(s*2));for(let i=0;i<n;i++){const t=F(R()*3);if(t==0&&S.houses.length){S.houses.pop();S.dm.h++}else if(t==1&&S.farms>0){S.farms--;S.dm.f++}else if(S.walls>0){S.walls--;S.dm.w++}}P(-Math.round(S.people*.05*s));drawH();say('🏚 Ruins! Pay to rebuild in Realm.')}
 function rebuild(){S.fire=0;wk2='';hk0='';const d=S.dm;for(let i=0;i<d.h;i++)S.houses.push({n:'Rebuilt home',k:'home',c:'#c9a27a'});S.farms+=d.f;S.walls+=d.w;S.dm={h:0,f:0,w:0};drawH();H(3);say('🔨 Everything rebuilt!')}
-function atk(src,b,m){const p=b*(1-Math.min(.7,S.guards*.05*(1+gq())))*(S.hm?.5:1)*(src=='food'&&S.chef?.3:1);if(R()<p){die(m);return 1}say(S.guards&&R()<.5?'🛡 Your guards stopped an assassin!':S.hm?'🗡 Your hitman spotted a plot!':'You survived an attempt on your life!');return 0}
+function atk(src,b,m){const p=b*(1-Math.min(.7,S.guards*.05*(1+gq())))*(S.hm?.5:1)*(src=='food'&&S.chef?.3:1);if(R()<p){if(asnOK(src))asnScene('dead',1,S.guards,m);else die(m);return 1}if(asnOK(src))asnScene(S.guards>0?'guards':'lucky',1,S.guards);say(S.guards&&R()<.5?'🛡 Your guards stopped an assassin!':S.hm?'🗡 Your hitman spotted a plot!':'You survived an attempt on your life!');return 0}
 function kgrow(k){if((k.sp&&(S.day+(k.of||0))%k.sp!=0)||R()<.1)return;const pwr=pw();if(k.ch&&ksp(k)>pwr*k.ch*1.3+30)return;const w=k.w||[5,2,1.5,0],tot=w[0]+w[1]+w[2]+w[3];let r=R()*tot,a=0;while(a<3&&r>=w[a]){r-=w[a];a++}
 if(a==1&&(k.up||0)>=(k.um||5))a=0;if(a==2&&(k.m||0)>=(k.mm||6))a=0;if(a==3&&(k.wl||0)>=(k.wm||3))a=0;
 if(a==0)k.p=Math.round(k.p+(2+R()*3)*(k.gr||1)*(k.sp||1));else if(a==1){k.up=(k.up||0)+1;if(S.inf)say('Informant: '+k.n+' upgraded its troops (lvl '+k.up+')!')}else if(a==2){k.m=(k.m||0)+1;if(S.inf)say('Informant: '+k.n+' built '+(k.skel?'a bone catapult':'a siege machine')+'!')}else{k.wl=(k.wl||0)+1;if(S.inf)say('Informant: '+k.n+' built stronger walls!')}
@@ -495,7 +495,7 @@ mono('Captain','#58a',['Majesty! The skeletons of Bonereach are storming the tow
 function skTown(k){S.skon=1;k.enemy=1;S.skw=1;const n=2+Math.min(3,S.skd|0);for(let i=0;i<n;i++){const x=R()<.5?-40-i*70:1040+i*70,e=document.createElementNS('http://www.w3.org/2000/svg','g');e.setAttribute('transform','translate('+x+',455)');e.innerHTML=sd(0,0,.55,{sk:1,a:F(R()*2),t:'#6a5a48',w:R()<.5?'s':'w',sh:R()<.5?1:0});$('np').appendChild(e);sx.push({x,e})}say('☠ Skeletons from Bonereach are attacking the city!')}
 function skRsl(k){k=k||skK();if(!k)return skDone();const mm=pw()-S.guards*1.5+wpw('a'),e=ksp(k)*(.8+R()*.5);
 if(S.troops<1&&S.mach<1&&S.sling<1){const mercy=!S.mercy;S.mercy=1;P(-Math.round(S.people*(mercy?.12:.15)));G(-Math.round(S.gold*(mercy?.2:.3)));dmg(mercy?1.2:1.5);say(mercy?'🛡 Guard: Majesty, we have NO soldiers! We barely survived this time, but we will not be so lucky again. Build an army!':'☠ With no soldiers to fight, the skeletons overran the kingdom! You lost people and gold.',25000);return skDone(false)}
-if(R()<mm/(mm+e))return skDone();P(-Math.round(S.people*.1));G(-Math.round(S.gold*.15));dmg(1);say('☠ The skeletons broke through your defenses! You lost people and gold.',25000);skDone(false)}
+if(skFight(k,mm,e))return skDone();P(-Math.round(S.people*.1));G(-Math.round(S.gold*.15));dmg(1);say('☠ The skeletons broke through your defenses! You lost people and gold.',25000);skDone(false)}
 function skHit(){if(!sx.length)return;const k0=skK();sx.forEach(a=>{a.x+=Math.sign(px-a.x)*5;a.e.setAttribute('transform','translate('+a.x+',455)')});
 if(sx.some(a=>Math.abs(a.x-px)<70)){const n=sx.length,g=S.guards,l=g>=n?Math.min(g,F(n/2)+1):g;sx.forEach(a=>a.e.remove());sx=[];
 if(g>=n)say('🛡 Skeletons attacked the city! Your guards fought them off and protected you!');else{G(-Math.round(S.gold*.15));say('☠ You barely escaped the skeletons! Your guards fell protecting you.')}
@@ -666,8 +666,8 @@ function hits(){hx2();
 if(ax.length){
  ax.forEach(a=>{a.x+=Math.sign(px-a.x)*6;a.e.setAttribute('transform','translate('+a.x+',398) scale(.5)')});
  if(ax.some(a=>Math.abs(a.x-px)<70)){const n=ax.length,g=S.guards;clrA();ac=1500;
-  if(g>=n){const l=Math.min(g,R()<.6*(1-gq()*.7)?F(n/2)+(R()<.5?1:0):0);S.guards-=l;gres(l,1);say('🛡 '+n+' assassin'+(n>1?'s':'')+' attacked! Your guards fought them off and saved you!'+(l?' You lost '+l+' guard'+(l>1?'s':'')+'. Hire new ones.':''));gdr();upd()}
-  else{const q0=gq();S.guards=Math.max(0,g-n);gres(g-S.guards,0);gdr();if(R()<Math.min(.9,g/n*.5*(1+q0))){say('🗡 '+n+' assassins attacked! Your few guards barely saved you, but they fell. Hire new ones!');upd()}else die('Assassins from an enemy kingdom killed you!')}}
+  if(g>=n){asnScene('guards',n,g);const l=Math.min(g,R()<.6*(1-gq()*.7)?F(n/2)+(R()<.5?1:0):0);S.guards-=l;gres(l,1);say('🛡 '+n+' assassin'+(n>1?'s':'')+' attacked! Your guards fought them off and saved you!'+(l?' You lost '+l+' guard'+(l>1?'s':'')+'. Hire new ones.':''));gdr();upd()}
+  else{const q0=gq();S.guards=Math.max(0,g-n);gres(g-S.guards,0);gdr();if(R()<Math.min(.9,g/n*.5*(1+q0))){asnScene('barely',n,g);say('🗡 '+n+' assassins attacked! Your few guards barely saved you, but they fell. Hire new ones!');upd()}else asnScene('dead',n,g,'Assassins from an enemy kingdom killed you!')}}
  return}
 if(bx.length)return;if(ac>0){ac--;return}
 if(S.ks.some(k=>!k.dead&&!k.skel&&!k.ally&&k.enemy)&&S.day>=(S.nh||0)&&R()<.02){
@@ -1331,7 +1331,7 @@ function wgo(){const[s,a,g]=wv();if(s+a+g<1)return say('Send at least 1 troop.')
 function wl(p){if(!WS){S.troops=Math.round(S.troops*(1-p));return}const c=x=>p>=.3?Math.ceil(x*p):Math.round(x*p),ls=c(WS.s),la=c(WS.a),lg=c(WS.g);S.troops=Math.max(0,S.troops-ls-la-lg);S.ar=Math.max(0,S.ar-la);S.gi=Math.max(0,S.gi-lg);say('Lost '+ls+' swordsmen, '+la+' archers and '+lg+' giants.')}
 function war0(k,f=1,all){S.wt=3;S.nh=Math.max(S.nh||0,S.day+1);const m=(WS?wsp(WS.s,WS.a,WS.g):pw())*f,e=ksp(k),sm=bsim(m,e),win=sm.win;BSIM=sm;try{scn(arm(k,win,78.6,Math.min(m,e)/Math.max(m,e,1)),sm.ms)}finally{BSIM=null}if(win){const n=Math.round(k.p*.5+5);if(R()<.8){G(k.p*4);say('Victory over '+k.n+'! +'+k.p*4+'g')}else say('Victory, but no loot.');k.p=Math.round(k.p*.5);k.ally=0;k.enemy=1;k.rel=-60;if(all){if(k.hit){k.dead=1;say(k.n+' is now part of your kingdom!')}else{k.hit=1;say('⚔ '+k.n+' is beaten but not broken! Win once more to take the kingdom, but they rebuild their army every day you wait.')}}wl(Math.max(.03,sm.lm));if(k.skel){k.p=Math.round(k.p*1.3);say('The bones reassemble... the skeletons rise again!')}else Q.push(()=>cqSpoils(k,n))}else{wl(Math.min(.9,sm.lm));k.p=Math.round(k.p*(1-sm.le*.5));P(-S.people*.1);G(-S.gold*.2);k.enemy=1;k.rel=-60;k.ally=0;say('Defeat vs '+k.n+'! Troops, people & gold lost.');dmg(1)}}
 function battle(k){const m=pw()+wpw('a'),e=ksp(k);say('⚔ '+k.n+' attacks!'+(k.skel?' Skeletons climb the walls in the dark!':''));const sm=bsim(m,e),win=sm.win;if(S.troops<1){say("Cannot battle, troops are needed");pump(1500)}else{BSIM=sm;try{scn(arm(k,win,84.8,Math.min(m,e)/Math.max(m,e,1)),sm.ms)}finally{BSIM=null}}if(win){S.troops=Math.round(S.troops*(1-Math.max(.03,sm.lm)));k.p=Math.round(k.p*(1-sm.le*.6));k.rel-=5;if(k.skel){k.p=Math.round(k.p*1.15);say('They reassemble...')}say('You held the line!')}else{S.troops=Math.round(S.troops*(1-Math.min(.9,sm.lm)));k.p=Math.round(k.p*(1-sm.le*.5));P(-S.people*.12);G(-S.gold*.25);U(8);H(-8);say('You lost people and gold.');dmg(.8)}}
-function civil(pp){const r=Math.round(S.people*S.unrest/200)+5,m=S.troops*(1+S.tl*.5)+ub()+S.guards*2+S.walls*6+wpw('r')+(pp||0);say('⚔ REBELLION! '+r+' rebels rise.');if(R()<m/(m+r)){S.troops=Math.round(S.troops*.85);U(-30);say('You crushed it.');dmg(.4)}else{G(-S.gold*.5);P(-S.people*.2);S.troops=Math.round(S.troops*.5);U(-20);say('Rebels won. Your kingdom is weak.');dmg(1.2)}}
+function civil(pp){const r=Math.round(S.people*S.unrest/200)+5,m=S.troops*(1+S.tl*.5)+ub()+S.guards*2+S.walls*6+wpw('r')+(pp||0);say('⚔ REBELLION! '+r+' rebels rise.');const sm=bsim(m,r);rebScene(sm,r);if(sm.win){S.troops=Math.round(S.troops*.85);U(-30);say('You crushed it.');dmg(.4);Q.push(()=>rebMercy(r))}else{G(-S.gold*.5);P(-S.people*.2);S.troops=Math.round(S.troops*.5);U(-20);say('Rebels won. Your kingdom is weak.');dmg(1.2)}}
 let pd=0;function prep(){const r=Math.round(S.people*S.unrest/200)+5,c=r*6;pd=0;ask('Captain','#678','Rebels are rising ('+r+')! Pay '+c+'g to stack extra guards and troops? They may still win.',()=>{pd=1;if(S.gold<c){say('Not enough gold! Only a few came.');civil(5)}else{G(-c);say('Extra guards fill the halls.');civil(r*.8+10)}},()=>{pd=1;civil()});AF=()=>{if(!pd){pd=1;civil()}}}
 function disaster(){const t=F(R()*10);if(t==0){const d=Math.round(S.people*(S.ast.doc?.06:.12));P(-d);say('☠ Plague! '+d+' died.')}else if(t==1){G(-90);if(S.farms>0){S.farms--;S.dm.f++}say('🌊 Flood! Repairs cost 90g and a field is ruined.')}else if(t==2){if(S.houses.length)S.dm.h++;S.houses.pop();drawH();G(-100);H(-5);say('🔥 Great fire! Rebuilding cost 100g.')}else if(t==3){say('🌋 Earthquake! Walls and homes cracked.');dmg(1.2)}else if(t==4){if(S.farms>0){S.farms--;S.dm.f++}H(-3);G(-40);say('☀ Drought! A field withered.')}else if(t==5){if(S.farms>0){S.farms--;S.dm.f++}S.grain=0;H(-2);say('🦗 Locusts ate a field and your stored crops!')}else if(t==6){say('🌪 Tornado tore through town!');dmg(.8)}else if(t==7){P(-Math.round(S.people*.06));H(-6);say('🥶 Blizzard famine! People starved.')}else if(t==8){G(-60);U(5);S.mines=Math.max(0,S.mines-1);P(-2);say('⛏ Mine collapse! A mine was lost.')}else{say('☄ Meteor strike!');dmg(1)}}
 
@@ -1504,7 +1504,7 @@ styA('Mason','#a63',['It opened! Gold... and a cursed crown.'],'Take the gold (Y
 function styRuler(){const ks=S.ks.map((k,i)=>[k,i]).filter(x=>!x[0].dead);if(!ks.length)return null;const[k,i]=ks[F(R()*ks.length)],r=styRUL[i%4],w=r[0],c=r[1];
 if(k.vas)return()=>mono(w,c,['I bow, liege. My tribute comes early.'],()=>{G(40);say('👑 '+w+' sent 40g early.')});
 if(k.ally)return EX().tw.length>=3&&R()<.5?()=>ask(w,c,'Your towns grow... I grow uneasy, friend. Share 80g to prove you are loyal?',()=>{G(-80);k.rel+=15;say(w+' relaxes.')},()=>{k.rel-=15;if(k.rel<-30){k.ally=0;k.enemy=1;say('💔 '+w+' BETRAYS you and breaks the alliance!')}else say(w+' grows cold.')}):()=>ask(w,c,'Friend, my army is thin. Lend me 60g?',()=>{G(-60);k.rel+=12;say(w+' will remember this.')},()=>{k.rel-=6;say(w+' frowns.')});
-if(k.enemy)return null;
+if(k.enemy)return()=>(k.skel?ak:ask)(w,c,k.skel?'The dead march at dawn. Give me 3 living souls or we strike!':'Pay 60g or my riders burn your border.',()=>{k.skel?P(-3):G(-60);k.rel+=5;say(w+' backs off for now.')},()=>{k.rel-=5;if(R()<.4){dmg(.4);say('🔥 '+w+' raids your border!')}else say(w+' swears revenge.')},k.skel?{art:skKingArt}:undefined);
 return k.skel?null:()=>ask(w,c,'I come with a gift and a pact, majesty. Seal friendship for 40g?',()=>{G(-40);k.rel+=15;say(w+' warms to you.')},()=>say(w+' leaves politely.'))}
 function styTr(s){let t=s.tr;const h=Object.keys(styADV).filter(k=>S.ast[k]);
 if(!t){if(h.length>=2&&S.day>=s.trd&&R()<.25)s.tr={k:h[F(R()*h.length)],c:0,d:S.day+1,cl:[]};return null}
@@ -1514,8 +1514,8 @@ if(t.c==2){t.c=3;return styAcc}
 if(t.c>=4){const n=styADV[t.k][0];S.ast[t.k]=0;G(-120);s.tr=null;s.trd=S.day+6;return()=>mono(n,'#556',['Your secrets are already sold, little king.'],()=>say('🗡 '+n+' fled with 120g!'))}return null}
 function styAcc(){const s=styS(),t=s.tr;if(!t)return;mo=1;$('pn').hidden=1;$('md').hidden=0;$('md').innerHTML='<h2 style="margin:0">🕵 Traitor hunt</h2><p>Clues: '+t.cl.join('; ')+'.</p><div style="display:grid;gap:6px;max-width:360px">'+Object.keys(styADV).filter(k=>S.ast[k]).map(k=>"<button onclick=\"styPick('"+k+"')\">Accuse "+styADV[k][0]+'</button>').join('')+'<button onclick="styPick(0)">Wait and watch</button></div>'}
 function styPick(k){const s=styS(),t=s.tr;if(t){if(!k){t.c=4;t.d=S.day+2;say('You wait... the traitor grows bold.')}else if(k==t.k){S.ast[k]=0;G(150);H(3);s.tr=null;s.trd=S.day+7;say('⚖ Traitor caught! '+styADV[k][0]+' is dragged away. +150g')}else{S.ast[k]=0;G(-60);H(-3);t.w=(t.w||0)+1;if(t.w>=2){t.c=4;t.d=S.day+2;say('Wrong again! The traitor slips away tonight...')}else{t.c=2;t.d=S.day+1;say('Wrong! '+styADV[k][0]+' leaves in tears. Keep hunting...')}}}hx()}
-function styRival(s){if(!s.rv){if(S.day>=s.rvd){const n=styRV[s.ri%styRV.length];s.rv={n,l:0};return()=>mono(n,'#7a2c2c',['A new warlord rises beyond your borders...','I am '+n+'. Every kingdom will kneel, yours too!'],()=>say('⚔ '+n+' now roams the lands. Find the warband in the Empire tab.'))}return null}
-if(S.day%4==0)s.rv.l++;return null}
+function styRival(s){if(!s.rv){if(S.day>=s.rvd){const n=styRV[s.ri%styRV.length];s.rv={n,l:0};return()=>mono(n,'#7a2c2c',['A new warlord rises beyond your borders...','I am '+n+'. Every kingdom will kneel, yours too!'],()=>say('⚔ '+n+' now raids the lands. Find the warband in the Empire tab.'))}return null}
+if(S.day%4==0)s.rv.l++;if(S.day%6==0)return()=>ask(s.rv.n,'#7a2c2c','Your walls are paper, little king. Pay 100g or I march?',()=>{G(-100);say('He laughs and rides off.')},()=>{if(R()<Math.min(.8,.3+.1*s.rv.l)){dmg(.4);G(-Math.round(S.gold*.08));say('🔥 '+s.rv.n+"'s warband raided your border!")}else say('He swears revenge.')});return null}
 function styDay(){const s=styS(),q=[],a=styRival(s),b=styTr(s);a&&q.push(a);b&&q.push(b);
 const cd=styAR.filter(x=>{const p=s.p[x.k]||0;return p<x.s.length&&S.day>=(s.nx[x.k]||0)&&(p>0||x.need())&&(!x.s[p].need||x.s[p].need())});
 if(cd.length&&R()<.6){const x=cd[F(R()*cd.length)],p=s.p[x.k]||0,st=x.s[p];s.p[x.k]=p+1;s.nx[x.k]=S.day+2+F(R()*3);q.push(()=>mq(st.w,st.c,typeof st.pg=='function'?st.pg():st.pg,()=>ask(st.w,st.c,st.q,st.y,st.n)))}else if(R()<.4)q.push(styRuler());
@@ -1945,5 +1945,95 @@ const _kvCQ=kview;kview=function(i){let h=_kvCQ(i);const c=CQ().find(x=>!x.hk&&x
 /* --- 9. Hook into the daily dawn, and recover an unanswered question after a reload --- */
 const _dwCQ=dawn;dawn=function(){const d0=S.day,r=_dwCQ.apply(this,arguments);try{if(S.day>d0)cqDay()}catch(e){console.error(e)}return r};
 try{CQ().filter(c=>c.st=='pend').forEach(c=>Q.push(()=>cqAsk(c.id)))}catch(e){}
+</script>
+<script>
+/* ===== BATTLE SCENES UPDATE: skeleton fights, street rebellion, assassin charge, buff Bone King ===== */
+const scNS='http://www.w3.org/2000/svg',
+scHdr=(t,sub,col)=>'<text x="500" y="80" text-anchor="middle" font-size="48" font-weight="900" fill="'+(col||'#2b2118')+'" font-family="Londrina Solid,Impact,sans-serif">'+t+'</text>'+(sub?'<text x="500" y="120" text-anchor="middle" font-size="26" font-weight="900" fill="'+(col||'#2b2118')+'" font-family="Londrina Solid,Impact,sans-serif">'+sub+'</text>':''),
+scBg=(f,t)=>f?'<g class="bgn" style="--g:'+f+'s">'+t+'</g>':t;
+
+/* --- 1. Skeleton attacks: same timeline fight as a normal kingdom attack (troops + upgrades decide) --- */
+function skFight(k,mm,e){const win=R()<mm/(mm+e);
+ if(S.troops>=1)scn(arm(k,win,84.8,Math.min(mm,e)/Math.max(mm,e,1)),84800);
+ return win}
+
+/* --- 2. Rebellion: peasants with pitchforks and knives, fought in the streets --- */
+let rbSv=0;
+function rbUnit(x,y,f,fl,kind,sd){
+ const hats=['<path d="M-46 -8Q0 -24 46 -8Q0 6 -46 -8Z" fill="#d9b860"/><path d="M-24 -10Q-22 -44 0 -46Q22 -44 24 -10Z" fill="#e6c870"/>','<path d="M-32 -14Q0 -34 32 -14L30 -2Q0 -20 -30 -2Z" fill="#b83a2e"/>','<path d="M-34 -4Q-36 -44 0 -48Q36 -44 34 -4Q16 -22 0 -16Q-16 -22 -34 -4Z" fill="#5a3a22"/>'],
+ tc=['#8a6a4a','#6b7a4a','#7a5a5a','#5a6a7a'][Math.abs(F(x/7)+F(y/9))%4],hat=hats[Math.abs(F(x/5)+F(y/3))%3],
+ head=(sur)=>'<circle cx="0" cy="0" r="30" fill="#e0b48c"/>'+hat+'<circle cx="-11" cy="4" r="4.5" fill="#2b2118" stroke="none"/><circle cx="11" cy="4" r="4.5" fill="#2b2118" stroke="none"/>'+(sur?'<path d="M-20 -4L-6 -1M20 -4L6 -1M-8 20Q0 14 8 20" stroke-width="4" fill="none"/>':'<path d="M-20 -6L-6 2M20 -6L6 2" stroke-width="4" fill="none"/><ellipse cx="0" cy="19" rx="7" ry="5" fill="#2b2118" stroke="none"/>'),
+ legs='<path d="M-18 108V136H-3V108Z" fill="#3a2a1e"/><path d="M3 108V136H18V108Z" fill="#3a2a1e"/><path d="M-22 128H0V138H-22Z" fill="#2b2118"/><path d="M0 128H22V138H0Z" fill="#2b2118"/>',
+ body='<path d="M-30 96Q-34 24 0 22Q34 24 30 96L44 124L-44 124Z" fill="'+tc+'"/><path d="M-26 66H26V76H-26Z" fill="#3a2a1e"/>',
+ weap=kind?'<path d="M24 46L58 62" stroke="#2b2118" stroke-width="15" fill="none"/><path d="M24 46L58 62" stroke="'+tc+'" stroke-width="8" fill="none"/><circle cx="62" cy="64" r="8" fill="#e0b48c"/><path d="M60 62L58 -80" stroke="#2b2118" stroke-width="10" fill="none"/><path d="M60 62L58 -80" stroke="#8a5a2b" stroke-width="5" fill="none"/><path d="M40 -52H76M40 -52V-96M58 -62V-104M76 -52V-96" stroke="#2b2118" stroke-width="9" fill="none"/><path d="M40 -52H76M40 -52V-96M58 -62V-104M76 -52V-96" stroke="#aab2bc" stroke-width="4" fill="none"/>'
+  :'<path d="M24 46L52 54" stroke="#2b2118" stroke-width="15" fill="none"/><path d="M24 46L52 54" stroke="'+tc+'" stroke-width="8" fill="none"/><circle cx="58" cy="54" r="8" fill="#e0b48c"/><path d="M62 50L112 26L116 36L66 62Z" fill="#dfe3ea"/><path d="M52 48L66 60" stroke="#6b4a33" stroke-width="9"/>',
+ norm='<g>'+legs+body+weap+head(0)+'</g>',
+ sur='<g>'+legs+body+'<path d="M24 46L44 -20" stroke="#2b2118" stroke-width="15" fill="none"/><path d="M24 46L44 -20" stroke="'+tc+'" stroke-width="8" fill="none"/><circle cx="44" cy="-24" r="8" fill="#e0b48c"/><path d="M-24 46L-44 -20" stroke="#2b2118" stroke-width="15" fill="none"/><path d="M-24 46L-44 -20" stroke="'+tc+'" stroke-width="8" fill="none"/><circle cx="-44" cy="-24" r="8" fill="#e0b48c"/><path d="M-44 -26V-100" stroke="#2b2118" stroke-width="7"/><path d="M-44 -98L2 -86L-44 -72Z" fill="#fff" stroke-width="4"/>'+head(1)+'</g>';
+ return '<g transform="translate('+x+','+y+') scale('+(f?-.5:.5)+',.5)" stroke="#2b2118" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">'
+ +(sd?'<g class="ea" style="animation-delay:'+sd+'s">'+norm+'</g><g class="ed" style="animation-delay:'+sd+'s">'+sur+'</g>':'<g'+(fl?' class="bfl" style="--d:'+fl+'s"':'')+'>'+norm+'</g>')+'</g>'}
+function rebHouses(){let o='';const xs=[-30,120,270,420,570,720,870],hh=[130,160,120,170,140,160,125];
+ xs.forEach((x,i)=>{const h=hh[i],c=WH[i%6],w=140;o+='<g stroke="#2b2118" stroke-width="5" stroke-linejoin="round"><rect x="'+x+'" y="'+(430-h)+'" width="'+w+'" height="'+h+'" fill="'+c+'"/><polygon points="'+(x-10)+','+(430-h)+' '+(x+w/2)+','+(430-h-60)+' '+(x+w+10)+','+(430-h)+'" fill="#b4533a"/><rect x="'+(x+16)+'" y="'+(430-h+24)+'" width="32" height="40" rx="3" fill="#8ec6df" stroke-width="4"/><rect x="'+(x+w-48)+'" y="'+(430-h+24)+'" width="32" height="40" rx="3" fill="#8ec6df" stroke-width="4"/><path d="M'+(x+w/2-16)+' 430V'+(430-52)+'Q'+(x+w/2)+' '+(430-72)+' '+(x+w/2+16)+' '+(430-52)+'V430Z" fill="#6b4a33" stroke-width="4"/></g>'});
+ return o}
+function rebScene(sm,r){
+ const win=sm.win;let st='';try{st=(arm({n:'x',p:1,up:0},1,8,.5).match(/^<style>[\s\S]*?<\/style>/)||[''])[0]}catch(e){}
+ const ns=Math.min(9,Math.max(0,S.troops-S.ar-S.gi)),na=Math.min(9,S.ar),ng=Math.min(3,S.gi);let gd=Math.min(3,S.guards);if(ns+na+ng+gd<1)gd=1;
+ const pn=ns+na+ng+gd,pf=sdt(pn,sm,0),en=Math.max(4,Math.min(18,Math.round(pn*sm.e0/Math.max(1,sm.m0)))),ef=sdt(en,sm,1);
+ let sv=0;const sur={};
+ if(win){sv=Math.max(2,Math.round(en*.3));const ord=[...Array(en).keys()].sort((a,b)=>ef[b]-ef[a]).slice(0,sv);ord.forEach(u=>{sur[u]=ef[u]||+(4+sm.Tf*.8).toFixed(2);ef[u]=0})}
+ rbSv=win?Math.max(sv,Math.round(r*sv/en)):0;
+ let i=0,PM='',PR='';
+ for(let q=0;q<ng;q++)PM+=zbf(370-Math.floor(q/3)*60,400+(q%3)*40,'g',S.gl,'#2f86d6',0,pf[i++],3+q*.15);
+ for(let q=0;q<ns;q++)PM+=zbf(440-Math.floor(q/3)*45,430+(q%3)*50,'s',S.swl,'#2f86d6',0,pf[i++],3+q*.1);
+ for(let q=0;q<gd;q++){const f=pf[i++];PM+='<g'+(f?' class="bfl" style="--d:'+f+'s"':'')+'>'+fg(480-Math.floor(q/3)*40,450+(q%3)*50,'#4a6fa8',{w:1})+'</g>'}
+ for(let q=0;q<na;q++){const x=170-Math.floor(q/3)*35,y=430+(q%3)*50,f=pf[i++];PR+=zbf(x,y,'a',S.arl,'#2f86d6',0,f,0)+scBg(f,zbar(x,y,S.arl,0,1+q*.3))}
+ let EM='',q2=0,m2=0;
+ for(let n=0;n<en;n++){const back=en>2&&n%3==2,x=back?830+Math.floor(q2/3)*35:560+Math.floor(m2/3)*45,y=430+((back?q2:m2)%3)*50;back?q2++:m2++;EM+=rbUnit(x,y,1,ef[n],back?1:(n%2),sur[n])}
+ BFZ=sm.Tf+4+1.4;
+ let h=st+rebHouses()+'<g class="bmr" style="--mx:-250px">'+PM+'</g>'+PR+'<g class="bmr" style="--mx:250px">'+EM+'</g>';
+ for(let j=0;j<3;j++)h+='<text class="bsp" x="500" y="'+(480+j*50)+'" text-anchor="middle" font-size="40" style="animation-delay:'+(3.5+j*.2)+'s">✦</text>';
+ h+=scHdr('⚔ REBELLION in the streets!','Pitchforks and knives vs your soldiers and guards');
+ if(win)h+='<text class="ed" x="500" y="170" text-anchor="middle" font-size="34" font-weight="900" fill="#fff" stroke="#2b2118" stroke-width="7" paint-order="stroke" font-family="Londrina Solid,Impact,sans-serif" style="animation-delay:'+(sm.Tf+4)+'s">🏳 The rebels surrender!</text>';
+ scn(h,sm.ms)}
+function rebMercy(r){const n=Math.max(1,Math.min(Math.max(0,S.people-1),rbSv||Math.round(r*.25)));
+ ak('Captain','#678','The rebels are losing! '+n+' of them throw down their pitchforks and surrender. Execute them or spare them?',()=>{P(-n);U(-10);H(-6);say('☠ '+n+' rebels were executed in the square. Fear keeps the peace.');nlog('Rebels Executed In The Square; Streets Quiet')},()=>{H(4);U(5);say('🕊 '+n+' rebels were pardoned and sent home. The people admire your mercy.');nlog('Surrendered Rebels Pardoned By The Crown')},{ly:'☠ Execute them',ln:'🕊 Spare them'})}
+
+/* --- 3. Assassins: someone charges at you; guards stop them --- */
+const asnOK=src=>src=='rival'||src=='rebel';
+function asnScene(res,n,gN,msg){
+ const na=Math.max(1,Math.min(3,n|0)),gD=Math.min(3,Math.max(0,gN|0)),dead=res=='dead';let kg='';
+ try{const t=document.createElementNS(scNS,'g');ruler(t,S);kg=t.innerHTML}catch(e){}
+ const dy=[0,-30,30],lane=i=>432+dy[i]*.9,GX=470,KX=770,
+ stopX=i=>(res=='lucky'||dead)?600:(i<gD?GX-70:GX+110),
+ dag='<path d="M26 46L52 50" stroke="#2b2118" stroke-width="16" fill="none"/><path d="M26 46L52 50" stroke="#3a3745" stroke-width="8" fill="none"/><path d="M48 44L118 34L118 52Z" fill="#dfe3ea" stroke-width="4"/><rect x="38" y="40" width="14" height="16" rx="4" fill="#6b4a33" stroke-width="4"/>';
+ let h='<style>@keyframes asch{from{transform:translateX(-820px)}to{transform:none}}@keyframes asfl{to{transform:rotate(-88deg) translate(0,8px);opacity:.15}}@keyframes askf{to{transform:rotate(88deg) translate(0,6px)}}@keyframes asgf{to{transform:rotate(-80deg);opacity:.2}}@keyframes asdg{0%,100%{transform:none}50%{transform:translateY(-16px)}}.asc{animation:asch 2.2s cubic-bezier(.3,.1,.6,1) both}.asf{transform-box:fill-box;transform-origin:50% 100%}</style>'
+ +'<rect width="1000" height="625" fill="url(#br)"/><path d="M110 400V220Q110 130 180 130Q250 130 250 220V400Z" fill="#a6dcec" stroke="#2b2118" stroke-width="6"/><path d="M750 400V220Q750 130 820 130Q890 130 890 220V400Z" fill="#a6dcec" stroke="#2b2118" stroke-width="6"/>'
+ +'<path d="M470 40H540V190L505 160L470 190Z" fill="#d9372f" stroke="#2b2118" stroke-width="5"/><rect y="470" width="1000" height="155" fill="url(#fl)"/><path d="M0 470H1000" stroke="#2b2118" stroke-width="7"/><path d="M180 470H820L900 625H100Z" fill="#a82b2b" stroke="#2b2118" stroke-width="5"/>'
+ +'<rect x="60" y="330" width="14" height="70" fill="#4a3524" stroke="#2b2118" stroke-width="4"/>'+fl2(67,330,1.2)+'<rect x="926" y="330" width="14" height="70" fill="#4a3524" stroke="#2b2118" stroke-width="4"/>'+fl2(933,330,1.2);
+ for(let i=0;i<gD;i++){const a=res=='barely'?'asgf .9s ease-in '+(3.3+i*.2)+'s both':res=='dead'?'asgf .8s ease-in '+(1.7+i*.2)+'s both':'';
+  h+='<g transform="translate('+GX+','+lane(i)+') scale(.9)"><g class="asf"'+(a?' style="animation:'+a+'"':'')+'><g style="animation:klunge .6s ease-in-out '+(res=='dead'?1.5:2.0)+'s both">'+xGRD+'</g></g></g>'}
+ for(let i=0;i<na;i++){const sx=stopX(i),fall=dead?'':'asfl .8s ease-in '+(res=='barely'&&i>=gD?3+i*.15:2.3+i*.15)+'s both';
+  h+='<g transform="translate('+sx+','+lane(i)+') scale(.9)"><g class="asc" style="animation-delay:'+(i*.18)+'s"><g class="asf"'+(fall?' style="animation:'+fall+'"':'')+'>'+'<g stroke="#2b2118" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">'+xhood(0)+dag+'</g></g></g></g>'}
+ h+='<g transform="translate('+KX+',315) scale(.9)"><g class="asf" style="'+(dead?'animation:askf .7s ease-in 2.4s both':res=='lucky'?'animation:asdg .5s ease-in-out 2.1s both':'')+'">'+kg+'</g></g>';
+ if(dead)h+='<text class="ed" x="640" y="420" text-anchor="middle" font-size="80" style="animation-delay:2.4s">💥</text>';
+ const lab=dead?'💀 The assassin struck you down!':res=='guards'?'🛡 Your guards stopped the assassin!':res=='barely'?'🗡 Your guards barely saved you!':'🍀 The assassin tripped and failed!';
+ h+=scHdr(na>1?'🗡 ASSASSINS!':'🗡 ASSASSIN!','','#f4efe6')+'<text class="ed" x="500" y="180" text-anchor="middle" font-size="36" font-weight="900" fill="#fff" stroke="#2b2118" stroke-width="7" paint-order="stroke" font-family="Londrina Solid,Impact,sans-serif" style="animation-delay:'+(dead?2.6:3)+'s">'+lab+'</text>';
+ if(dead){scn(h,5200);setTimeout(()=>die(msg||'An assassin killed you!'),4700)}else scn(h,5400)}
+
+/* --- 4. The Bone King: a scary buff skeleton with red eyes, black crown and a skull staff --- */
+const skKingArt=()=>{const I='#2b2118',B='#efe9d6',D='#cfc6ad',K='#14121a',RE='#ff2a2a',e=x=>'<ellipse cx="'+x+'" cy="2" rx="10" ry="12" fill="'+K+'"/><circle cx="'+x+'" cy="3" r="10" fill="'+RE+'" opacity=".4" stroke="none"/><circle cx="'+x+'" cy="3" r="5" fill="'+RE+'" stroke="none"/>',g=x=>'<circle cx="'+x+'" cy="-62" r="5" fill="#8b0000" stroke-width="3"/>';
+ return '<g stroke="'+I+'" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">'
+ +'<path d="M-96 44Q-118 130 -100 150L100 150Q118 130 96 44Q60 24 0 30Q-60 24 -96 44Z" fill="#1b1626"/>'
+ +'<path d="M-62 40Q-78 92 -48 134L48 134Q78 92 62 40Q0 22 -62 40Z" fill="#2a2438"/>'
+ +'<path d="M-46 56Q0 74 46 56M-50 80Q0 98 50 80M-44 104Q0 120 44 104M0 44V134" stroke="'+B+'" stroke-width="8" fill="none"/>'
+ +'<circle cx="-70" cy="44" r="28" fill="'+D+'"/><circle cx="70" cy="44" r="28" fill="'+D+'"/>'
+ +'<path d="M-76 60L-90 118" stroke="'+I+'" stroke-width="26"/><path d="M-76 60L-90 118" stroke="'+B+'" stroke-width="16"/><circle cx="-92" cy="124" r="14" fill="'+B+'"/>'
+ +'<path d="M104 190V-62" stroke="'+I+'" stroke-width="13"/><path d="M104 190V-62" stroke="#4a3524" stroke-width="7"/>'
+ +'<path d="M76 60L98 102" stroke="'+I+'" stroke-width="26"/><path d="M76 60L98 102" stroke="'+B+'" stroke-width="16"/><circle cx="102" cy="106" r="14" fill="'+B+'"/>'
+ +'<circle cx="104" cy="-86" r="26" fill="'+B+'"/><path d="M90 -64L92 -48H116L118 -64Z" fill="'+B+'"/><ellipse cx="94" cy="-90" rx="7" ry="9" fill="'+K+'"/><ellipse cx="114" cy="-90" rx="7" ry="9" fill="'+K+'"/><circle cx="94" cy="-90" r="3.5" fill="'+RE+'" stroke="none"/><circle cx="114" cy="-90" r="3.5" fill="'+RE+'" stroke="none"/><path d="M104 -78L100 -70H108Z" fill="'+K+'" stroke-width="2"/><path d="M96 -54V-64M104 -54V-63M112 -54V-64" stroke-width="3"/>'
+ +'<rect x="-14" y="26" width="28" height="26" fill="'+D+'"/>'
+ +'<circle cx="0" cy="0" r="36" fill="'+B+'"/><path d="M-24 22Q0 48 24 22L22 40Q0 52 -22 40Z" fill="'+B+'"/><path d="M-14 32V44M-6 34V46M2 34V46M10 32V44" stroke-width="3" fill="none"/>'
+ +e(-14)+e(14)+'<path d="M-30 -12L-6 0M30 -12L6 0" stroke-width="7" fill="none"/><path d="M0 12L-5 22H5Z" fill="'+K+'" stroke-width="2"/>'
+ +'<path d="M-36 -20L-42 -62L-22 -38L-11 -72L0 -42L11 -72L22 -38L42 -62L36 -20Z" fill="'+K+'"/><path d="M-36 -20Q0 -10 36 -20" stroke="#5a5a66" stroke-width="3" fill="none"/>'+g(-42)+g(42)+'<circle cx="0" cy="-30" r="5" fill="#8b0000" stroke-width="3"/>'
+ +'</g>'};
 </script>
 </body></html>
