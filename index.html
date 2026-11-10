@@ -891,7 +891,7 @@ const myPow=()=>S.troops*(1+S.tl*.5)+ub()+S.guards*2+S.walls*6+wpw('r');
 function hkStep(d){const n=S.arcN;if(n<ARCS.length){Q.push(ARCS[n]);S.arcN++;S.arcT=d+(HKW[n+1]||3);return}
 if(n==ARCS.length){const m=myPow();S.arcN=ARCS.length+1;S.arcT=0;S.hkK=1;S.hk={nx:d+2,k:0,fd:d+10,FIN:Math.round((m*1.45+60)*(HX().fm||1)),w:0};nlog('Hollow Kingdom Marches On Border; Map Updated');Q.push(()=>ask('Border Scout','#6a5','The Hollow King has crossed the border! His kingdom now shows on your map. Expect 3 skirmishes, then a parley and the FINAL BATTLE in 10 days. His whole army can never grow past strength '+S.hk.FIN+'. Train soldiers and prepare!',()=>say('You called your commanders to the war room.'),()=>say('You studied the map in silence.')))}}
 function hkCamp(d){const h=S.hk;if(h.k<3&&d>=h.nx){h.k++;h.nx+=3;const kk=h.k;Q.push(()=>hkSk(kk))}
-if(h.k>=3&&!h.pend&&d>=h.fd){h.pend=1;Q.push(()=>hkParley(()=>ask('Hollow King','#2a2a3a','THE FINAL BATTLE! My whole host of strength '+h.FIN+' marches on your castle. Winner takes all. Your strength: '+Math.round(myPow())+'. March out? (N: delay 2 days, costs 60 gold)',()=>{const m=myPow()*(.92+R()*.16)*(HX().shard==1?1.1:1);if(m>h.FIN){S.hkDone=1;G(600);S.troops+=12;H(12);U(-10);say('🏆 VICTORY! The Hollow King is defeated and his kingdom is yours!');Q.push(()=>hkFate());Q.push(()=>ask('Royal Chamberlain','#a4c','25 prisoners of the fallen Hollow Kingdom await your word. Yes: welcome them as civilians. No: take them as slaves.',()=>{P(25);H(3);say('25 new civilians settled in your kingdom.')},()=>{S.slaves+=25;U(8);say('25 prisoners were taken as slaves. The people are uneasy.')}));nlog('HOLLOW KING FALLS IN FINAL BATTLE; Kingdom Celebrates');S.ms=S.ms||{};S.ms.hk=1}else{G(-Math.round(S.gold*.35));S.troops=Math.round(S.troops*.7);P(-Math.round(S.people*.1));H(-8);U(5);h.FIN=Math.round(h.FIN*.9);h.fd=S.day+4;h.pend=0;say('💀 DEFEAT! The Hollow King demands a rematch in 4 days. His army is hurt too. Prepare!');nlog('Final Battle Lost; Rematch Called')}},()=>{G(-60);U(3);h.fd=S.day+2;h.pend=0;say('You delayed. The Hollow King plunders the border.')})))}}
+if(h.k>=3&&!h.pend&&d>=h.fd){h.pend=1;Q.push(()=>hkParley(()=>ask('Hollow King','#2a2a3a','THE FINAL BATTLE! My whole host of strength '+h.FIN+' marches on your castle. Winner takes all. Your strength: '+Math.round(myPow())+'. March out? (N: delay 2 days, costs 60 gold)',()=>{const m=myPow()*(.92+R()*.16)*(HX().shard==1?1.1:1);if(m>h.FIN){S.hkDone=1;G(600);S.troops+=12;H(12);U(-10);say('🏆 VICTORY! The Hollow King is defeated and his kingdom is yours!');Q.push(()=>hkFate());Q.push(()=>cqSpoils(null,25,1));nlog('HOLLOW KING FALLS IN FINAL BATTLE; Kingdom Celebrates');S.ms=S.ms||{};S.ms.hk=1}else{G(-Math.round(S.gold*.35));S.troops=Math.round(S.troops*.7);P(-Math.round(S.people*.1));H(-8);U(5);h.FIN=Math.round(h.FIN*.9);h.fd=S.day+4;h.pend=0;say('💀 DEFEAT! The Hollow King demands a rematch in 4 days. His army is hurt too. Prepare!');nlog('Final Battle Lost; Rematch Called')}},()=>{G(-60);U(3);h.fd=S.day+2;h.pend=0;say('You delayed. The Hollow King plunders the border.')})))}}
 function dawn4(){const d=S.day;let bz=0;S.laws=S.laws||{};Object.keys(S.laws).forEach(k=>{const l=LAW.find(x=>x.k==k);l&&l.dy()});advDay();if(S.cc==1)G(5);if(S.cc==2){G(12);U(1)}
 if(!S.lawD)S.lawD=d+2;if(d>=S.lawD){S.lawD=d+3+(R()<.35?1:0);lawAsk();bz=1}
 if(!S.advD)S.advD=d+3;if((S.adv||[]).length<3&&d>=S.advD){S.advD=d+4+F(R()*3);advAsk();bz=1}
@@ -1307,7 +1307,7 @@ const rY=()=>[['Customize ruler',0,creator],['Start a NEW game (erases save)',0,
 const br=b=>S.fire?0:(BR[b.t]||.1)*(1+(b.up||0)*.25),BT=['crop farm','blacksmith','bakery','tavern'],BR={'crop farm':.08,'blacksmith':.12,'bakery':.1,'tavern':.14},BN=['Tom','Mara','Edric','Hilda','Bram','Wen','Olga','Ned'];
 function bizUI(i){const b=S.bl[i];mo=1;$('pn').hidden=1;$('md').hidden=0;$('md').innerHTML='<h2 style="margin:0">'+b.n+"'s "+b.t+'</h2><div style="display:grid;gap:6px;max-width:340px">Invested so far: <b>'+b.a+'g</b> (earns '+Math.round(b.a*br(b))+'g a day, prices +'+(b.up||0)+')<br>How much do you want to invest?<input type="number" id="ia" min="1" value="50"><small>You have '+S.gold+'g. A '+b.t+' pays you '+Math.round(br(b)*100)+'% of your investment every day, plus '+(b.up||0)*5+'g tax a day from raised prices.</small><button onclick="bizOk('+i+')">Invest</button><button onclick="hx()">Close</button></div>'}
 function bizOk(i){const a=Math.floor(+$('ia').value),b=S.bl[i];if(!(a>0))return say('Type an amount first.');if(a>S.gold)return say('Not enough gold!');G(-a);b.a+=a;say('Invested '+a+'g in '+b.n+"'s "+b.t+'. It now earns you '+Math.round(b.a*br(b))+'g a day.');hx()}
-function expand(){S.land++;S.pens++;say('Kingdom expanded. +1 slave pen, and you now need '+S.land*3+' guards for security.');const a=S.ks.filter(k=>!k.dead);if(S.land>=3&&R()<.5){const k=a[F(R()*a.length)];if(k.skel){say('Rattling bones at the border: '+k.n+' does not talk.');S.warn=S.ks.indexOf(k);return}ask(k.n+' envoy','#58a','Your border touches our land! Negotiate (Y) or fight (N)?',()=>{if(R()<.55+k.rel/200){k.rel+=5;say('Border agreed peacefully.')}else ask(k.n,'#a33','Talks failed. Retreat (Y) or go to war (N)?',()=>{S.land--;say('You retreated, avoiding conflict.')},()=>war(k))},()=>war(k))}}
+function expand(){S.land++;S.pens++;say('Kingdom expanded. +1 slave pen, and you now need '+S.land*3+' guards for security.');const a=S.ks.filter(k=>!k.dead);if(S.land>=3&&a.length&&R()<.5){const k=a[F(R()*a.length)];if(k.skel){say('Rattling bones at the border: '+k.n+' does not talk.');S.warn=S.ks.indexOf(k);return}ask(k.n+' envoy','#58a','Your border touches our land! Negotiate (Y) or fight (N)?',()=>{if(R()<.55+k.rel/200){k.rel+=5;say('Border agreed peacefully.')}else ask(k.n,'#a33','Talks failed. Retreat (Y) or go to war (N)?',()=>{S.land--;say('You retreated, avoiding conflict.')},()=>war(k))},()=>war(k))}}
 function ally(k){if(R()<.55+k.rel/200){k.ally=1;k.rel+=15;say(k.n+' accepts! You grow together.')}else{k.rel-=10;say(k.n+' refuses.')}}
 function trade(k){if(R()<.75){G((S.farms*35+40)*(k.ally?1.5:1));say('Trade succeeded!')}else say(k.n+' refused to trade.')}
 function hit(k){if(k.skel){G(150);say('The hitman: You cannot kill the dead. Refunded.');return}if(R()<.55){k.p=Math.round(k.p*.6);say('The hitman struck! '+k.n+' is shaken.')}else{k.enemy=1;k.rel-=40;S.nh=S.day+1;say('The hitman failed and talked...')}}
@@ -1319,7 +1319,7 @@ function wpick(k,f,all){WK=[k,f,all];mo=1;$('pn').hidden=1;$('md').hidden=0;cons
 function wup(){const[s,a,g]=wv();$('wi').textContent='Sending '+(s+a+g)+' troops. Your army power is about '+wsp(s,a,g)+' vs their '+ksp(WK[0])+'. Troops staying home: '+(S.troops-s-a-g)+'. Sent troops may be lost.'}
 function wgo(){const[s,a,g]=wv();if(s+a+g<1)return say('Send at least 1 troop.');const[k,f,all]=WK;WS={s,a,g};hx();say('⚔ You send '+s+' swordsmen, '+a+' archers and '+g+' giants.');try{war0(k,f,all)}finally{WS=null}}
 function wl(p){if(!WS){S.troops=Math.round(S.troops*(1-p));return}const c=x=>p>=.3?Math.ceil(x*p):Math.round(x*p),ls=c(WS.s),la=c(WS.a),lg=c(WS.g);S.troops=Math.max(0,S.troops-ls-la-lg);S.ar=Math.max(0,S.ar-la);S.gi=Math.max(0,S.gi-lg);say('Lost '+ls+' swordsmen, '+la+' archers and '+lg+' giants.')}
-function war0(k,f=1,all){S.wt=3;S.nh=Math.max(S.nh||0,S.day+1);const m=(WS?wsp(WS.s,WS.a,WS.g):pw())*f,e=ksp(k)*(.8+R()*.5),win=R()<m/(m+e);scn(arm(k,win,78.6,Math.min(m,e)/Math.max(m,e,1)),78600);if(win){const n=Math.round(k.p*.5+5);if(R()<.8){G(k.p*4);say('Victory over '+k.n+'! +'+k.p*4+'g')}else say('Victory, but no loot.');k.p=Math.round(k.p*.5);k.ally=0;k.enemy=1;k.rel=-60;if(all){k.dead=1;say(k.n+' is now part of your kingdom!')}wl(.1);if(k.skel){k.p=Math.round(k.p*1.3);say('The bones reassemble... the skeletons rise again!')}else Q.push(()=>ask('Spoils','#a63','Take '+n+' captives as citizens (Y) or slaves (N)?',()=>P(n),()=>{S.slaves+=n;U(3)}))}else{wl(.4);P(-S.people*.1);G(-S.gold*.2);k.enemy=1;k.rel=-60;k.ally=0;say('Defeat vs '+k.n+'! Troops, people & gold lost.');dmg(1)}}
+function war0(k,f=1,all){S.wt=3;S.nh=Math.max(S.nh||0,S.day+1);const m=(WS?wsp(WS.s,WS.a,WS.g):pw())*f,e=ksp(k)*(.8+R()*.5),win=R()<m/(m+e);scn(arm(k,win,78.6,Math.min(m,e)/Math.max(m,e,1)),78600);if(win){const n=Math.round(k.p*.5+5);if(R()<.8){G(k.p*4);say('Victory over '+k.n+'! +'+k.p*4+'g')}else say('Victory, but no loot.');k.p=Math.round(k.p*.5);k.ally=0;k.enemy=1;k.rel=-60;if(all){k.dead=1;say(k.n+' is now part of your kingdom!')}wl(.1);if(k.skel){k.p=Math.round(k.p*1.3);say('The bones reassemble... the skeletons rise again!')}else Q.push(()=>cqSpoils(k,n))}else{wl(.4);P(-S.people*.1);G(-S.gold*.2);k.enemy=1;k.rel=-60;k.ally=0;say('Defeat vs '+k.n+'! Troops, people & gold lost.');dmg(1)}}
 function battle(k){const m=pw()+wpw('a'),e=ksp(k)*(.8+R()*.5);say('⚔ '+k.n+' attacks!'+(k.skel?' Skeletons climb the walls in the dark!':''));const win=R()<m/(m+e);if(S.troops<1){say("Cannot battle, troops are needed");pump(1500)}else scn(arm(k,win,84.8,Math.min(m,e)/Math.max(m,e,1)),84800);if(win){const fr=S.wp.f/Math.max(1,S.troops);S.troops=Math.round(S.troops*(.88-Math.min(.1,fr*.2)));k.rel-=5;if(k.skel){k.p=Math.round(k.p*1.15);say('They reassemble...')}say('You held the line!')}else{S.troops=Math.round(S.troops*.6);P(-S.people*.12);G(-S.gold*.25);U(8);H(-8);say('You lost people and gold.');dmg(.8)}}
 function civil(pp){const r=Math.round(S.people*S.unrest/200)+5,m=S.troops*(1+S.tl*.5)+ub()+S.guards*2+S.walls*6+wpw('r')+(pp||0);say('⚔ REBELLION! '+r+' rebels rise.');if(R()<m/(m+r)){S.troops=Math.round(S.troops*.85);U(-30);say('You crushed it.');dmg(.4)}else{G(-S.gold*.5);P(-S.people*.2);S.troops=Math.round(S.troops*.5);U(-20);say('Rebels won. Your kingdom is weak.');dmg(1.2)}}
 let pd=0;function prep(){const r=Math.round(S.people*S.unrest/200)+5,c=r*6;pd=0;ask('Captain','#678','Rebels are rising ('+r+')! Pay '+c+'g to stack extra guards and troops? They may still win.',()=>{pd=1;if(S.gold<c){say('Not enough gold! Only a few came.');civil(5)}else{G(-c);say('Extra guards fill the halls.');civil(r*.8+10)}},()=>{pd=1;civil()});AF=()=>{if(!pd){pd=1;civil()}}}
@@ -1779,5 +1779,161 @@ const nwA={
 Object.assign(SPA,nwA);
 const _mn2=mono;mono=function(w,c,pg,done,gh,ar){return _mn2(w,c,pg,done,gh,ar||(!gh&&nwA[w]?nwA[w]():undefined))};
 const _d8=dawn2;dawn2=function(){_d8();dawnMy();dawnSph()};
+</script>
+<script>
+/* ===== CONQUERED LANDS UPDATE: spoils choices, empty land, colonies, staying kingdoms ===== */
+const cqCost=100,cqMul=1;
+const CQ=()=>{if(!Array.isArray(S.cq))S.cq=[];return S.cq},
+cqF=id=>CQ().find(c=>c.id==id),
+cqK=c=>c.hk?c.fk:S.ks[c.ki],
+cqCap=c=>30+(c.hs|0)*6,
+cqNA=()=>S.day+3+F(R()*6),
+cqGN=['Harlan','Brynn','Voss','Maren','Tolk','Edda','Corwin','Isolde'],
+cqBT=['blacksmith','bakery','tavern'],
+cqHK=()=>({n:'Hollow Kingdom',p:12,up:0,m:0,wl:0,rel:-60,enemy:1,ally:0,ch:1,sp:2,of:0,gr:1,w:[4,2,2,1],um:5,mm:4,wm:3,tr:'the Hollow King\u2019s old realm'}),
+cqPay=n=>{if(S.gold<n){say('Not enough gold!');return false}G(-n);return true},
+cqInc=c=>{let t=Math.round(c.pop*S.tax*.04)+c.farms*7+(c.hs|0)*4;c.biz.forEach(b=>{t+=(b.own?8:5)+Math.round(b.a*br(b))});return Math.round(t*(S.ast&&S.ast.tax?1.1:1))};
+
+/* --- 1. After a win: what happens to the people? (replaces the old Citizens/Slaves question) --- */
+function cqSpoils(k,n,hk){
+ const cs=CQ(),ki=hk?-1:S.ks.indexOf(k);
+ let c=cs.find(x=>hk?x.hk:x.ki===ki);
+ if(c&&(c.st=='empty'||c.st=='colony'))return;
+ if(!c){c={id:'L'+(S.cqn=(S.cqn|0)+1),n:hk?'Hollow Kingdom':k.n};cs.push(c)}
+ Object.assign(c,{ki:ki,hk:hk?1:0,st:'pend',n0:n,d0:S.day,na:0,pop:0,ct:0,farms:0,biz:[],hs:0,gen:'',ge:0,set:0,first:0,how:''});
+ cqAsk(c.id)}
+function cqAsk(id){const c=cqF(id);if(!c)return;mo=1;$('pn').hidden=1;$('mp').hidden=1;$('md').hidden=0;
+ const n=c.n0,b=(o,t)=>'<button onclick="cqDo(\''+id+'\',\''+o+'\')">'+t+'</button>';
+ $('md').innerHTML='<h2 style="margin:0">\u2694 Spoils of war: '+c.n+'</h2><p>You defeated '+c.n+'! '+n+' survivors wait for your word. What happens to the people of '+c.n+'?</p><div style="display:grid;gap:6px;max-width:440px">'
+ +b('slave','\u26d3 Enslave them (+'+n+' slaves, people uneasy)<br><small>The land is left empty.</small>')
+ +b('kill','\u2620 Kill them all (nobody survives, the people are horrified)<br><small>The land is left empty.</small>')
+ +b('join','\ud83c\udfe0 Let them join your kingdom as civilians (+'+n+' people)<br><small>The land is left empty.</small>')
+ +b('stay','\ud83c\udff3 Let them stay on their land<br><small>It is NOT your land. In 5 days they build a full kingdom as strong as yours and attack you every 3-8 days.</small>')
+ +'</div><p><small>An empty land lets you send 2 settlers to start a colony (Menu \u2192 Lands).</small></p>'}
+function cqDo(id,o){const c=cqF(id);if(!c||c.st!='pend')return;hx();
+ const n=c.n0,k=cqK(c),hk=c.hk;c.how=o;
+ if(o=='stay'){c.st='stay';c.d0=S.day;if(hk)c.fk=cqHK();else if(k){k.dead=0;k.enemy=1;k.ally=0}
+  say('\ud83c\udff3 '+c.n+' stays on its own land. It is NOT your land. In 5 days they will build a full kingdom.');nlog(c.n+' Allowed To Keep Its Land; Border Watched')}
+ else{c.st='empty';if(k&&!hk){k.dead=1;k.enemy=0;k.ally=0}
+  if(o=='slave'){S.slaves+=n;U(hk?8:3);say('\u26d3 '+n+' prisoners were taken as slaves. The people are uneasy.')}
+  else if(o=='kill'){H(-8);U(5);say('\u2620 Everyone in '+c.n+' was put to the sword. The people are horrified.');nlog('Conquered Land Left Empty After Massacre')}
+  else{P(n);if(hk)H(3);say('\ud83c\udfe0 '+n+' new civilians settled in your kingdom.')}
+  say('\ud83c\udff4 '+c.n+' is now empty land. Open Menu \u2192 Lands to send 2 settlers there.')}
+ upd()}
+
+/* --- 2. Rival kingdom that was allowed to stay: matches your strength after 5 days --- */
+function cqMatch(k){const T=Math.max(15,pw()*cqMul*(.92+R()*.16));
+ k.up=Math.min(k.um||5,Math.floor(T/60));k.m=Math.min(k.mm||6,Math.floor(T/120));k.wl=Math.min(k.wm||3,Math.floor(T/150));
+ k.p=Math.max(5,Math.round((T-(k.m||0)*15-(k.wl||0)*10)/(1+(k.up||0)*.3)))}
+
+/* --- 3. Daily step (runs right after your normal dawn) --- */
+function cqDay(){
+ if(S.warn>=0&&CQ().some(c=>!c.hk&&c.ki===S.warn&&(c.st=='stay'||c.st=='rival')))S.warn=-1;
+ let tax=0,did=0;
+ CQ().forEach(c=>{
+  if(c.st=='stay'||c.st=='rival'){const k=cqK(c);if(!k)return;if(k.dead&&!c.hk){c.st='empty';return}
+   if(c.st=='stay'){if(S.day>=c.d0+5){c.st='rival';k.enemy=1;k.ally=0;k.ch=1;cqMatch(k);c.na=cqNA();
+     Q.push(()=>mono('Border Scout','#6a5',['Majesty! The people of '+c.n+' have built a whole new kingdom.','Its army is as strong as yours, and they remember who beat them.','Expect attacks every few days. Keep your army ready!'],()=>say('\ud83d\udcdc '+c.n+' is now a full kingdom and your enemy.')));
+     nlog(c.n+' Rebuilds Into Full Kingdom; Border Tense')}return}
+   if(c.hk)kgrow(c.fk);
+   if(k.ally||k.vas){c.na=cqNA();return}
+   if(c.na==S.day+1)say('\ud83d\udd2d Scouts: '+c.n+' is gathering its army!');
+   if(S.day>=c.na){c.na=cqNA();cqMatch(k);Q.push(()=>{say('\u2694 The kingdom of '+c.n+' marches on you!');battle(k)})}
+   return}
+  if(c.st!='colony')return;
+  let ds=0;while((c.ld|0)<S.day&&ds++<30){c.ld=(c.ld|0)+1;
+   c.ct=(c.ct|0)+1;if(c.ct>=2){c.ct=0;if(c.pop<cqCap(c))c.pop++}
+   if(c.pop>c.farms+c.biz.length&&R()<.3){
+    if(R()<.5){c.farms++;say('\ud83c\udf3e A settler in '+c.n+' started a farm. It pays you taxes.');nlog('New Farm Opens In '+c.n+' Colony')}
+    else{const t=cqBT[F(R()*cqBT.length)],bn=BN[F(R()*BN.length)];c.biz.push({t:t,n:bn,a:0,up:0});say('\ud83c\udfea '+bn+' opened a '+t+' in '+c.n+'. It pays you taxes.');nlog(bn+' Opens '+t+' In '+c.n+' Colony')}}
+   tax+=cqInc(c);did=1;
+   if(S.day>=c.ge){c.ge=S.day+4+F(R()*3);Q.push(()=>cqGen(c.id))}}});
+ if(tax>0){G(tax);say('\ud83c\udff4 Your colonies paid '+tax+'g in taxes.')}
+ if(did||tax)upd()}
+
+/* --- 4. The general reports (and sometimes asks what to do) --- */
+function cqGen(id){const c=cqF(id);if(!c||c.st!='colony')return;
+ const w='General '+c.gen+' ('+c.n+')',cap=cqCap(c),r=R();
+ const rep=()=>mono(w,'#a63',[c.first?'Majesty! We arrived safely and the colony is taking shape.':'Majesty, General '+c.gen+' reporting from '+c.n+'.','People: '+c.pop+' of '+cap+' (one more settler every 2 days). Farms: '+c.farms+'. Businesses: '+c.biz.length+'. Houses: '+(c.hs|0)+'.',(c.pop>=cap-1?'We are almost out of room. Build houses so more can settle here!':'Taxes bring you about '+cqInc(c)+'g a day. All is calm.')],()=>{c.first=0});
+ if(c.first||r<.4)return rep();
+ if(c.pop>=cap-1)return mono(w,'#a63',['Majesty, '+c.n+' is full ('+c.pop+'/'+cap+').','Settlers keep arriving but there are no beds left.','Build houses here, and the colony will keep growing.'],()=>{});
+ if(r<.6)return mq(w,'#a63',['Majesty! Bandits are circling '+c.n+'!'],()=>ask(w,'#a63','Hire guards for 60 gold to drive them off?',()=>{if(S.gold<60){c.pop=Math.max(1,c.pop-2);say('\ud83d\udde1 Not enough gold! The bandits hurt 2 settlers.')}else{G(-60);say('\ud83d\udee1 Hired guards drove the bandits away.')}},()=>{c.pop=Math.max(1,c.pop-2);G(-40);say('\ud83d\udde1 The bandits looted '+c.n+': 2 settlers lost, 40g stolen.')}));
+ if(r<.78)return mq(w,'#a63',['Majesty, food is running short in '+c.n+'.'],()=>ask(w,'#a63','Send grain worth 40 gold to the colony?',()=>{if(S.gold<40){c.pop=Math.max(1,c.pop-2);say('\ud83c\udf3e No gold for grain. 2 settlers left '+c.n+'.')}else{G(-40);H(1);say('\ud83c\udf3e The grain arrived. The settlers are grateful.')}},()=>{c.pop=Math.max(1,c.pop-2);say('\ud83c\udf3e Hunger drove 2 settlers out of '+c.n+'.')}));
+ if(c.pop>=6)return mq(w,'#a63',['Majesty, some young settlers want to serve in your army.'],()=>ask(w,'#a63','Pay 50 gold to train 3 colonists as soldiers?',()=>{if(S.gold<50)return say('Not enough gold!');G(-50);c.pop-=3;S.troops+=3;say('\u2694 3 colonists from '+c.n+' joined your army.')},()=>say('The recruits went back to their fields.')));
+ return rep()}
+
+/* --- 5. Send settlers --- */
+function cqSend(id){const c=cqF(id);if(!c||c.st!='empty'||c.set)return;
+ if(S.people<3){G(cqCost);return say('You need at least 3 people at home to send 2.')}
+ P(-2);c.set=1;c.st='colony';c.pop=2;c.ct=0;c.ld=S.day;c.gen=cqGN[F(R()*cqGN.length)];c.ge=S.day+2;c.first=1;
+ say('\ud83c\udff4 2 settlers and General '+c.gen+' set out for '+c.n+'. One more settler will arrive every 2 days.');nlog('Settlers Leave To Resettle '+c.n)}
+
+/* --- 6. Visiting a colony (it shows the other castle) --- */
+function cqScene(c){let s='';
+ try{if(!c.hk){const m=String(sview(c.ki)).match(/<svg[\s\S]*<\/svg>/);if(m)s=m[0]}}catch(e){}
+ if(!s)s='<svg viewBox="0 -110 800 570" width="100%" style="display:block"><rect y="-110" width="800" height="570" rx="14" fill="#5d4b7c"/><rect y="380" width="800" height="80" fill="#5f7a58" stroke="#2b2118" stroke-width="4"/>'+mcs(400,347,'#3a3a4a',3,3.3)+'</svg>';
+ let o='<g stroke="#2b2118" stroke-width="3" stroke-linejoin="round">';
+ for(let i=0;i<Math.min(6,c.farms);i++){const x=20+i*46;o+='<rect x="'+x+'" y="418" width="40" height="26" rx="4" fill="#8a5e3a"/><circle cx="'+(x+10)+'" cy="428" r="4" fill="#6cc04a"/><circle cx="'+(x+20)+'" cy="428" r="4" fill="#6cc04a"/><circle cx="'+(x+30)+'" cy="428" r="4" fill="#6cc04a"/><circle cx="'+(x+15)+'" cy="437" r="4" fill="#6cc04a"/><circle cx="'+(x+27)+'" cy="437" r="4" fill="#6cc04a"/>'}
+ for(let i=0;i<Math.min(6,c.hs|0);i++){const x=500+i*46;o+='<rect x="'+x+'" y="410" width="34" height="28" fill="#e6c9a0"/><polygon points="'+(x-4)+',410 '+(x+17)+',390 '+(x+38)+',410" fill="#b4533a"/><rect x="'+(x+13)+'" y="420" width="9" height="18" fill="#6b4a33"/>'}
+ for(let i=0;i<Math.min(6,c.biz.length);i++){const x=500+i*46;o+='<rect x="'+x+'" y="444" width="34" height="14" fill="#c9a24b"/><path d="M'+(x-3)+' 444H'+(x+37)+'V438Q'+(x+27)+' 433 '+(x+17)+' 438Q'+(x+7)+' 433 '+(x-3)+' 438Z" fill="#d9533b"/>'}
+ return s.replace('</svg>',o+'</g></svg>')}
+function cqVisit(id){const c=cqF(id);if(!c||c.st!='colony')return;if(B)return say('Answer first!');if(tn)return say('Return to the castle first.');
+ mo=1;$('pn').hidden=1;$('mp').hidden=1;$('md').hidden=0;cqView(id)}
+function cqView(id){const c=cqF(id);if(!c)return hx();const cap=cqCap(c),full=c.pop<=c.farms+c.biz.length,bt=(o,t,d)=>'<button '+(d?'disabled ':'')+'onclick="'+o+'">'+t+'</button>';
+ $('md').innerHTML='<h2 style="margin:0">\ud83c\udff4 '+c.n+' (your colony)</h2>'+cqScene(c)
+ +'<p><b>General '+c.gen+'</b> runs the colony for you.<br><b>People:</b> '+c.pop+' / '+cap+' (+1 every 2 days) \u00b7 <b>Farms:</b> '+c.farms+' \u00b7 <b>Houses:</b> '+(c.hs|0)+' \u00b7 <b>Businesses:</b> '+c.biz.length+'<br><b>Taxes to you:</b> about '+cqInc(c)+'g a day. Settlers start their own farms and businesses and pay you tax without asking.</p>'
+ +(c.biz.length?'<p><small>'+c.biz.map(b=>b.n+"'s "+b.t+(b.own?' (yours)':'')+' \u00b7 invested '+b.a+'g \u00b7 '+(b.own?8:5)+'g tax + '+Math.round(b.a*br(b))+'g a day').join('<br>')+'</small></p>':'')
+ +'<div style="display:grid;gap:6px;max-width:440px">'
+ +bt('cqBuild(\''+id+'\',\'h\')','\ud83c\udfe0 Build a house (120g): +6 room, +4g a day',(c.hs|0)>=12)
+ +cqBT.map(t=>bt('cqBuild(\''+id+'\',\''+t+'\')','\ud83c\udfea Open your own '+t+' (150g)',full)).join('')
+ +c.biz.map((b,i)=>bt('cqInvUI(\''+id+'\','+i+')','\ud83d\udcb0 Invest in '+b.n+"'s "+b.t)).join('')
+ +bt('cqBuild(\''+id+'\',\'s\')','\u2694 Recruit 1 colonist as a soldier (30g)',c.pop<4)
+ +bt('','\ud83c\udf3e Plantations: not allowed here (settlers start their own farms)',1)
+ +bt('hx();cqGen(\''+id+'\')','\ud83d\udde3 Talk to General '+c.gen)
+ +bt('hx()','\u2190 Leave '+c.n)
+ +'</div>'+(full?'<p><small>Every settler already has a farm or business. More people (and houses) are needed before opening another business.</small></p>':'')}
+function cqBuild(id,t){const c=cqF(id);if(!c)return;
+ if(t=='h'){if((c.hs|0)>=12||!cqPay(120))return;c.hs=(c.hs|0)+1;say('\ud83c\udfe0 A new house rose in '+c.n+'. Room for 6 more settlers.')}
+ else if(t=='s'){if(c.pop<4||!cqPay(30))return;c.pop--;S.troops++;say('\u2694 A colonist from '+c.n+' joined your army.')}
+ else{if(c.pop<=c.farms+c.biz.length)return say('No free settler to run it yet.');if(!cqPay(150))return;c.biz.push({t:t,n:'Royal',a:100,up:0,own:1});say('\ud83c\udfea You opened a '+t+' in '+c.n+'.')}
+ upd();cqView(id)}
+function cqInvUI(id,i){const c=cqF(id),b=c&&c.biz[i];if(!b)return;
+ $('md').innerHTML='<h2 style="margin:0">'+b.n+"'s "+b.t+' ('+c.n+')</h2><div style="display:grid;gap:6px;max-width:340px">Invested so far: <b>'+b.a+'g</b> (earns '+Math.round(b.a*br(b))+'g a day)<br>How much do you want to invest?<input type="number" id="cqia" min="1" value="50"><small>You have '+S.gold+'g. A '+b.t+' pays you '+Math.round(br(b)*100)+'% of your investment every day, on top of its tax.</small><button onclick="cqInvOk(\''+id+'\','+i+')">Invest</button><button onclick="cqView(\''+id+'\')">Back</button></div>'}
+function cqInvOk(id,i){const c=cqF(id),b=c&&c.biz[i],a=Math.floor(+$('cqia').value);if(!b)return;if(!(a>0))return say('Type an amount first.');if(!cqPay(a))return;b.a+=a;say('Invested '+a+'g in '+b.n+"'s "+b.t+' in '+c.n+'.');upd();cqView(id)}
+
+/* --- 7. Menu tab "Lands" --- */
+const cqHead=c=>c.st=='stay'?'\ud83c\udff3 '+c.n+' \u2014 <small>NOT YOUR LAND (they stayed)</small>':c.st=='rival'?'\u2694 '+c.n+' \u2014 <small>NOT YOUR LAND (a full kingdom, your enemy)</small>':c.st=='colony'?'\ud83c\udff4 '+c.n+' \u2014 <small>your colony \u00b7 '+c.pop+'/'+cqCap(c)+' people \u00b7 '+c.farms+' farms \u00b7 '+c.biz.length+' businesses \u00b7 '+(c.hs|0)+' houses</small>':'\ud83c\udff4 '+c.n+' \u2014 <small>empty land'+(c.how=='slave'?' (people enslaved)':c.how=='kill'?' (people killed)':c.how=='join'?' (people joined you)':'')+'</small>';
+const cqRows=()=>{const o=[];CQ().filter(c=>c.st!='pend'&&c.st!='gone').forEach(c=>{o.push([cqHead(c),0,()=>0,0,1]);
+ if(c.st=='empty')o.push(['Send 2 settlers to start a colony (you can only send 2). One more settler arrives every 2 days.',cqCost,()=>cqSend(c.id),c.set||S.people<3]);
+ if(c.st=='colony')o.push(['\ud83c\udff0 Visit '+c.n+' (build, invest, talk to General '+c.gen+')',0,()=>cqVisit(c.id)]);
+ if(c.st=='stay')o.push(['Not your land. In '+Math.max(0,c.d0+5-S.day)+' days they build a full kingdom as strong as yours.',0,()=>0,1]);
+ if(c.st=='rival')o.push(['Not your land. They attack you every 3-8 days. Beat them again to decide their fate.',0,()=>0,1])});
+ if(!o.length)o.push(['No conquered lands yet. Beat a kingdom in war to claim one.',0,()=>0,1]);return o};
+const cqInfo=()=>'<small>Lands you conquered. <b>Empty</b> lands can get 2 settlers; they grow by 1 person every 2 days, start farms and businesses that pay you tax, and you can visit, build houses, open businesses, invest and recruit there. Lands where the people <b>stayed</b> are not yours.</small>';
+const cqBar=()=>{const bar=document.querySelector('#pn .tb');if(bar&&!$('pn').hidden&&CQ().some(c=>c.st!='pend'&&c.st!='gone')&&!bar.querySelector('.cql')){const x=document.createElement('button');x.className='cql';x.textContent='Lands';x.setAttribute('onclick',"M('Lands')");bar.insertBefore(x,bar.lastElementChild)}return bar};
+const _MCQ=M;M=function(t){
+ if(t=='Lands'||(!t&&tab=='Lands')){_MCQ.call(this,'Realm');tab='Lands';rows=cqRows();const bar=cqBar();
+  if(bar)bar.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.classList.contains('cql')));
+  const bd=document.querySelector('#pn .bd');
+  if(bd)bd.innerHTML='<p>'+cqInfo()+'</p>'+rows.map((r,i)=>r[4]?'<p style="margin-top:8px;border-bottom:3px solid #2b2118"><b>'+r[0]+'</b></p>':'<button class="rw" '+(r[3]?'disabled':'')+' onclick="RW('+i+')"><span>'+r[0]+'</span><span>'+(r[1]?r[1]+'g':'')+'</span></button>').join('');
+  return}
+ const v=_MCQ.apply(this,arguments);cqBar();return v};
+
+/* --- 8. Map: your colonies, and the "not your land" note --- */
+function cqMapGo(id){const c=cqF(id);mapClose();if(!c)return;if(B)return say('Answer first!');if(c.st=='colony')cqVisit(id);else M('Lands')}
+const _mvCQ=mview;mview=function(){let h=_mvCQ(),o='';
+ const nt=(x,y,t,col)=>'<text x="'+x+'" y="'+y+'" text-anchor="middle" font-size="12" font-weight="900" fill="'+col+'" stroke="#fff8e0" stroke-width="4" paint-order="stroke" style="pointer-events:none">'+t+'</text>';
+ CQ().forEach(c=>{if(c.st=='pend'||c.st=='gone')return;
+  if(c.hk){o+=nt(555,162,c.st=='colony'?'\ud83c\udff4 your colony':c.st=='empty'?'\ud83c\udff4 your land (empty)':'not your land','#2f6a2f');return}
+  const i=c.ki,k=S.ks[i],p=MP[i%8];if(!k)return;
+  if(c.st=='stay'||c.st=='rival'){if(!k.dead)o+=nt(p[0],p[1]+64,'(not your land)','#7a4a1e');return}
+  o+='<g style="cursor:pointer" onclick="cqMapGo(\''+c.id+'\')">'+mcs(p[0],p[1],'#8a8f7a',mst(k,i),1)+mlb(p[0],p[1]+34,c.n,c.st=='colony'?'\ud83c\udff4 Your colony':'\ud83c\udff4 Your land (empty)','#2f8a2f')+'</g>'});
+ return o?h.replace('<g transform="translate(735,66)"',o+'<g transform="translate(735,66)"'):h};
+const _kvCQ=kview;kview=function(i){let h=_kvCQ(i);const c=CQ().find(x=>!x.hk&&x.ki===i&&(x.st=='stay'||x.st=='rival'));
+ return c?h.replace('</h2>',' <small>(not your land'+(c.st=='rival'?' \u00b7 a full kingdom now':'')+')</small></h2>'):h};
+
+/* --- 9. Hook into the daily dawn, and recover an unanswered question after a reload --- */
+const _dwCQ=dawn;dawn=function(){const d0=S.day,r=_dwCQ.apply(this,arguments);try{if(S.day>d0)cqDay()}catch(e){console.error(e)}return r};
+try{CQ().filter(c=>c.st=='pend').forEach(c=>Q.push(()=>cqAsk(c.id)))}catch(e){}
 </script>
 </body></html>
