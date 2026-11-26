@@ -309,9 +309,9 @@ if(L>=3)u+=P('M-21 8Q0 20 21 8V24Q0 32 -21 24Z','#efe4c8')+'<path d="M-12 14V26M
 const bl=36+L*7;u+='<path d="M64 '+(62-bl)+'Q'+(104+L*5)+' 62 64 '+(62+bl)+'" fill="none" stroke="'+(L>=3?'#1a1a24':'#6b3f1d')+'" stroke-width="'+(6+(L>>1))+'"/>'+(L>=2?P('M58 '+(62-bl)+'L64 '+(50-bl)+'L70 '+(62-bl)+'ZM58 '+(62+bl)+'L64 '+(74+bl)+'L70 '+(62+bl)+'Z',L>=4?'#8d97a3':TR):'')+'<path d="M64 '+(62-bl)+'V'+(62+bl)+'" stroke="'+(GL||'#e8e0c8')+'" stroke-width="2" fill="none"/>'+(L>=5?fl2(86,62-bl,.7):'');
 return u+'</g></g>'}
 const N0='none';
-function zbfG(x,y,L,c,f,fl,d,sk){const v=zVn(x,y),sc=.55*(.93+v*.03),I='#2b2118',P=zP,C=zC,NS=' stroke="none"',
+function zbfG(x,y,L,c,f,fl,d,sk){const v=zVn(x,y),sc=.95*(.93+v*.03),I='#2b2118',P=zP,C=zC,NS=' stroke="none"',
 SK=sk?'#e9e4d2':['#b0794f','#8aa65a','#a98a6a','#7a8aa0','#b06a5a'][v],AC=['#6b4a2a','#d8cfb0','#8d97a3','#2f2f3d','#23232f','#2a1a14'][L],TR=['#8a6a4a','#efe4c8','#c9d1d9','#f2c230','#ff3b3b','#ff7a2a'][L],GL=L>=5?'#ff7a2a':L>=4?'#ff3b3b':'',len=100+L*14;
-let u='<g transform="translate('+x+','+y+') scale('+(f?-sc:sc)+','+sc+')" stroke="'+I+'" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><g'+(fl?' class="bfl" style="--d:'+fl+'s"':'')+'>';
+let u='<g transform="translate('+x+','+(y-60)+') scale('+(f?-sc:sc)+','+sc+')" stroke="'+I+'" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><g'+(fl?' class="bfl" style="--d:'+fl+'s"':'')+'>';
 if(L>=5)u+=C(0,60,120,'#ff7a2a',' opacity=".16"'+NS);
 u+=P('M-44 112V150H-8V112Z',SK)+P('M8 112V150H44V112Z',SK)+P('M-48 140H-4V152H-48Z',I)+P('M4 140H48V152H4Z',I);
 u+=P('M-70 52Q-74 -2 0 -2Q74 -2 70 52L56 118L-56 118Z',L>=5?'#3a2218':SK);
