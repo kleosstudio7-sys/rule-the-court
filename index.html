@@ -123,7 +123,7 @@ input,select{font:inherit;color:var(--ink);background:#fff8e6;border:3px solid v
 <script>
 const $=i=>document.getElementById(i),R=Math.random,F=Math.floor,cl=v=>Math.max(0,Math.min(100,Math.round(v)));
 let S,B=null,AF=null,Q=[],slp=0,mo=0,rows=[],tab='Realm',lg=[],lt,hr=60;
-const DEF=()=>({name:'Aria',king:0,skin:'#f2c9a0',hair:'#2a1a3a',robe:'#4a78c8',crown:'#f2c230',cr:0,hs:0,ey:0,br:0,mt:0,fl:0,bd:0,gold:75,people:2,happy:70,unrest:10,tax:25,troops:0,tl:0,walls:0,wx:0,guards:1,mach:0,farms:0,mines:0,pick:0,biz:0,land:1,houses:[],inf:0,chef:0,slaves:0,sw:{f:0,m:0},fh:0,bl:[],ar:0,gi:0,gd:0,gl:0,swl:0,arl:0,know:0,pens:1,env:null,ast:{},sling:0,wp:{t:0,b:0,f:0},dm:{h:0,f:0,w:0},shop:{on:0,pr:100,it:{bread:1,cloth:0,tools:0,swords:0}},grain:0,cm:0,hm:0,wt:0,pw:null,day:1,nj:2,nf:3,wd:null,t:0,sl:0,loans:[],warn:-1,deaths:0,debtors:0,fear:0,made:0,ks:[{n:'Redmoor',p:40,rel:0,tr:'warlike, loves siege machines',gr:1.1,sp:2,of:0,ch:.9,w:[3,2,4,1],um:5,mm:8,wm:2},{n:'Goldvale',p:28,rel:10,tr:'rich, trains elite troops',gr:.9,sp:3,of:1,ch:.55,w:[2,4,1,3],um:7,mm:3,wm:5},{n:'Stonehelm',p:75,rel:-5,tr:'big army, builds fortress walls, a real challenge',gr:.7,sp:4,of:2,ch:1.25,w:[5,1,1,4],um:4,mm:4,wm:6},{n:'Bonereach',p:60,rel:0,skel:1,tr:'undead, steady growth',gr:1,sp:3,of:0,ch:1,w:[3,3,3,0],um:5,mm:6,wm:0}]});
+const DEF=()=>({name:'Aria',king:0,skin:'#f2c9a0',hair:'#2a1a3a',robe:'#4a78c8',crown:'#f2c230',cr:0,hs:0,ey:0,br:0,mt:0,fl:0,bd:0,gold:75,people:2,happy:70,unrest:10,tax:25,troops:0,tl:0,walls:0,wx:0,guards:1,mach:0,farms:0,mines:0,pick:0,biz:0,land:1,houses:[],inf:0,chef:0,slaves:0,sw:{f:0,m:0},fh:0,bl:[],ar:0,gi:0,gd:0,gl:0,swl:0,arl:0,know:0,pens:1,env:null,ast:{},sling:0,wp:{t:0,b:0,f:0},dm:{h:0,f:0,w:0},shop:{on:0,pr:100,it:{bread:1,cloth:0,tools:0,swords:0}},grain:0,cm:0,hm:0,wt:0,pw:null,day:1,nj:2,nf:3,wd:null,t:0,sl:0,loans:[],warn:-1,deaths:0,debtors:0,fear:0,made:0,ks:[{n:'Redmoor',p:40,rel:0,tr:'warlike, loves siege machines',gr:1.1,sp:2,of:0,ch:.9,w:[3,2,4,1],um:5,mm:8,wm:2},{n:'Goldvale',p:28,rel:10,tr:'rich, trains elite troops',gr:.9,sp:3,of:1,ch:.55,w:[2,4,1,3],um:7,mm:3,wm:5},{n:'Stonehelm',p:75,rel:-5,tr:'big army, builds fortress walls, a real challenge',gr:.7,sp:4,of:2,ch:1.25,w:[5,1,1,4],um:4,mm:4,wm:6},{n:'Bonereach',p:30,rel:0,skel:1,tr:'undead, steady growth',gr:1,sp:3,of:0,ch:1,w:[3,3,3,0],um:5,mm:6,wm:0}]});
 const save=()=>{try{localStorage.setItem('realm1',JSON.stringify(S))}catch(e){}};
 let ZC=null,ZT=null;const zv=()=>ZT&&ZT.d==S.day&&S.t-ZT.t<90,PM=n=>n<15?n:n<=20?5:n<=30?10:n<=35?15:n<=40?20:n<=50?25:n<=60?30:n<=70?35:40,vp=(k,len)=>{const v=S.vb||(S.vb={});let b=(v[k]||[]).filter(i=>i<len);if(!b.length){b=[...Array(len).keys()].sort(()=>R()-.5);if(b.length>1&&b[b.length-1]===v['l'+k]){const j=F(R()*(b.length-1)),x=b[b.length-1];b[b.length-1]=b[j];b[j]=x}}const i=b.pop();v[k]=b;v['l'+k]=i;return i},tz=()=>{ZT={t:S.t,d:S.day};TQ[vp('T',TQ.length)]()};
 let GG=0;const GGX={g:1},gth=()=>{throw GGX};
@@ -2241,5 +2241,42 @@ function stFight(name,e,f,def,dm){
  mchLoss(sm);
  if(def&&!sm.win){if(dm)dmg(dm);fireAll()}
  return sm.win}
+</script>
+<script>
+/* ===== BALANCE UPDATE: enemy army size is back to your original rule (from the kingdom's strength k.p, their own upgrades, your units' HP/attack by type + upgrade).
+   Only changes: skeleton/story units are your levels minus MIRD (so your upgrades give you an edge), and Bonereach is tamed. ===== */
+const MIRD=1;
+ubsim=function(k,f,def){const W=WS,sw=W?W.s:Math.max(0,S.troops-S.ar-S.gi),ar=W?W.a:S.ar,gi=W?W.g:S.gi,fm=W?(sw+ar+gi)/Math.max(1,S.troops):1,mc=Math.round(S.mach*fm),sl=Math.round(S.sling*fm),ml=Math.min(5,S.tl|0);
+ const bonus=(S.walls*12+S.wx*10+S.guards*1.5)*fm+(def?wpw('a'):0),hm=Math.max(.05,(1+bonus/Math.max(1,sw+ar+gi+mc*22+sl*10))*f);
+ const n=Math.max(3,Math.round(k.p)),L=Math.min(5,k.up|0),mir=k.skel||k.story,lo=v=>Math.max(0,(v|0)-MIRD),Ls=mir?Math.max(L,lo(S.swl)):L,La=mir?Math.max(L,lo(S.arl)):L,Lg=mir?Math.max(L,lo(S.gl)):L,Lc=mir?Math.max(L,lo(ml)):L,eg=Math.floor(n*.06),ea=Math.floor(n*.3),hmE=1+(k.wl||0)*10/Math.max(1,n+(k.m||0)*15);
+ const A=[],E=[],mk=(arr,t,c,lv,h)=>{for(let i=0;i<c;i++){const q=ust(t,lv);arr.push({t,hp:q[0]*h,at:q[1],r:UST[t][4]})}};
+ mk(A,'s',sw,S.swl,hm);mk(A,'a',ar,S.arl,hm);mk(A,'g',gi,S.gl,hm);mk(A,'c',mc,ml,hm);mk(A,'l',sl,ml,hm);
+ mk(E,'s',n-ea-eg,Ls,hmE);mk(E,'a',ea,La,hmE);mk(E,'g',eg,Lg,hmE);mk(E,'c',k.m|0,Lc,hmE);
+ const m0=A.length,e0=E.length;if(!m0)return LASTSM=bsim(pw(),ksp(k));
+ let t=0,wa=0,we=0;const TA=[1],TE=[1],pick=(a)=>a[F(R()*a.length)];
+ while(t<300){const a=A.filter(u=>u.hp>0),e=E.filter(u=>u.hp>0);if(!a.length||!e.length)break;
+  const am=a.filter(u=>!u.r),em=e.filter(u=>!u.r);wa=em.length?0:wa+1;we=am.length?0:we+1;const dm=[];
+  const go=(att,foes,fm2,wk)=>att.forEach(u=>{const pool=u.r?foes:fm2.length?fm2:wk>=3?foes:null;if(pool)dm.push([pick(pool),u.at])});
+  go(a,e,em,wa);go(e,a,am,we);dm.forEach(x=>{x[0].hp-=x[1]});t++;
+  A.forEach(u=>{if(u.hp<=0&&u.dt==null)u.dt=t});E.forEach(u=>{if(u.hp<=0&&u.dt==null)u.dt=t});
+  TA.push(A.filter(u=>u.hp>0).length/m0);TE.push(E.filter(u=>u.hp>0).length/e0)}
+ const ra=A.filter(u=>u.hp>0),re=E.filter(u=>u.hp>0),hp=x=>x.reduce((s,u)=>s+Math.max(0,u.hp),0),win=!re.length?ra.length>0:ra.length>0&&hp(ra)/m0>=hp(re)/e0;
+ const Tf=Math.min(26,Math.max(9,6+t*.2)),
+ md=(arr,show)=>{const dead=arr.filter(u=>u.hp<=0).sort((x,y)=>x.dt-y.dt),n2=Math.min(3,show);if(!arr.length||!dead.length||!n2)return[];const kc=Math.min(n2,Math.max(1,Math.ceil(n2*dead.length/arr.length)));return Array.from({length:kc},(_,i)=>+(4+dead[Math.min(dead.length-1,Math.floor(i*dead.length/kc))].dt/Math.max(1,t)*Tf).toFixed(2))},
+ cA=A.filter(u=>u.t=='c'),lA=A.filter(u=>u.t=='l');
+ return LASTSM={win,m0,e0,T:t,TA,TE,lm:1-TA[t],le:1-TE[t],Tf,ms:Math.round((4+Tf+3.6)*1000),md:[md(cA,S.mach),md(lA,S.sling),md(E.filter(u=>u.t=='c'),k.m|0)],dc:cA.filter(u=>u.hp<=0).length,dl:lA.filter(u=>u.hp<=0).length}};
+function stFight(name,e,f,def,dm){
+ const fk={n:name,p:1,up:0,m:0,wl:0,story:1,skel:0,ch:1},sw=Math.max(0,S.troops-S.ar-S.gi),um=Math.max(1,sw+S.ar+S.gi+S.mach+S.sling);
+ fk.p=Math.max(3,Math.round(um*e/Math.max(1,myPow())));
+ const sm=ubsim(fk,f||1,def?1:0);
+ if(S.troops>=1){BSIM=sm;try{scn(arm(fk,sm.win,84.8,.5),sm.ms)}finally{BSIM=null}}
+ mchLoss(sm);
+ if(def&&!sm.win){if(dm)dmg(dm);fireAll()}
+ return sm.win}
+
+function skCap(k){if(!k||!k.skel||k.dead)return;const lim=Math.max(20,Math.round(pw()+wpw('a')));let g=0;while(k.p>5&&ksp(k)>lim&&g++<500)k.p--}
+{const _kgC=kgrow;kgrow=function(k){const r=_kgC.apply(this,arguments);skCap(k);return r}}
+{const _w0C=war0;war0=function(k){const p0=k&&k.skel?k.p:0,r=_w0C.apply(this,arguments);if(k&&k.skel&&k.p>p0*1.25)k.p=Math.round(p0*1.1);return r}}
+try{S.ks.forEach(skCap)}catch(e){}
 </script>
 </body></html>
